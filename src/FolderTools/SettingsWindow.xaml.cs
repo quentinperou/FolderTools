@@ -51,6 +51,7 @@ public partial class SettingsWindow : Window
         DeleteModeBox.Items.Add(Strings.Get("DeleteModePermanent"));
         DeleteModeBox.SelectedIndex = _settings.DeleteToRecycleBin ? 0 : 1;
         IgnoredFilesBox.Text = string.Join(Environment.NewLine, _settings.IgnoredFiles);
+        IgnoredFoldersBox.Text = string.Join(Environment.NewLine, _settings.IgnoredFolders);
         Closing += (_, _) => SaveIgnoredFiles();
 
         VersionText.Text = Strings.Format("AboutVersion", Updater.CurrentVersion);
@@ -122,18 +123,25 @@ public partial class SettingsWindow : Window
     private void ResetIgnoredFiles_Click(object sender, RoutedEventArgs e)
     {
         IgnoredFilesBox.Text = string.Join(Environment.NewLine, AppSettings.DefaultIgnoredFiles);
+        IgnoredFoldersBox.Text = string.Join(Environment.NewLine, AppSettings.DefaultIgnoredFolders);
         SaveIgnoredFiles();
     }
 
     // One name per line; blank lines and repeats are dropped.
-    private void SaveIgnoredFiles()
-    {
-        var names = IgnoredFilesBox.Text.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    private static List<string> ReadNames(TextBox box) =>
+        box.Text.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
-        if (names.SequenceEqual(_settings.IgnoredFiles))
+
+    // Both lists of the "Empty folders" page.
+    private void SaveIgnoredFiles()
+    {
+        var files = ReadNames(IgnoredFilesBox);
+        var folders = ReadNames(IgnoredFoldersBox);
+        if (files.SequenceEqual(_settings.IgnoredFiles) && folders.SequenceEqual(_settings.IgnoredFolders))
             return;
-        _settings.IgnoredFiles = names;
+        _settings.IgnoredFiles = files;
+        _settings.IgnoredFolders = folders;
         _settings.Save();
     }
 

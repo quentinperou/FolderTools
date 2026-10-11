@@ -244,6 +244,20 @@
             </StackPanel>
           </DockPanel>
         </Border>
+
+        <!-- Folders never looked into nor deleted (.git...). -->
+        <Border Style="{StaticResource Card}">
+          <DockPanel>
+            <TextBlock DockPanel.Dock="Left" Style="{StaticResource CardIcon}" Text="&#xE72E;" VerticalAlignment="Top" />
+            <TextBox x:Name="IgnoredFoldersBox" DockPanel.Dock="Right" Width="220" Height="88" Margin="16,0,0,0"
+                     AcceptsReturn="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Auto"
+                     LostFocus="IgnoredFiles_LostFocus" AutomationProperties.Name="{local:Tr SettingsIgnoredFolders}" />
+            <StackPanel>
+              <TextBlock Text="{local:Tr SettingsIgnoredFolders}" />
+              <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsIgnoredFoldersDescription}" />
+            </StackPanel>
+          </DockPanel>
+        </Border>
       </StackPanel>
     </ScrollViewer>
 

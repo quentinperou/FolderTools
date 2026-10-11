@@ -285,7 +285,7 @@ They will not go to the recycle bin.</value>
     <value>A folder holding only these files counts as empty; they are deleted with it. One name per line, * and ? allowed.</value>
   </data>
   <data name="SettingsIgnoredFilesReset" xml:space="preserve">
-    <value>Restore the default list</value>
+    <value>Restore the default lists</value>
   </data>
   <data name="SettingsLanguage" xml:space="preserve">
     <value>Language</value>
@@ -389,4 +389,4 @@ They will not go to the recycle bin.</value>
   <data name="UpdatesTitle" xml:space="preserve">
     <value>Updates</value>
   </data>
-<data name="SettingsGeneral" xml:space="preserve"><value>General</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Empty folders</value></data></root>
+<data name="SettingsGeneral" xml:space="preserve"><value>General</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Empty folders</value></data><data name="SettingsIgnoredFolders" xml:space="preserve"><value>Ignored folders</value></data><data name="SettingsIgnoredFoldersDescription" xml:space="preserve"><value>Never looked into nor deleted, and a folder holding one is not empty: version control repositories (.git…) need their empty folders. One name per line, * and ? allowed.</value></data><data name="CleanInsideIgnored" xml:space="preserve"><value>Nothing to look for here.</value></data><data name="CleanInsideIgnoredDetail" xml:space="preserve"><value>This folder is inside an ignored folder (.git, .svn…: see Settings → Empty folders), whose empty folders must stay.</value></data></root>

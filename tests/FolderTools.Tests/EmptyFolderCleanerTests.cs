@@ -76,6 +76,62 @@ public class EmptyFolderCleanerTests : IDisposable
         Assert.Equal([P("Target")], result.Folders.Select(f => f.Path));
     }
 
+    private static readonly string[] DefaultIgnoredFolders = [".git", ".svn", ".hg"];
+
+    [Fact]
+    public void Find_NeverLooksIntoIgnoredFolders()
+    {
+        var cleaner = new EmptyFolderCleaner(DefaultIgnored, DefaultIgnoredFolders);
+        // A repository whose branches are all packed: refs\heads and refs\tags are empty, and must stay.
+        _tree.Dir(@"Repo\.git\refs\heads");
+        _tree.Dir(@"Repo\.git\refs\tags");
+        _tree.Dir(@"Repo\.git\objects\info");
+        _tree.Dir(@"Repo\src\empty");
+        _tree.Dir(@"OnlyGit\.GIT"); // case does not matter
+
+        var result = cleaner.Find(_tree.Root);
+
+        Assert.Equal([P(@"Repo\src")], result.Folders.Select(f => f.Path));
+        Assert.False(result.InsideIgnoredFolder);
+    }
+
+    [Fact]
+    public void Find_InsideAnIgnoredFolder_FindsNothing()
+    {
+        var cleaner = new EmptyFolderCleaner(DefaultIgnored, DefaultIgnoredFolders);
+        _tree.Dir(@"Repo\.git\refs\heads");
+
+        var result = cleaner.Find(P(@"Repo\.git\refs"));
+
+        Assert.True(result.InsideIgnoredFolder);
+        Assert.Empty(result.Folders);
+        Assert.True(Directory.Exists(P(@"Repo\.git\refs\heads")));
+    }
+
+    [Fact]
+    public void Find_IgnoredFolders_SupportWildcards()
+    {
+        var cleaner = new EmptyFolderCleaner([], ["keep*"]);
+        _tree.Dir(@"A\keep-me");
+        _tree.Dir(@"B\other");
+
+        Assert.Equal([P("B")], cleaner.Find(_tree.Root).Folders.Select(f => f.Path));
+    }
+
+    [Fact]
+    public void Delete_LeavesAFolderThatReceivedAnIgnoredFolder()
+    {
+        var cleaner = new EmptyFolderCleaner(DefaultIgnored, DefaultIgnoredFolders);
+        _tree.Dir(@"A\B");
+        var found = cleaner.Find(_tree.Root);
+        _tree.Dir(@"A\B\.git");
+
+        var report = cleaner.Delete(found.Folders);
+
+        Assert.Equal(DeleteFailureReason.NoLongerEmpty, Assert.Single(report.Failures).Reason);
+        Assert.True(Directory.Exists(P(@"A\B\.git")));
+    }
+
     [Fact]
     public void Find_HiddenFilesAreContent()
     {

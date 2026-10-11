@@ -26,6 +26,9 @@ public sealed class AppSettings
     /// <summary>Files that do not keep a folder from being empty, unless the user changes the list.</summary>
     public static readonly string[] DefaultIgnoredFiles = ["Thumbs.db", "desktop.ini", ".DS_Store"];
 
+    /// <summary>Folders never looked into nor deleted: version control repositories need their empty folders.</summary>
+    public static readonly string[] DefaultIgnoredFolders = [".git", ".svn", ".hg"];
+
     private static readonly string FilePath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FolderTools", "settings.json");
 
@@ -40,6 +43,9 @@ public sealed class AppSettings
 
     /// <summary>File names (wildcards allowed) that do not count as content when looking for empty folders.</summary>
     public List<string> IgnoredFiles { get; set; } = [.. DefaultIgnoredFiles];
+
+    /// <summary>Folder names (wildcards allowed) that count as content and are never looked into (1.0.1).</summary>
+    public List<string> IgnoredFolders { get; set; } = [.. DefaultIgnoredFolders];
 
     /// <summary>Ask GitHub for a newer version when the app starts.</summary>
     public bool CheckForUpdatesAtStartup { get; set; } = true;
@@ -62,6 +68,7 @@ public sealed class AppSettings
                 if (!SupportedLanguages.Contains(settings.Language))
                     settings.Language = SystemLanguage;
                 settings.IgnoredFiles ??= [.. DefaultIgnoredFiles];
+                settings.IgnoredFolders ??= [.. DefaultIgnoredFolders];
                 return settings;
             }
         }

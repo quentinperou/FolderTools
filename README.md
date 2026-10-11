@@ -44,6 +44,8 @@
 - A folder that only holds empty folders counts as empty: it is listed once (“+ 3 empty subfolders”) and goes with them.
 - **Ignored files**: a folder that only holds `Thumbs.db`, `desktop.ini` or `.DS_Store` counts as empty (the list can
   be changed in Settings, `*` and `?` allowed).
+- **Ignored folders**: `.git`, `.svn` and `.hg` are never looked into nor deleted, and a folder holding one is not
+  empty: version control repositories need their empty folders (the list can be changed in Settings).
 - The folder you started from is never deleted, nor are junctions and symbolic links.
 - Each folder is checked again just before being deleted: a file created in the meantime keeps it.
 - **Recycle bin** (default) or **deleted for good** (with one more confirmation), chosen in Settings.

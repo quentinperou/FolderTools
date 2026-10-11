@@ -10,7 +10,9 @@ public sealed record EmptyFolder(string Path, int NestedCount)
     public int TotalCount => NestedCount + 1;
 }
 
-public sealed record EmptyFolderSearch(IReadOnlyList<EmptyFolder> Folders, int InaccessibleCount)
+/// <param name="InsideIgnoredFolder">The starting folder is, or is inside, an ignored folder (a <c>.git</c>...): nothing
+/// was looked at.</param>
+public sealed record EmptyFolderSearch(IReadOnlyList<EmptyFolder> Folders, int InaccessibleCount, bool InsideIgnoredFolder = false)
 {
     public int TotalCount => Folders.Sum(f => f.TotalCount);
 }
@@ -33,6 +35,8 @@ public sealed record DeleteReport(int DeletedCount, IReadOnlyList<DeleteFailure>
 /// Finds and deletes empty folders. A folder is empty when it holds no file other than the ignored ones
 /// (<c>Thumbs.db</c>, <c>desktop.ini</c>...) and its subfolders are empty too. The folder the search starts from
 /// is never deleted, and junctions and symbolic links count as content: they are never followed nor removed.
+/// Ignored folders (<c>.git</c>, <c>.svn</c>, <c>.hg</c>...) count as content too and are never looked into: a version
+/// control repository may need its empty folders (Git no longer sees a repository whose <c>refs</c> folder is gone).
 /// </summary>
 public sealed class EmptyFolderCleaner
 {
@@ -48,15 +52,33 @@ public sealed class EmptyFolderCleaner
     };
 
     private readonly string[] _ignoredPatterns;
+    private readonly string[] _ignoredFolderPatterns;
 
     /// <param name="ignoredFiles">File names that do not count as content; <c>*</c> and <c>?</c> are allowed.</param>
-    public EmptyFolderCleaner(IEnumerable<string> ignoredFiles)
+    /// <param name="ignoredFolders">Folder names never looked into nor deleted; <c>*</c> and <c>?</c> are allowed.</param>
+    public EmptyFolderCleaner(IEnumerable<string> ignoredFiles, IEnumerable<string>? ignoredFolders = null)
     {
-        _ignoredPatterns = ignoredFiles.Select(p => p.Trim()).Where(p => p.Length > 0).ToArray();
+        _ignoredPatterns = Clean(ignoredFiles);
+        _ignoredFolderPatterns = Clean(ignoredFolders ?? []);
     }
 
-    public bool IsIgnored(string fileName) =>
-        _ignoredPatterns.Any(p => FileSystemName.MatchesSimpleExpression(p, fileName, ignoreCase: true));
+    private static string[] Clean(IEnumerable<string> patterns) =>
+        patterns.Select(p => p.Trim()).Where(p => p.Length > 0).ToArray();
+
+    public bool IsIgnored(string fileName) => Matches(_ignoredPatterns, fileName);
+
+    public bool IsIgnoredFolder(string folderName) => Matches(_ignoredFolderPatterns, folderName);
+
+    private static bool Matches(string[] patterns, string name) =>
+        patterns.Any(p => FileSystemName.MatchesSimpleExpression(p, name, ignoreCase: true));
+
+    // "D:\Code\app\.git\refs": started inside a repository, nothing there may be deleted either.
+    private bool IsInsideIgnoredFolder(string path)
+    {
+        string full = Path.GetFullPath(path);
+        string relative = full[(Path.GetPathRoot(full)?.Length ?? 0)..];
+        return relative.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(IsIgnoredFolder);
+    }
 
     /// <summary>
     /// The empty folders under <paramref name="root"/>, as the outermost ones only: a folder that only holds
@@ -66,6 +88,8 @@ public sealed class EmptyFolderCleaner
     {
         if (!Directory.Exists(root))
             throw new DirectoryNotFoundException(root);
+        if (IsInsideIgnoredFolder(root))
+            return new EmptyFolderSearch([], 0, InsideIgnoredFolder: true);
         var found = new List<EmptyFolder>();
         int inaccessible = 0;
         Visit(root, isRoot: true, found, ref inaccessible, currentFolder, cancellationToken);
@@ -94,7 +118,7 @@ public sealed class EmptyFolderCleaner
                     if (!IsIgnored(name))
                         hasContent = true;
                 }
-                else if (isReparsePoint && FolderScanner.IsLink(Path.Join(path, name)))
+                else if (IsIgnoredFolder(name) || (isReparsePoint && FolderScanner.IsLink(Path.Join(path, name))))
                     hasContent = true;
                 else
                     subfolders.Add(Path.Join(path, name));
@@ -140,7 +164,7 @@ public sealed class EmptyFolderCleaner
                     if (!IsIgnored(name))
                         return false;
                 }
-                else if (isReparsePoint && FolderScanner.IsLink(Path.Join(path, name)))
+                else if (IsIgnoredFolder(name) || (isReparsePoint && FolderScanner.IsLink(Path.Join(path, name))))
                     return false;
                 else if (!IsEmpty(Path.Join(path, name)))
                     return false;

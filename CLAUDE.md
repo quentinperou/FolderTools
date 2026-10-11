@@ -68,6 +68,11 @@ Automation (rows are `DataItem`s) then posting `WM_KEYDOWN VK_RIGHT`, captured w
 (`FolderTools-Setup-1.0.0.exe`, 5.9 MB, SHA-256 `fefe757d…871287`), release notes in English written by hand
 (features, installation, privacy, checksum), like CropPdf's.
 
+**v1.0.1** (October 11, 2026): **ignored folders** for the empty-folder cleanup (default `.git`, `.svn`, `.hg`,
+setting under *Empty folders*), after the author's real run on `Downloads` offered `.git\objects\info` folders; the
+“folder with a cross” icon for the *Delete empty folders* menu entry (variant C chosen among four); the cleaning window
+opens at 1000 × 680. 91 unit tests pass.
+
 Next steps: test the new-menu toggle and the settings cleanup at uninstall for real; then v1.1
 (folder colors).
 
@@ -180,7 +185,10 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   first. *For good*: only ignored files and empty folders are removed, with non-recursive `RemoveDirectory`, so a
   file created in the meantime stops the deletion. *Recycle bin*: `SHFileOperation` in batches of 64, silent, on an
   STA thread; success is read afterwards with `Directory.Exists`. Junctions/symlinks count as content (never
-  removed). The starting folder is never deleted. A warning bar shows for sensitive locations.
+  removed). **Ignored folders** (`AppSettings.IgnoredFolders`, default `.git`/`.svn`/`.hg`, wildcards) count as
+  content and are never looked into: Git no longer recognizes a repository whose empty `refs\heads`/`refs\tags`
+  (all branches packed) and then `refs` were removed. Started inside one (any path segment matches),
+  `Find` returns `InsideIgnoredFolder` and looks at nothing. The starting folder is never deleted. A warning bar shows for sensitive locations.
 - **Deleting from the size tree**: `SHFileOperation` with File Explorer's own progress/error dialogs and
   `FOF_WANTNUKEWARNING` (asks before a permanent deletion on a drive without recycle bin), then `FolderNode.Detach`
   updates the totals of every parent without rescanning.
@@ -250,6 +258,9 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   from `dllhost` (the app would inherit the package identity: blank taskbar tile). See CropPdf's CLAUDE.md.
 - `exdisp.h` does not compile with `WIN32_LEAN_AND_MEAN`; `rc.exe` needs a trailing newline at the end of `resource.h`.
 - File Explorer may keep the DLL loaded during an update: the installer then replaces it at the next restart.
+- PowerShell scratch scripts: never name a helper function `R`, `Rp`, `Ri`, `Rm`… (`r` is `Invoke-History`, `rp` is
+  `Remove-ItemProperty`, `ri`/`rm` are `Remove-Item`): aliases win over functions, and the call then runs the
+  built-in command with the arguments. Use the Edit tool, or `.Replace()` on a string.
 - `dotnet run file.cs` in a folder without `nuget.config` may fail to restore (`NU1100`): copy the repo's
   `nuget.config` next to it and add `#:property PublishAot=false`.
 

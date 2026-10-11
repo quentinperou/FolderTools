@@ -47,6 +47,8 @@
   vides ») et part avec eux.
 - **Fichiers ignorés** : un dossier qui ne contient que `Thumbs.db`, `desktop.ini` ou `.DS_Store` compte comme vide
   (liste modifiable dans les paramètres, `*` et `?` acceptés).
+- **Dossiers ignorés** : `.git`, `.svn` et `.hg` ne sont jamais explorés ni supprimés, et un dossier qui en contient un
+  n'est pas vide : les dépôts de gestion de versions ont besoin de leurs dossiers vides (liste modifiable dans les paramètres).
 - Le dossier de départ n'est jamais supprimé, pas plus que les jonctions et liens symboliques.
 - Chaque dossier est revérifié juste avant d'être supprimé : un fichier créé entre-temps le conserve.
 - **Corbeille** (par défaut) ou **suppression définitive** (avec une confirmation de plus), au choix dans les paramètres.

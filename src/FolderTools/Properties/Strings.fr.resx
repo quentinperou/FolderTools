@@ -285,7 +285,7 @@ Ils n'iront pas à la corbeille.</value>
     <value>Un dossier qui ne contient que ces fichiers compte comme vide ; ils sont supprimés avec lui. Un nom par ligne, * et ? acceptés.</value>
   </data>
   <data name="SettingsIgnoredFilesReset" xml:space="preserve">
-    <value>Rétablir la liste par défaut</value>
+    <value>Rétablir les listes par défaut</value>
   </data>
   <data name="SettingsLanguage" xml:space="preserve">
     <value>Langue</value>
@@ -389,4 +389,4 @@ Ils n'iront pas à la corbeille.</value>
   <data name="UpdatesTitle" xml:space="preserve">
     <value>Mises à jour</value>
   </data>
-<data name="SettingsGeneral" xml:space="preserve"><value>Général</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Dossiers vides</value></data></root>
+<data name="SettingsGeneral" xml:space="preserve"><value>Général</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Dossiers vides</value></data><data name="SettingsIgnoredFolders" xml:space="preserve"><value>Dossiers ignorés</value></data><data name="SettingsIgnoredFoldersDescription" xml:space="preserve"><value>Jamais explorés ni supprimés, et un dossier qui en contient un n'est pas vide : les dépôts de gestion de versions (.git…) ont besoin de leurs dossiers vides. Un nom par ligne, * et ? acceptés.</value></data><data name="CleanInsideIgnored" xml:space="preserve"><value>Rien à chercher ici.</value></data><data name="CleanInsideIgnoredDetail" xml:space="preserve"><value>Ce dossier est dans un dossier ignoré (.git, .svn… : voir Paramètres → Dossiers vides), dont les dossiers vides doivent rester.</value></data></root>

@@ -68,7 +68,7 @@ public partial class CleanWindow : Window, IRebuildable
         using var cts = new CancellationTokenSource();
         _search = cts;
         _settings = AppSettings.Load();
-        _cleaner = new EmptyFolderCleaner(_settings.IgnoredFiles);
+        _cleaner = new EmptyFolderCleaner(_settings.IgnoredFiles, _settings.IgnoredFolders);
         ShowMode();
 
         Items.Clear();
@@ -119,10 +119,11 @@ public partial class CleanWindow : Window, IRebuildable
 
         foreach (var folder in result.Folders)
             Items.Add(Track(new CleanItem(folder, _path)));
-        SummaryText.Text = result.Folders.Count == 0
-            ? Strings.Get("CleanNoneFound")
+        SummaryText.Text = result.InsideIgnoredFolder ? Strings.Get("CleanInsideIgnored")
+            : result.Folders.Count == 0 ? Strings.Get("CleanNoneFound")
             : Strings.Plural("CleanFound", result.TotalCount, WindowsShell.FormatCount(result.TotalCount));
-        DetailText.Text = result.Folders.Count == 0 ? "" : Strings.Get("CleanFoundDetail");
+        DetailText.Text = result.InsideIgnoredFolder ? Strings.Get("CleanInsideIgnoredDetail")
+            : result.Folders.Count == 0 ? "" : Strings.Get("CleanFoundDetail");
         ShowInaccessible(result.InaccessibleCount);
         SetButtons(searching: false);
     }
@@ -249,7 +250,8 @@ public partial class CleanWindow : Window, IRebuildable
         if (IsLoaded)
         {
             var settings = AppSettings.Load();
-            bool ignoredChanged = !settings.IgnoredFiles.SequenceEqual(_settings.IgnoredFiles);
+            bool ignoredChanged = !settings.IgnoredFiles.SequenceEqual(_settings.IgnoredFiles)
+                || !settings.IgnoredFolders.SequenceEqual(_settings.IgnoredFolders);
             _settings = settings;
             ShowMode();
             if (ignoredChanged && _search is null)
