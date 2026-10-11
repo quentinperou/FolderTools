@@ -79,6 +79,8 @@ Users of 1.0.0 are offered it by the app.
 (installs from the bar, like CropPdf), asked by the author; every start checks for updates (privacy policy updated). **Released** (tag `v1.0.2` on `10cddb5`, “latest”,
 `FolderTools-Setup-1.0.2.exe`, SHA-256 `cd332216…ac3745`).
 
+**v1.2.0 released** (October 12, 2026): the “Largest files” tab (tag `v1.2.0` on `0f60381`, “latest”, `FolderTools-Setup-1.2.0.exe`, SHA-256 `9c922a7b…b4fc60`, hand-written notes).
+
 **v1.1.0 (released October 12, 2026: tag `v1.1.0` on `053a1c6`, “latest”, `FolderTools-Setup-1.1.0.exe`, SHA-256 `d5b5b0fb…ad7e9a`, hand-written notes)**: **folder colors** (8 colors + Default
 color, right in “FolderTools ›” after a separator), decided with the author on October 11, 2026: the palette of the
 mock-up (red, orange, yellow, green, blue, purple, pink, gray), icons kept in the install folder (not copied into each
