@@ -21,7 +21,7 @@
 ## Features
 
 - **Right-click a folder, a drive or the background of an open folder → “FolderTools ›”**, in the new Windows 11
-  context menu (and under “Show more options” / on Windows 10), with two tools and, on folders, the folder colors:
+  context menu (and under “Show more options” / on Windows 10), with three tools and, on folders, the folder colors:
 
 ### Folder sizes
 
@@ -57,6 +57,19 @@
   some programs need their empty folders.
 - Handy for the **temporary folder** of Windows: the home window has a *Temporary folder* link.
 
+### Sort photos by date
+
+- Moves the **photos, RAW files and videos** sitting directly in the folder into **date folders** inside it, from
+  their **date taken** (EXIF for photos and RAW files, creation date for videos).
+- Date folders to choose from (in Settings, or right in the window): **Year › day** (`2025\2025-06-14`, default),
+  Year › month › day (`2025\06\14`), Year › month (`2025\06`) or Day (`2025-06-14`).
+- Photos **without a date taken** (screenshots, downloaded pictures…): sorted by their **file date**, put in a
+  **No date** folder, or **left where they are**, as you choose.
+- A RAW file and the JPEG of the same name stay together, with their sidecar files (`.xmp`, `.aae`…).
+- **Preview first**: the date folders and what goes in each, then **Sort**. Nothing is overwritten (a name already
+  taken in a date folder gets “ (2)”); subfolders and other files never move.
+- **Undo the sort**: puts every file back and removes the date folders it created, when they are empty again.
+
 ### Folder color
 
 - **Right-click a folder → FolderTools ›**, below the tools: red, orange, yellow, green, blue, purple, pink or gray,
@@ -77,7 +90,7 @@
 - **English and French**: the app, the context menu and the installer follow the Windows display language; the
   app language can also be chosen in **Settings**.
 - The context menu entries can be **turned off** in Settings, all together or one by one (Folder sizes, Delete empty
-  folders, Folder color).
+  folders, Sort photos by date, Folder color).
 - **Updates in one click**: at startup the app checks the GitHub Releases; a bar at the top of every window offers
   the new version (**What's new** / **Update**), which installs itself and restarts the app. In **Settings**: check now, turn off the check at startup, or
   choose the **Beta** channel to get new versions earlier.
@@ -163,6 +176,7 @@ dotnet test tests\FolderTools.Tests                              # unit tests
 dotnet run --project src\FolderTools                             # home window
 dotnet run --project src\FolderTools -- size "D:\Photos"         # folder sizes
 dotnet run --project src\FolderTools -- clean "%TEMP%"           # empty folders
+dotnet run --project src\FolderTools -- photos "D:\Import"       # sort photos by date
 ```
 
 Set the `FOLDERTOOLS_THEME` environment variable to `Light` or `Dark`, or `FOLDERTOOLS_LANG` to `en` or `fr`,
@@ -175,8 +189,8 @@ replaces the previous install).
 
 ```
 src/
-  FolderTools.Core/     Logic without UI: folder scan, empty folder search and deletion, CSV export, sizes, command line, update feed
-  FolderTools/          WPF app: home, size tree, cleaning window, settings, updates, UI strings
+  FolderTools.Core/     Logic without UI: folder scan, empty folder search and deletion, photo sort, CSV export, sizes, command line, update feed
+  FolderTools/          WPF app: home, size tree, cleaning window, photo sort window, settings, updates, UI strings
   FolderTools.Shell/    C++ DLL for the Windows 11 context menu (IExplorerCommand), with its localized labels and icons
 package/                Manifest and logos of the “sparse” package (the app identity for the Windows 11 menu)
 installer/              Inno Setup script of the installer
@@ -200,8 +214,8 @@ tools/                  Dev tool: InvokeMenu (runs the installed menu commands l
 
 The new context menu only accepts apps that have a **package identity**. The app remains a classic desktop app,
 but the installer registers a small “sparse” package (`package/AppxManifest.xml`) that points at the install folder
-and declares `FolderToolsMenu.dll`, which shows “FolderTools ›” and its two entries and asks File Explorer to start
-`FolderTools.exe size|clean "<folder>"`. This package is **not signed**: Windows 11 accepts it with
+and declares `FolderToolsMenu.dll`, which shows “FolderTools ›” and its entries and asks File Explorer to start
+`FolderTools.exe size|clean|photos "<folder>"`. This package is **not signed**: Windows 11 accepts it with
 `Add-AppxPackage -AllowUnsigned` from an administrator session, hence the UAC prompt during installation.
 
 ### Releasing a version
@@ -215,8 +229,6 @@ and declares `FolderToolsMenu.dll`, which shows “FolderTools ›” and its tw
 
 ## Roadmap
 
-- [ ] **Sort photos by date**: right-click a folder › FolderTools › move its photos, RAW files and videos into
-      `2025\2025-06-14\…` folders from their date taken (EXIF), with a preview and an undo.
 - [ ] **New dated folder**: on the background of a folder, create `2026-10-12` (or a chosen pattern) in one click.
 - [ ] **Flatten a folder**: move every file of the subfolders up to the folder itself, renaming the duplicates.
 - [ ] **Duplicates**: find identical files (compared by hash), with a preview before deleting.
@@ -247,3 +259,6 @@ user, with one exception: the **update check**. The names, sizes and contents of
 ## Credits
 
 Developed by [QuentinPerou](https://github.com/quentinperou), with [Claude Code](https://claude.com/claude-code) (Anthropic).
+
+Dates taken are read with [MetadataExtractor](https://github.com/drewnoakes/metadata-extractor-dotnet) and XmpCore
+(Apache License 2.0).

@@ -157,6 +157,12 @@
           <TextBlock Text="{local:Tr SettingsEmptyFolders}" VerticalAlignment="Center" />
         </StackPanel>
       </ListBoxItem>
+      <ListBoxItem AutomationProperties.Name="{local:Tr SettingsPhotos}">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE91B;" />
+          <TextBlock Text="{local:Tr SettingsPhotos}" VerticalAlignment="Center" />
+        </StackPanel>
+      </ListBoxItem>
       <ListBoxItem AutomationProperties.Name="{local:Tr UpdatesTitle}">
         <StackPanel Orientation="Horizontal">
           <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE895;" />
@@ -232,6 +238,13 @@
               </DockPanel>
               <Rectangle Style="{StaticResource CardDivider}" />
               <DockPanel Style="{StaticResource CardSubRow}">
+                <CheckBox x:Name="PhotosEntryBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                          VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
+                          AutomationProperties.Name="{local:Tr ActionPhotos}" />
+                <TextBlock Text="{local:Tr ActionPhotos}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Rectangle Style="{StaticResource CardDivider}" />
+              <DockPanel Style="{StaticResource CardSubRow}">
                 <CheckBox x:Name="ColorEntryBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
                           VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
                           AutomationProperties.Name="{local:Tr ActionColor}" />
@@ -285,6 +298,37 @@
             <StackPanel>
               <TextBlock Text="{local:Tr SettingsIgnoredFolders}" />
               <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsIgnoredFoldersDescription}" />
+            </StackPanel>
+          </DockPanel>
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Photos: the date folders, and what to do with photos that have no date taken. -->
+    <ScrollViewer x:Name="PhotosPage" Grid.Row="1" Grid.Column="1" Style="{StaticResource Page}" Margin="16,0,0,0">
+      <StackPanel>
+        <Border Style="{StaticResource Card}">
+          <DockPanel>
+            <TextBlock DockPanel.Dock="Left" Style="{StaticResource CardIcon}" Text="&#xE787;" />
+            <ComboBox x:Name="PhotoLayoutBox" DockPanel.Dock="Right" MinWidth="260" VerticalAlignment="Center"
+                      Margin="16,0,0,0" SelectionChanged="PhotoOptions_SelectionChanged"
+                      AutomationProperties.Name="{local:Tr PhotosLayout}" />
+            <StackPanel VerticalAlignment="Center">
+              <TextBlock Text="{local:Tr PhotosLayout}" />
+              <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsPhotosLayoutDescription}" />
+            </StackPanel>
+          </DockPanel>
+        </Border>
+
+        <Border Style="{StaticResource Card}">
+          <DockPanel>
+            <TextBlock DockPanel.Dock="Left" Style="{StaticResource CardIcon}" Text="&#xE9CE;" />
+            <ComboBox x:Name="PhotoUndatedBox" DockPanel.Dock="Right" MinWidth="260" VerticalAlignment="Center"
+                      Margin="16,0,0,0" SelectionChanged="PhotoOptions_SelectionChanged"
+                      AutomationProperties.Name="{local:Tr PhotosUndated}" />
+            <StackPanel VerticalAlignment="Center">
+              <TextBlock Text="{local:Tr PhotosUndated}" />
+              <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsPhotosUndatedDescription}" />
             </StackPanel>
           </DockPanel>
         </Border>

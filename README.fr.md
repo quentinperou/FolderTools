@@ -21,7 +21,7 @@
 ## Fonctionnalités
 
 - **Clic droit sur un dossier, un lecteur ou le fond d'un dossier ouvert → « FolderTools › »**, dans le nouveau menu
-  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec deux outils et, sur les dossiers, les
+  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec trois outils et, sur les dossiers, les
   couleurs de dossier :
 
 ### Taille des dossiers
@@ -62,6 +62,19 @@
   entier…), où certains programmes ont besoin de leurs dossiers vides.
 - Pratique pour le **dossier temporaire** de Windows : la fenêtre d'accueil a un lien *Dossier temporaire*.
 
+### Trier les photos par date
+
+- Range les **photos, RAW et vidéos** posées directement dans le dossier dans des **dossiers datés** à l'intérieur,
+  selon leur **date de prise de vue** (EXIF pour les photos et les RAW, date de création pour les vidéos).
+- Dossiers datés au choix (dans les paramètres, ou directement dans la fenêtre) : **Année › jour** (`20255-06-14`,
+  par défaut), Année › mois › jour (`2025`), Année › mois (`2025`) ou Jour (`2025-06-14`).
+- Photos **sans date de prise de vue** (captures d'écran, images téléchargées…) : rangées selon la **date du
+  fichier**, mises dans un dossier **Sans date**, ou **laissées en place**, au choix.
+- Un RAW et le JPEG du même nom restent ensemble, avec leurs fichiers annexes (`.xmp`, `.aae`…).
+- **Aperçu d'abord** : les dossiers datés et ce qui va dans chacun, puis **Trier**. Rien n'est écrasé (un nom déjà
+  pris dans un dossier daté reçoit « (2) ») ; les sous-dossiers et les autres fichiers ne bougent jamais.
+- **Annuler le tri** : remet chaque fichier à sa place et supprime les dossiers datés créés, s'ils sont de nouveau vides.
+
 ### Couleur du dossier
 
 - **Clic droit sur un dossier → FolderTools ›**, sous les outils : rouge, orange, jaune, vert, bleu, violet, rose
@@ -84,7 +97,7 @@
 - **Français et anglais** : l'application, le menu clic droit et l'installeur suivent la langue d'affichage de
   Windows ; la langue de l'application peut aussi être choisie dans les **Paramètres**.
 - Les entrées du menu clic droit peuvent être **désactivées** dans les paramètres, toutes ensemble ou une par une
-  (Taille des dossiers, Supprimer les dossiers vides, Couleur du dossier).
+  (Taille des dossiers, Supprimer les dossiers vides, Trier les photos par date, Couleur du dossier).
 - **Mises à jour en un clic** : au démarrage, l'application consulte les Releases GitHub ; un bandeau en haut de chaque
   fenêtre propose la nouvelle version (**Nouveautés** / **Mettre à jour**), qui s'installe et redémarre l'application. Dans les **Paramètres** : vérifier maintenant,
   désactiver la vérification au démarrage, ou choisir le canal **Bêta** pour recevoir les nouveautés en avance.
@@ -171,6 +184,7 @@ dotnet test tests\FolderTools.Tests                              # tests unitair
 dotnet run --project src\FolderTools                             # fenêtre d'accueil
 dotnet run --project src\FolderTools -- size "D:\Photos"         # taille des dossiers
 dotnet run --project src\FolderTools -- clean "%TEMP%"           # dossiers vides
+dotnet run --project src\FolderTools -- photos "D:\Import"       # trier les photos par date
 ```
 
 Définissez la variable d'environnement `FOLDERTOOLS_THEME` à `Light` ou `Dark`, ou `FOLDERTOOLS_LANG` à `en` ou `fr`,
@@ -183,8 +197,8 @@ installation remplace la précédente).
 
 ```
 src/
-  FolderTools.Core/     Logique sans interface : analyse des dossiers, recherche et suppression des dossiers vides, export CSV, tailles, ligne de commande, mises à jour
-  FolderTools/          Application WPF : accueil, arborescence des tailles, fenêtre de nettoyage, paramètres, mises à jour, textes
+  FolderTools.Core/     Logique sans interface : analyse des dossiers, recherche et suppression des dossiers vides, tri des photos, export CSV, tailles, ligne de commande, mises à jour
+  FolderTools/          Application WPF : accueil, arborescence des tailles, fenêtre de nettoyage, fenêtre de tri des photos, paramètres, mises à jour, textes
   FolderTools.Shell/    DLL C++ du menu clic droit de Windows 11 (IExplorerCommand), avec ses libellés traduits et ses icônes
 package/                Manifeste et logos du package « sparse » (l'identité de l'application pour le menu de Windows 11)
 installer/              Script Inno Setup de l'installeur
@@ -209,7 +223,7 @@ tools/                  Outil de dev : InvokeMenu (lance les commandes du menu i
 Le nouveau menu clic droit n'accepte que les applications qui ont une **identité de package**. L'application reste une
 application de bureau classique, mais l'installeur enregistre un petit package « sparse » (`package/AppxManifest.xml`)
 qui pointe vers le dossier d'installation et déclare `FolderToolsMenu.dll`. Cette DLL affiche « FolderTools › » et ses
-deux entrées, puis demande à l'Explorateur de lancer `FolderTools.exe size|clean "<dossier>"`. Ce package **n'est pas
+entrées, puis demande à l'Explorateur de lancer `FolderTools.exe size|clean|photos "<dossier>"`. Ce package **n'est pas
 signé** : Windows 11 l'accepte avec `Add-AppxPackage -AllowUnsigned` depuis une session administrateur, d'où la
 demande UAC pendant l'installation.
 
@@ -224,8 +238,6 @@ demande UAC pendant l'installation.
 
 ## Feuille de route
 
-- [ ] **Trier les photos par date** : clic droit sur un dossier › FolderTools › ranger ses photos, RAW et vidéos dans
-      des dossiers `2025\2025-06-14\…` d'après leur date de prise de vue (EXIF), avec aperçu et annulation.
 - [ ] **Nouveau dossier daté** : sur le fond d'un dossier, créer `2026-10-12` (ou un modèle choisi) en un clic.
 - [ ] **Aplatir un dossier** : remonter tous les fichiers des sous-dossiers dans le dossier lui-même, en renommant
       les doublons de noms.
@@ -260,3 +272,6 @@ dossiers ne quittent jamais votre ordinateur.
 ## Crédits
 
 Développé par [QuentinPerou](https://github.com/quentinperou), avec [Claude Code](https://claude.com/claude-code) (Anthropic).
+
+Les dates de prise de vue sont lues avec [MetadataExtractor](https://github.com/drewnoakes/metadata-extractor-dotnet)
+et XmpCore (licence Apache 2.0).

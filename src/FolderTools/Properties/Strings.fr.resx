@@ -389,4 +389,152 @@ Ils n'iront pas à la corbeille.</value>
   </data>
 <data name="SettingsGeneral" xml:space="preserve"><value>Général</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Dossiers vides</value></data><data name="SettingsIgnoredFolders" xml:space="preserve"><value>Dossiers ignorés</value></data><data name="SettingsIgnoredFoldersDescription" xml:space="preserve"><value>Jamais explorés ni supprimés, et un dossier qui en contient un n'est pas vide : les dépôts de gestion de versions (.git…) ont besoin de leurs dossiers vides. Un nom par ligne, * et ? acceptés.</value></data><data name="CleanInsideIgnored" xml:space="preserve"><value>Rien à chercher ici.</value></data><data name="CleanInsideIgnoredDetail" xml:space="preserve"><value>Ce dossier est dans un dossier ignoré (.git, .svn… : voir Paramètres → Dossiers vides), dont les dossiers vides doivent rester.</value></data><data name="ActionColor" xml:space="preserve"><value>Couleur du dossier</value></data><data name="TabFolders" xml:space="preserve"><value>Dossiers</value></data><data name="TabFiles" xml:space="preserve"><value>Plus gros fichiers</value></data><data name="ColumnFolder" xml:space="preserve"><value>Dossier</value></data><data name="FilesCount" xml:space="preserve"><value>{0} plus gros fichiers sur les {1} retenus</value></data><data name="FilesCountSubset" xml:space="preserve"><value>{0} plus gros fichiers de ce dossier, parmi les {1} retenus pour toute l'analyse : des fichiers plus petits de ce dossier peuvent manquer</value></data><data name="FilesNone" xml:space="preserve"><value>Aucun fichier.</value></data><data name="FilesMore" xml:space="preserve"><value>Afficher 100 de plus</value></data><data name="MenuOpen" xml:space="preserve"><value>Ouvrir</value></data><data name="MenuShowInExplorer" xml:space="preserve"><value>Afficher dans l'Explorateur</value></data><data name="ConfirmRecycleFile" xml:space="preserve"><value>Envoyer « {0} » à la corbeille ?
 
-{1}</value></data><data name="CsvFileHeaders" xml:space="preserve"><value>Chemin|Nom|Dossier|Taille (octets)|Taille (Go)|% du dossier analysé|Modifié</value></data></root>
+{1}</value></data><data name="CsvFileHeaders" xml:space="preserve"><value>Chemin|Nom|Dossier|Taille (octets)|Taille (Go)|% du dossier analysé|Modifié</value></data>
+  <data name="ActionPhotos" xml:space="preserve">
+    <value>Trier les photos par date</value>
+  </data>
+  <data name="ActionPhotosDescription" xml:space="preserve">
+    <value>Range les photos, RAW et vidéos du dossier dans des dossiers datés, selon leur date de prise de vue. Annulable.</value>
+  </data>
+  <data name="PhotosWindowTitle" xml:space="preserve">
+    <value>Trier les photos par date – {0}</value>
+  </data>
+  <data name="SettingsPhotos" xml:space="preserve">
+    <value>Photos</value>
+  </data>
+  <data name="PhotosLayout" xml:space="preserve">
+    <value>Dossiers datés</value>
+  </data>
+  <data name="PhotosUndated" xml:space="preserve">
+    <value>Photos sans date de prise de vue</value>
+  </data>
+  <data name="SettingsPhotosLayoutDescription" xml:space="preserve">
+    <value>Les dossiers créés par « Trier les photos par date », dans le dossier trié.</value>
+  </data>
+  <data name="SettingsPhotosUndatedDescription" xml:space="preserve">
+    <value>Captures d'écran, images téléchargées ou retouchées n'ont souvent pas de date de prise de vue dans leurs métadonnées.</value>
+  </data>
+  <data name="PhotosLayoutYearDay" xml:space="preserve">
+    <value>Année › jour</value>
+  </data>
+  <data name="PhotosLayoutYearMonthDay" xml:space="preserve">
+    <value>Année › mois › jour</value>
+  </data>
+  <data name="PhotosLayoutYearMonth" xml:space="preserve">
+    <value>Année › mois</value>
+  </data>
+  <data name="PhotosLayoutDay" xml:space="preserve">
+    <value>Jour</value>
+  </data>
+  <data name="PhotosUndatedFileDate" xml:space="preserve">
+    <value>Les ranger selon la date du fichier</value>
+  </data>
+  <data name="PhotosUndatedNoDateFolder" xml:space="preserve">
+    <value>Les mettre dans un dossier « {0} »</value>
+  </data>
+  <data name="PhotosUndatedLeave" xml:space="preserve">
+    <value>Les laisser en place</value>
+  </data>
+  <data name="PhotosNoDateFolder" xml:space="preserve">
+    <value>Sans date</value>
+  </data>
+  <data name="PhotosOpenFolder" xml:space="preserve">
+    <value>Ouvrir le dossier</value>
+  </data>
+  <data name="PhotosUndo" xml:space="preserve">
+    <value>Annuler le tri</value>
+  </data>
+  <data name="PhotosRenameNote" xml:space="preserve">
+    <value>Seuls les fichiers directement dans ce dossier sont déplacés ; ses sous-dossiers et les autres fichiers restent. Rien n'est écrasé : un nom déjà pris dans un dossier daté reçoit « (2) ».</value>
+  </data>
+  <data name="PhotosReading" xml:space="preserve">
+    <value>Lecture des dates de prise de vue…</value>
+  </data>
+  <data name="PhotosReadCount_One" xml:space="preserve">
+    <value>{0} fichier lu</value>
+  </data>
+  <data name="PhotosReadCount_Other" xml:space="preserve">
+    <value>{0} fichiers lus</value>
+  </data>
+  <data name="PhotosNoneFound" xml:space="preserve">
+    <value>Aucune photo ni vidéo directement dans ce dossier.</value>
+  </data>
+  <data name="PhotosNothingToMove" xml:space="preserve">
+    <value>Rien à déplacer : aucune photo ici n'a de date de prise de vue.</value>
+  </data>
+  <data name="PhotosPlanSummary" xml:space="preserve">
+    <value>{0} à ranger dans {1}.</value>
+  </data>
+  <data name="PhotosFiles_One" xml:space="preserve">
+    <value>{0} fichier</value>
+  </data>
+  <data name="PhotosFiles_Other" xml:space="preserve">
+    <value>{0} fichiers</value>
+  </data>
+  <data name="PhotosFolders_One" xml:space="preserve">
+    <value>{0} dossier</value>
+  </data>
+  <data name="PhotosFolders_Other" xml:space="preserve">
+    <value>{0} dossiers</value>
+  </data>
+  <data name="PhotosDetailFileDate_One" xml:space="preserve">
+    <value>{0} sans date de prise de vue, rangé selon la date du fichier</value>
+  </data>
+  <data name="PhotosDetailFileDate_Other" xml:space="preserve">
+    <value>{0} sans date de prise de vue, rangés selon la date du fichier</value>
+  </data>
+  <data name="PhotosDetailNoDateFolder_One" xml:space="preserve">
+    <value>{0} sans date de prise de vue va dans « {1} »</value>
+  </data>
+  <data name="PhotosDetailNoDateFolder_Other" xml:space="preserve">
+    <value>{0} sans date de prise de vue vont dans « {1} »</value>
+  </data>
+  <data name="PhotosDetailLeft_One" xml:space="preserve">
+    <value>{0} sans date de prise de vue reste en place</value>
+  </data>
+  <data name="PhotosDetailLeft_Other" xml:space="preserve">
+    <value>{0} sans date de prise de vue restent en place</value>
+  </data>
+  <data name="PhotosSort" xml:space="preserve">
+    <value>Trier ({0})</value>
+  </data>
+  <data name="PhotosSorting" xml:space="preserve">
+    <value>Tri en cours…</value>
+  </data>
+  <data name="PhotosDone" xml:space="preserve">
+    <value>Tri terminé : {0} dans {1}.</value>
+  </data>
+  <data name="PhotosFailures_One" xml:space="preserve">
+    <value>{0} fichier n'a pas pu être déplacé (en tête de liste).</value>
+  </data>
+  <data name="PhotosFailures_Other" xml:space="preserve">
+    <value>{0} fichiers n'ont pas pu être déplacés (en tête de liste).</value>
+  </data>
+  <data name="PhotosUndoing" xml:space="preserve">
+    <value>Remise en place des fichiers…</value>
+  </data>
+  <data name="PhotosUndone_One" xml:space="preserve">
+    <value>Tri annulé : {0} fichier remis en place.</value>
+  </data>
+  <data name="PhotosUndone_Other" xml:space="preserve">
+    <value>Tri annulé : {0} fichiers remis en place.</value>
+  </data>
+  <data name="PhotosUndoFailures_One" xml:space="preserve">
+    <value>{0} fichier n'a pas pu être remis en place (en tête de liste).</value>
+  </data>
+  <data name="PhotosUndoFailures_Other" xml:space="preserve">
+    <value>{0} fichiers n'ont pas pu être remis en place (en tête de liste).</value>
+  </data>
+  <data name="PhotosByFileDate" xml:space="preserve">
+    <value>date du fichier, {0}</value>
+  </data>
+  <data name="PhotosNoDate" xml:space="preserve">
+    <value>sans date</value>
+  </data>
+  <data name="PhotosRenamedFrom" xml:space="preserve">
+    <value>renommé : « {0} » était pris</value>
+  </data>
+  <data name="PhotosLeftInPlace" xml:space="preserve">
+    <value>Laissées en place</value>
+  </data>
+</root>

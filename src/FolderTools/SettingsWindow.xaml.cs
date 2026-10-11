@@ -12,6 +12,7 @@ public enum SettingsPage
 {
     General,
     EmptyFolders,
+    Photos,
     Updates,
     About,
 }
@@ -48,6 +49,7 @@ public partial class SettingsWindow : Window
         NewMenuBox.IsChecked = AppSettings.ShowInNewContextMenu;
         SizeEntryBox.IsChecked = AppSettings.ShowSizeEntry;
         CleanEntryBox.IsChecked = AppSettings.ShowCleanEntry;
+        PhotosEntryBox.IsChecked = AppSettings.ShowPhotosEntry;
         ColorEntryBox.IsChecked = AppSettings.ShowColorEntry;
         MenuEntries.IsEnabled = NewMenuBox.IsChecked == true;
 
@@ -57,6 +59,7 @@ public partial class SettingsWindow : Window
         IgnoredFilesBox.Text = string.Join(Environment.NewLine, _settings.IgnoredFiles);
         IgnoredFoldersBox.Text = string.Join(Environment.NewLine, _settings.IgnoredFolders);
         Closing += (_, _) => SaveIgnoredFiles();
+        PhotoOptions.Fill(PhotoLayoutBox, PhotoUndatedBox, _settings);
 
         VersionText.Text = Strings.Format("AboutVersion", Updater.CurrentVersion);
         _initialized = true;
@@ -99,7 +102,7 @@ public partial class SettingsWindow : Window
 
     private void PageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ScrollViewer[] pages = [GeneralPage, EmptyFoldersPage, UpdatesPage, AboutPage];
+        ScrollViewer[] pages = [GeneralPage, EmptyFoldersPage, PhotosPage, UpdatesPage, AboutPage];
         for (int i = 0; i < pages.Length; i++)
             pages[i].Visibility = i == PageList.SelectedIndex ? Visibility.Visible : Visibility.Hidden;
         if (PageList.SelectedItem is ListBoxItem item)
@@ -116,7 +119,7 @@ public partial class SettingsWindow : Window
         MenuEntries.IsEnabled = NewMenuBox.IsChecked == true;
     }
 
-    // One switch per entry of "FolderTools ›" in the new menu; with all three off, the entry itself goes.
+    // One switch per entry of "FolderTools ›" in the new menu; with all of them off, the entry itself goes.
     private void MenuEntry_Changed(object sender, RoutedEventArgs e)
     {
         if (!_initialized)
@@ -125,8 +128,18 @@ public partial class SettingsWindow : Window
             AppSettings.ShowSizeEntry = SizeEntryBox.IsChecked == true;
         else if (sender == CleanEntryBox)
             AppSettings.ShowCleanEntry = CleanEntryBox.IsChecked == true;
+        else if (sender == PhotosEntryBox)
+            AppSettings.ShowPhotosEntry = PhotosEntryBox.IsChecked == true;
         else if (sender == ColorEntryBox)
             AppSettings.ShowColorEntry = ColorEntryBox.IsChecked == true;
+    }
+
+    private void PhotoOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_initialized)
+            return;
+        (_settings.PhotoLayout, _settings.PhotoUndated) = PhotoOptions.Read(PhotoLayoutBox, PhotoUndatedBox);
+        _settings.Save();
     }
 
     private void DeleteModeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

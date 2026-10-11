@@ -50,13 +50,34 @@ namespace
     constexpr wchar_t HideValue[] = L"HideInNewContextMenu";
     constexpr wchar_t HideSizeValue[] = L"HideSizeEntry";
     constexpr wchar_t HideCleanValue[] = L"HideCleanEntry";
+    constexpr wchar_t HidePhotosValue[] = L"HidePhotosEntry";
     constexpr wchar_t HideColorValue[] = L"HideColorEntry";
 
     enum class Action
     {
         Size,
         Clean,
+        Photos,
     };
+
+    // What each tool entry shows and starts: title, icon (resource id of this DLL), app verb, settings value.
+    struct ActionInfo
+    {
+        UINT Title;
+        PCWSTR Icon;
+        PCWSTR Verb;
+        PCWSTR HideValue;
+    };
+
+    const ActionInfo& InfoOf(Action action)
+    {
+        static const ActionInfo infos[] = {
+            {IDS_MENU_SIZE, L",-201", L"size ", HideSizeValue},
+            {IDS_MENU_CLEAN, L",-202", L"clean ", HideCleanValue},
+            {IDS_MENU_PHOTOS, L",-204", L"photos ", HidePhotosValue},
+        };
+        return infos[static_cast<int>(action)];
+    }
 
     std::wstring LoadText(UINT id)
     {
@@ -218,7 +239,7 @@ namespace
     void Launch(Action action, const std::wstring& folder)
     {
         std::wstring app = AppPath();
-        std::wstring arguments = std::wstring(action == Action::Size ? L"size " : L"clean ") + Quote(folder);
+        std::wstring arguments = InfoOf(action).Verb + Quote(folder);
         if (!LaunchThroughExplorer(app, arguments))
             LaunchDirectly(app, arguments);
     }
@@ -254,7 +275,7 @@ namespace
         ComPtr<IUnknown> m_site;
     };
 
-    // "Folder sizes" or "Delete empty folders".
+    // "Folder sizes", "Delete empty folders" or "Sort photos by date".
     class SubCommand final : public CommandBase<SubCommand>
     {
     public:
@@ -267,12 +288,12 @@ namespace
 
         IFACEMETHODIMP GetTitle(IShellItemArray*, PWSTR* name) override
         {
-            return SHStrDupW(LoadText(m_action == Action::Size ? IDS_MENU_SIZE : IDS_MENU_CLEAN).c_str(), name);
+            return SHStrDupW(LoadText(InfoOf(m_action).Title).c_str(), name);
         }
 
         IFACEMETHODIMP GetIcon(IShellItemArray*, PWSTR* icon) override
         {
-            std::wstring resource = ModulePath() + (m_action == Action::Size ? L",-201" : L",-202");
+            std::wstring resource = ModulePath() + InfoOf(m_action).Icon;
             return SHStrDupW(resource.c_str(), icon);
         }
 
@@ -284,7 +305,7 @@ namespace
 
         IFACEMETHODIMP GetState(IShellItemArray*, BOOL, EXPCMDSTATE* state) override
         {
-            *state = HiddenBySettings(m_action == Action::Size ? HideSizeValue : HideCleanValue) ? ECS_HIDDEN : ECS_ENABLED;
+            *state = HiddenBySettings(InfoOf(m_action).HideValue) ? ECS_HIDDEN : ECS_ENABLED;
             return S_OK;
         }
 
@@ -462,10 +483,10 @@ public:
     {
         DWORD count = 0;
         bool hasItems = items && SUCCEEDED(items->GetCount(&count)) && count > 0;
-        // Hidden by the user (the whole menu, or both its sub-entries), or on items that are not folders of the file
+        // Hidden by the user (the whole menu, or all its sub-entries), or on items that are not folders of the file
         // system (This PC, Control Panel...).
         bool allHidden = HiddenBySettings(HideSizeValue) && HiddenBySettings(HideCleanValue)
-            && (HiddenBySettings(HideColorValue) || !hasItems);
+            && HiddenBySettings(HidePhotosValue) && (HiddenBySettings(HideColorValue) || !hasItems);
         *state = HiddenBySettings() || allHidden || (hasItems && FolderPaths(items).empty()) ? ECS_HIDDEN : ECS_ENABLED;
         return S_OK;
     }
@@ -481,9 +502,11 @@ public:
         // The sub-entries need the site too, to find the open folder when clicked on its background.
         ComPtr<IExplorerCommand> size;
         ComPtr<IExplorerCommand> clean;
+        ComPtr<IExplorerCommand> photos;
         RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&size, Action::Size, m_site.Get()));
         RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&clean, Action::Clean, m_site.Get()));
-        std::vector<ComPtr<IExplorerCommand>> list{size, clean};
+        RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&photos, Action::Photos, m_site.Get()));
+        std::vector<ComPtr<IExplorerCommand>> list{size, clean, photos};
         // The colors right in this sub-menu: File Explorer does not show a sub-menu inside a sub-menu (remarks of
         // IExplorerCommand::EnumSubCommands), and a second entry of the package, or a second package, gets gathered
         // with this one in an icon-less "FolderTools ›" flyout made by Windows.

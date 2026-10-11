@@ -23,7 +23,7 @@ function New-RoundedRectPath([System.Drawing.RectangleF]$r, [float]$radius) {
 
 # Rounded square in the yellow of File Explorer folders, with a white line drawing:
 #   Folder: the app (a filled folder with its tab); Size: three bars (folder sizes); Clean: the folder with a cross;
-#   Color: three dots (the folder color sub-menu).
+#   Color: three dots (the folder color sub-menu); Photos: a picture with mountains and a sun (sort photos by date).
 # -Hinted (small sizes): lines of a whole number of pixels, snapped to the pixel grid, so that they stay sharp.
 function New-IconBitmap([int]$size, [float]$padding = 0.04, [switch]$Hinted, [string]$Glyph = 'Folder') {
     $bmp = New-Object System.Drawing.Bitmap $size, $size, ([System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
@@ -80,6 +80,26 @@ function New-IconBitmap([int]$size, [float]$padding = 0.04, [switch]$Hinted, [st
                 $dd = [float]($s * 0.22)
                 $g.FillEllipse([System.Drawing.Brushes]::White, [float]($m + $dot[0] * $s - $dd / 2), [float]($m + $dot[1] * $s - $dd / 2), $dd, $dd)
             }
+        }
+        'Photos' {
+            # A white picture, its mountains and sun cut out in the background gradient. Edges on whole pixels.
+            function F([float]$v) { $c = $m + $v * $s; if ($Hinted) { [float][Math]::Round($c) } else { [float]$c } }
+            $r = [float]([Math]::Max(1, 0.06 * $s)); $d = 2 * $r
+            $photo = New-Object System.Drawing.Drawing2D.GraphicsPath
+            $photo.AddArc((F 0.18), (F 0.25), $d, $d, 180, 90)
+            $photo.AddArc((F 0.82) - $d, (F 0.25), $d, $d, 270, 90)
+            $photo.AddArc((F 0.82) - $d, (F 0.75) - $d, $d, $d, 0, 90)
+            $photo.AddArc((F 0.18), (F 0.75) - $d, $d, $d, 90, 90)
+            $photo.CloseFigure()
+            $g.FillPath([System.Drawing.Brushes]::White, $photo)
+            $photo.Dispose()
+            function Q([float]$x, [float]$y) { New-Object System.Drawing.PointF ($m + $x * $s), ($m + $y * $s) }
+            [System.Drawing.PointF[]]$big = @((Q 0.26 0.67), (Q 0.44 0.43), (Q 0.62 0.67))
+            [System.Drawing.PointF[]]$small = @((Q 0.50 0.67), (Q 0.63 0.51), (Q 0.74 0.67))
+            $g.FillPolygon($brush, $big)
+            $g.FillPolygon($brush, $small)
+            $sun = [float]($s * 0.14)
+            $g.FillEllipse($brush, [float]($m + 0.64 * $s - $sun / 2), [float]($m + 0.38 * $s - $sun / 2), $sun, $sun)
         }
         'Clean' {
             # A cross cut out of the folder, in the background gradient.
@@ -210,6 +230,7 @@ Save-Ico @(16, 20, 24, 32, 40, 48, 64, 256) (Join-Path $root 'src\FolderTools\As
 Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\SizeMenu.ico') 'Size'
 Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\CleanMenu.ico') 'Clean'
 Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\ColorMenu.ico') 'Color'
+Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\PhotosMenu.ico') 'Photos'
 # The colored folders, installed in <app>\Colors and referenced by the desktop.ini of the colored folders.
 $colorDir = Join-Path $root 'src\FolderTools.Shell\Colors'
 [System.IO.Directory]::CreateDirectory($colorDir) | Out-Null

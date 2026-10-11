@@ -389,4 +389,152 @@ They will not go to the recycle bin.</value>
   </data>
 <data name="SettingsGeneral" xml:space="preserve"><value>General</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Empty folders</value></data><data name="SettingsIgnoredFolders" xml:space="preserve"><value>Ignored folders</value></data><data name="SettingsIgnoredFoldersDescription" xml:space="preserve"><value>Never looked into nor deleted, and a folder holding one is not empty: version control repositories (.git…) need their empty folders. One name per line, * and ? allowed.</value></data><data name="CleanInsideIgnored" xml:space="preserve"><value>Nothing to look for here.</value></data><data name="CleanInsideIgnoredDetail" xml:space="preserve"><value>This folder is inside an ignored folder (.git, .svn…: see Settings → Empty folders), whose empty folders must stay.</value></data><data name="ActionColor" xml:space="preserve"><value>Folder color</value></data><data name="TabFolders" xml:space="preserve"><value>Folders</value></data><data name="TabFiles" xml:space="preserve"><value>Largest files</value></data><data name="ColumnFolder" xml:space="preserve"><value>Folder</value></data><data name="FilesCount" xml:space="preserve"><value>{0} largest files of the {1} kept</value></data><data name="FilesCountSubset" xml:space="preserve"><value>{0} largest files of this folder, among the {1} kept for the whole analysis: smaller files of this folder may be missing</value></data><data name="FilesNone" xml:space="preserve"><value>No file.</value></data><data name="FilesMore" xml:space="preserve"><value>Show 100 more</value></data><data name="MenuOpen" xml:space="preserve"><value>Open</value></data><data name="MenuShowInExplorer" xml:space="preserve"><value>Show in File Explorer</value></data><data name="ConfirmRecycleFile" xml:space="preserve"><value>Send “{0}” to the recycle bin?
 
-{1}</value></data><data name="CsvFileHeaders" xml:space="preserve"><value>Path|Name|Folder|Size (bytes)|Size (GB)|% of the analyzed folder|Modified</value></data></root>
+{1}</value></data><data name="CsvFileHeaders" xml:space="preserve"><value>Path|Name|Folder|Size (bytes)|Size (GB)|% of the analyzed folder|Modified</value></data>
+  <data name="ActionPhotos" xml:space="preserve">
+    <value>Sort photos by date</value>
+  </data>
+  <data name="ActionPhotosDescription" xml:space="preserve">
+    <value>Moves the photos, RAW files and videos of the folder into date folders, from the date they were taken. Can be undone.</value>
+  </data>
+  <data name="PhotosWindowTitle" xml:space="preserve">
+    <value>Sort photos by date – {0}</value>
+  </data>
+  <data name="SettingsPhotos" xml:space="preserve">
+    <value>Photos</value>
+  </data>
+  <data name="PhotosLayout" xml:space="preserve">
+    <value>Date folders</value>
+  </data>
+  <data name="PhotosUndated" xml:space="preserve">
+    <value>Photos without a date taken</value>
+  </data>
+  <data name="SettingsPhotosLayoutDescription" xml:space="preserve">
+    <value>The folders made by “Sort photos by date”, inside the sorted folder.</value>
+  </data>
+  <data name="SettingsPhotosUndatedDescription" xml:space="preserve">
+    <value>Screenshots, downloaded or edited pictures often have no date taken in their metadata.</value>
+  </data>
+  <data name="PhotosLayoutYearDay" xml:space="preserve">
+    <value>Year › day</value>
+  </data>
+  <data name="PhotosLayoutYearMonthDay" xml:space="preserve">
+    <value>Year › month › day</value>
+  </data>
+  <data name="PhotosLayoutYearMonth" xml:space="preserve">
+    <value>Year › month</value>
+  </data>
+  <data name="PhotosLayoutDay" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="PhotosUndatedFileDate" xml:space="preserve">
+    <value>Sort them by the file date</value>
+  </data>
+  <data name="PhotosUndatedNoDateFolder" xml:space="preserve">
+    <value>Put them in a “{0}” folder</value>
+  </data>
+  <data name="PhotosUndatedLeave" xml:space="preserve">
+    <value>Leave them where they are</value>
+  </data>
+  <data name="PhotosNoDateFolder" xml:space="preserve">
+    <value>No date</value>
+  </data>
+  <data name="PhotosOpenFolder" xml:space="preserve">
+    <value>Open the folder</value>
+  </data>
+  <data name="PhotosUndo" xml:space="preserve">
+    <value>Undo the sort</value>
+  </data>
+  <data name="PhotosRenameNote" xml:space="preserve">
+    <value>Only the files directly in this folder move; its subfolders and other files stay. Nothing is overwritten: a name already taken in a date folder gets “ (2)”.</value>
+  </data>
+  <data name="PhotosReading" xml:space="preserve">
+    <value>Reading the dates taken…</value>
+  </data>
+  <data name="PhotosReadCount_One" xml:space="preserve">
+    <value>{0} file read</value>
+  </data>
+  <data name="PhotosReadCount_Other" xml:space="preserve">
+    <value>{0} files read</value>
+  </data>
+  <data name="PhotosNoneFound" xml:space="preserve">
+    <value>No photos or videos directly in this folder.</value>
+  </data>
+  <data name="PhotosNothingToMove" xml:space="preserve">
+    <value>Nothing to move: no photo here has a date taken.</value>
+  </data>
+  <data name="PhotosPlanSummary" xml:space="preserve">
+    <value>{0} to sort into {1}.</value>
+  </data>
+  <data name="PhotosFiles_One" xml:space="preserve">
+    <value>{0} file</value>
+  </data>
+  <data name="PhotosFiles_Other" xml:space="preserve">
+    <value>{0} files</value>
+  </data>
+  <data name="PhotosFolders_One" xml:space="preserve">
+    <value>{0} folder</value>
+  </data>
+  <data name="PhotosFolders_Other" xml:space="preserve">
+    <value>{0} folders</value>
+  </data>
+  <data name="PhotosDetailFileDate_One" xml:space="preserve">
+    <value>{0} without a date taken, sorted by its file date</value>
+  </data>
+  <data name="PhotosDetailFileDate_Other" xml:space="preserve">
+    <value>{0} without a date taken, sorted by their file date</value>
+  </data>
+  <data name="PhotosDetailNoDateFolder_One" xml:space="preserve">
+    <value>{0} without a date taken goes to “{1}”</value>
+  </data>
+  <data name="PhotosDetailNoDateFolder_Other" xml:space="preserve">
+    <value>{0} without a date taken go to “{1}”</value>
+  </data>
+  <data name="PhotosDetailLeft_One" xml:space="preserve">
+    <value>{0} without a date taken stays where it is</value>
+  </data>
+  <data name="PhotosDetailLeft_Other" xml:space="preserve">
+    <value>{0} without a date taken stay where they are</value>
+  </data>
+  <data name="PhotosSort" xml:space="preserve">
+    <value>Sort ({0})</value>
+  </data>
+  <data name="PhotosSorting" xml:space="preserve">
+    <value>Sorting…</value>
+  </data>
+  <data name="PhotosDone" xml:space="preserve">
+    <value>{0} sorted into {1}.</value>
+  </data>
+  <data name="PhotosFailures_One" xml:space="preserve">
+    <value>{0} file could not be moved (listed first).</value>
+  </data>
+  <data name="PhotosFailures_Other" xml:space="preserve">
+    <value>{0} files could not be moved (listed first).</value>
+  </data>
+  <data name="PhotosUndoing" xml:space="preserve">
+    <value>Putting the files back…</value>
+  </data>
+  <data name="PhotosUndone_One" xml:space="preserve">
+    <value>Sort undone: {0} file put back.</value>
+  </data>
+  <data name="PhotosUndone_Other" xml:space="preserve">
+    <value>Sort undone: {0} files put back.</value>
+  </data>
+  <data name="PhotosUndoFailures_One" xml:space="preserve">
+    <value>{0} file could not be put back (listed first).</value>
+  </data>
+  <data name="PhotosUndoFailures_Other" xml:space="preserve">
+    <value>{0} files could not be put back (listed first).</value>
+  </data>
+  <data name="PhotosByFileDate" xml:space="preserve">
+    <value>file date, {0}</value>
+  </data>
+  <data name="PhotosNoDate" xml:space="preserve">
+    <value>no date</value>
+  </data>
+  <data name="PhotosRenamedFrom" xml:space="preserve">
+    <value>renamed: “{0}” was taken</value>
+  </data>
+  <data name="PhotosLeftInPlace" xml:space="preserve">
+    <value>Left where they are</value>
+  </data>
+</root>

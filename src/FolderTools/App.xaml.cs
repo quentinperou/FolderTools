@@ -44,12 +44,13 @@ public partial class App : Application
             args.Handled = true;
         };
 
-        // The context menu starts "FolderTools.exe size|clean <folder>"; the Start menu, no argument.
+        // The context menu starts "FolderTools.exe size|clean|photos <folder>"; the Start menu, no argument.
         var request = LaunchRequest.Parse(e.Args);
         Window window = request.Action switch
         {
             LaunchAction.Size => new SizeWindow(request.Path!),
             LaunchAction.Clean => new CleanWindow(request.Path!),
+            LaunchAction.Photos => new PhotoSortWindow(request.Path!),
             _ => new HomeWindow(request.Path),
         };
         MainWindow = window;

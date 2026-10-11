@@ -47,6 +47,14 @@ public sealed class AppSettings
     /// <summary>Folder names (wildcards allowed) that count as content and are never looked into (1.0.1).</summary>
     public List<string> IgnoredFolders { get; set; } = [.. DefaultIgnoredFolders];
 
+    /// <summary>Date folders made by “Sort photos by date”.</summary>
+    [JsonConverter(typeof(JsonStringEnumConverter<PhotoLayout>))]
+    public PhotoLayout PhotoLayout { get; set; } = PhotoLayout.YearDay;
+
+    /// <summary>What “Sort photos by date” does with files that have no date taken.</summary>
+    [JsonConverter(typeof(JsonStringEnumConverter<UndatedPolicy>))]
+    public UndatedPolicy PhotoUndated { get; set; } = UndatedPolicy.FileDate;
+
     /// <summary>Ask GitHub for a newer version when the app starts.</summary>
     public bool CheckForUpdatesAtStartup { get; set; } = true;
 
@@ -114,6 +122,12 @@ public sealed class AppSettings
     {
         get => IsShown("HideCleanEntry");
         set => SetShown("HideCleanEntry", value);
+    }
+
+    public static bool ShowPhotosEntry
+    {
+        get => IsShown("HidePhotosEntry");
+        set => SetShown("HidePhotosEntry", value);
     }
 
     public static bool ShowColorEntry
