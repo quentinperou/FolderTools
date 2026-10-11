@@ -95,26 +95,48 @@ public sealed class AppSettings
     // Read by FolderToolsMenu.dll (src/FolderTools.Shell) each time File Explorer builds its menu, hence the
     // registry rather than settings.json: no JSON parsing in the shell extension, and no admin rights needed.
     private const string MenuKey = @"Software\FolderTools";
-    private const string HideInNewMenuValue = "HideInNewContextMenu";
 
     /// <summary>"FolderTools ▸" in the new Windows 11 context menu; it always stays under "Show more options".</summary>
     public static bool ShowInNewContextMenu
     {
-        get
+        get => IsShown("HideInNewContextMenu");
+        set => SetShown("HideInNewContextMenu", value);
+    }
+
+    /// <summary>The sub-entries of "FolderTools ▸" in the new menu (1.1.0). Same names as in dllmain.cpp.</summary>
+    public static bool ShowSizeEntry
+    {
+        get => IsShown("HideSizeEntry");
+        set => SetShown("HideSizeEntry", value);
+    }
+
+    public static bool ShowCleanEntry
+    {
+        get => IsShown("HideCleanEntry");
+        set => SetShown("HideCleanEntry", value);
+    }
+
+    public static bool ShowColorEntry
+    {
+        get => IsShown("HideColorEntry");
+        set => SetShown("HideColorEntry", value);
+    }
+
+    private static bool IsShown(string hideValue)
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(MenuKey);
+        return key?.GetValue(hideValue) is not int hidden || hidden == 0;
+    }
+
+    private static void SetShown(string hideValue, bool shown)
+    {
+        try
         {
-            using var key = Registry.CurrentUser.OpenSubKey(MenuKey);
-            return key?.GetValue(HideInNewMenuValue) is not int hidden || hidden == 0;
+            using var key = Registry.CurrentUser.CreateSubKey(MenuKey);
+            key.SetValue(hideValue, shown ? 0 : 1, RegistryValueKind.DWord);
         }
-        set
+        catch (Exception ex) when (ex is UnauthorizedAccessException or IOException)
         {
-            try
-            {
-                using var key = Registry.CurrentUser.CreateSubKey(MenuKey);
-                key.SetValue(HideInNewMenuValue, value ? 0 : 1, RegistryValueKind.DWord);
-            }
-            catch (Exception ex) when (ex is UnauthorizedAccessException or IOException)
-            {
-            }
         }
     }
 }

@@ -6,10 +6,10 @@ project(FolderToolsMenu LANGUAGES CXX RC)
 # Static CRT: the DLL must not depend on the Visual C++ redistributable being installed.
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-add_library(FolderToolsMenu SHARED dllmain.cpp FolderToolsMenu.def FolderToolsMenu.rc)
+add_library(FolderToolsMenu SHARED dllmain.cpp FolderColor.cpp FolderToolsMenu.def FolderToolsMenu.rc)
 target_compile_features(FolderToolsMenu PRIVATE cxx_std_20)
 # No WIN32_LEAN_AND_MEAN: exdisp.h (IShellWindows) needs the OLE declarations it strips.
 target_compile_definitions(FolderToolsMenu PRIVATE UNICODE _UNICODE NOMINMAX)
 # C4324 (structure padded due to alignment) comes from the WRL headers themselves.
 target_compile_options(FolderToolsMenu PRIVATE /W4 /WX /wd4324 /permissive- /EHsc /utf-8)
-target_link_libraries(FolderToolsMenu PRIVATE runtimeobject shlwapi ole32 oleaut32 uuid)
+target_link_libraries(FolderToolsMenu PRIVATE runtimeobject shell32 shlwapi ole32 oleaut32 uuid)

@@ -1,9 +1,11 @@
-// FolderTools - "FolderTools ›" entry of the Windows 11 File Explorer context menu, on folders, drives and
-// the background of an open folder, with two sub-entries: "Folder sizes" and "Delete empty folders".
+// FolderTools - "FolderTools ›" entry of the Windows 11 File Explorer context menu, on folders and the
+// background of an open folder, with three sub-entries: "Folder sizes", "Delete empty folders" and
+// "Folder color ›" (folders only).
 //
 // Explorer finds this COM class through the sparse package (package/AppxManifest.xml), loads the DLL in a
-// surrogate process and calls IExplorerCommand. A sub-entry starts FolderTools.exe, installed next to this
-// DLL, as "FolderTools.exe size|clean <folder>", once per selected folder.
+// surrogate process and calls IExplorerCommand. The first two sub-entries start FolderTools.exe, installed next
+// to this DLL, as "FolderTools.exe size|clean <folder>", once per selected folder; the colors are applied here
+// (FolderColor.cpp). The classic menu applies them through the SetColor export, with rundll32.
 
 #include <windows.h>
 #include <exdisp.h>
@@ -19,21 +21,37 @@
 #include <string>
 #include <vector>
 
+#include "FolderColor.h"
 #include "resource.h"
 
 using namespace Microsoft::WRL;
+
+// Returns the HRESULT of a call that failed.
+#define RETURN_IF_FAILED_HR(expression) \
+    do \
+    { \
+        HRESULT failed_ = (expression); \
+        if (FAILED(failed_)) \
+            return failed_; \
+    } while (false)
 
 namespace
 {
     HMODULE g_module = nullptr;
 
-    // Guard against an accidental "select all" in a folder full of folders.
+    // Guard against an accidental "select all" in a folder full of folders: one window per folder.
     constexpr DWORD MaxFoldersPerInvoke = 8;
 
-    // Written by the app's settings (AppSettings.ShowInNewContextMenu): 1 hides the entry from this menu.
-    // It stays in the classic menu ("Show more options"), which is registered by the installer.
+    // A color costs no window: a whole selection can get one.
+    constexpr DWORD MaxFoldersPerColor = 500;
+
+    // Written by the app's settings (AppSettings): 1 hides the whole entry, or one sub-entry, from this menu.
+    // Everything stays in the classic menu ("Show more options"), which is registered by the installer.
     constexpr wchar_t SettingsKey[] = L"Software\\FolderTools";
     constexpr wchar_t HideValue[] = L"HideInNewContextMenu";
+    constexpr wchar_t HideSizeValue[] = L"HideSizeEntry";
+    constexpr wchar_t HideCleanValue[] = L"HideCleanEntry";
+    constexpr wchar_t HideColorValue[] = L"HideColorEntry";
 
     enum class Action
     {
@@ -71,12 +89,12 @@ namespace
 
     std::wstring ModulePath() { return ModuleFolder() + L"FolderToolsMenu.dll"; }
 
-    bool HiddenBySettings()
+    bool HiddenBySettings(PCWSTR value = HideValue)
     {
-        DWORD value = 0;
-        DWORD size = sizeof(value);
-        return RegGetValueW(HKEY_CURRENT_USER, SettingsKey, HideValue, RRF_RT_REG_DWORD, nullptr, &value, &size) == ERROR_SUCCESS
-            && value != 0;
+        DWORD data = 0;
+        DWORD size = sizeof(data);
+        return RegGetValueW(HKEY_CURRENT_USER, SettingsKey, value, RRF_RT_REG_DWORD, nullptr, &data, &size) == ERROR_SUCCESS
+            && data != 0;
     }
 
     // "C:\" must become "C:\\" inside quotes: otherwise \" reads as an escaped quote.
@@ -89,13 +107,13 @@ namespace
     }
 
     // File system folders of the selection: none for "This PC", Control Panel or a library root.
-    std::vector<std::wstring> FolderPaths(IShellItemArray* items)
+    std::vector<std::wstring> FolderPaths(IShellItemArray* items, DWORD max = MaxFoldersPerInvoke)
     {
         std::vector<std::wstring> paths;
         DWORD count = 0;
         if (!items || FAILED(items->GetCount(&count)))
             return paths;
-        for (DWORD i = 0; i < count && paths.size() < MaxFoldersPerInvoke; ++i)
+        for (DWORD i = 0; i < count && paths.size() < max; ++i)
         {
             ComPtr<IShellItem> item;
             SFGAOF attributes = 0;
@@ -267,7 +285,7 @@ namespace
 
         IFACEMETHODIMP GetState(IShellItemArray*, BOOL, EXPCMDSTATE* state) override
         {
-            *state = ECS_ENABLED;
+            *state = HiddenBySettings(m_action == Action::Size ? HideSizeValue : HideCleanValue) ? ECS_HIDDEN : ECS_ENABLED;
             return S_OK;
         }
 
@@ -301,20 +319,13 @@ namespace
         Action m_action = Action::Size;
     };
 
-    class SubCommands final : public RuntimeClass<RuntimeClassFlags<ClassicCom>, IEnumExplorerCommand>
+    // The sub-entries of a menu, as File Explorer reads them.
+    class CommandList final : public RuntimeClass<RuntimeClassFlags<ClassicCom>, IEnumExplorerCommand>
     {
     public:
-        HRESULT RuntimeClassInitialize(IUnknown* site)
+        HRESULT RuntimeClassInitialize(std::vector<ComPtr<IExplorerCommand>> commands)
         {
-            ComPtr<IExplorerCommand> size;
-            ComPtr<IExplorerCommand> clean;
-            HRESULT hr = MakeAndInitialize<SubCommand>(&size, Action::Size, site);
-            if (SUCCEEDED(hr))
-                hr = MakeAndInitialize<SubCommand>(&clean, Action::Clean, site);
-            if (FAILED(hr))
-                return hr;
-            m_commands.push_back(size);
-            m_commands.push_back(clean);
+            m_commands = std::move(commands);
             return S_OK;
         }
 
@@ -350,6 +361,133 @@ namespace
         std::vector<ComPtr<IExplorerCommand>> m_commands;
         size_t m_index = 0;
     };
+
+    // A color of "Folder color ›" (or Default), checked when every selected folder has it.
+    class ColorCommand final : public CommandBase<ColorCommand>
+    {
+    public:
+        HRESULT RuntimeClassInitialize(int color)
+        {
+            m_color = color;
+            return S_OK;
+        }
+
+        IFACEMETHODIMP GetTitle(IShellItemArray*, PWSTR* name) override
+        {
+            UINT id = m_color == FolderColor::Default ? IDS_COLOR_DEFAULT : FolderColor::Colors[m_color].Title;
+            return SHStrDupW(LoadText(id).c_str(), name);
+        }
+
+        IFACEMETHODIMP GetIcon(IShellItemArray*, PWSTR* icon) override
+        {
+            if (m_color != FolderColor::Default)
+                return SHStrDupW(FolderColor::IconPath(m_color).c_str(), icon);
+            // The ordinary folder icon of Windows.
+            wchar_t system[MAX_PATH];
+            UINT length = GetSystemDirectoryW(system, MAX_PATH);
+            std::wstring resource = std::wstring(system, length) + L"\\imageres.dll,-3";
+            return SHStrDupW(resource.c_str(), icon);
+        }
+
+        IFACEMETHODIMP GetCanonicalName(GUID* guid) override
+        {
+            *guid = GUID_NULL;
+            return E_NOTIMPL;
+        }
+
+        IFACEMETHODIMP GetState(IShellItemArray* items, BOOL, EXPCMDSTATE* state) override
+        {
+            auto folders = FolderPaths(items, MaxFoldersPerColor);
+            bool all = !folders.empty();
+            for (const auto& folder : folders)
+                all = all && FolderColor::Current(folder) == m_color;
+            *state = all ? ECS_CHECKED : ECS_ENABLED;
+            return S_OK;
+        }
+
+        IFACEMETHODIMP GetFlags(EXPCMDFLAGS* flags) override
+        {
+            *flags = m_color == FolderColor::Default ? ECF_SEPARATORBEFORE : ECF_DEFAULT;
+            return S_OK;
+        }
+
+        IFACEMETHODIMP EnumSubCommands(IEnumExplorerCommand** commands) override
+        {
+            *commands = nullptr;
+            return E_NOTIMPL;
+        }
+
+        IFACEMETHODIMP Invoke(IShellItemArray* items, IBindCtx*) override
+        {
+            for (const auto& folder : FolderPaths(items, MaxFoldersPerColor))
+                FolderColor::Apply(folder, m_color);
+            return S_OK;
+        }
+
+    private:
+        int m_color = FolderColor::Default;
+    };
+
+    // True when a path is a drive root ("C:\"): drives have their own icon, not a folder's.
+    bool IsDriveRoot(const std::wstring& path) { return PathIsRootW(path.c_str()) != FALSE; }
+
+    // "Folder color ›": on folders only, not on the background of an open folder nor on drives.
+    class ColorMenu final : public CommandBase<ColorMenu>
+    {
+    public:
+        IFACEMETHODIMP GetTitle(IShellItemArray*, PWSTR* name) override
+        {
+            return SHStrDupW(LoadText(IDS_MENU_COLOR).c_str(), name);
+        }
+
+        IFACEMETHODIMP GetIcon(IShellItemArray*, PWSTR* icon) override
+        {
+            std::wstring resource = ModulePath() + L",-203";
+            return SHStrDupW(resource.c_str(), icon);
+        }
+
+        IFACEMETHODIMP GetCanonicalName(GUID* guid) override
+        {
+            *guid = GUID_NULL;
+            return E_NOTIMPL;
+        }
+
+        IFACEMETHODIMP GetState(IShellItemArray* items, BOOL, EXPCMDSTATE* state) override
+        {
+            auto folders = FolderPaths(items, MaxFoldersPerColor);
+            bool drive = false;
+            for (const auto& folder : folders)
+                drive = drive || IsDriveRoot(folder);
+            *state = HiddenBySettings(HideColorValue) || folders.empty() || drive ? ECS_HIDDEN : ECS_ENABLED;
+            return S_OK;
+        }
+
+        IFACEMETHODIMP GetFlags(EXPCMDFLAGS* flags) override
+        {
+            *flags = ECF_HASSUBCOMMANDS;
+            return S_OK;
+        }
+
+        IFACEMETHODIMP EnumSubCommands(IEnumExplorerCommand** commands) override
+        {
+            std::vector<ComPtr<IExplorerCommand>> list;
+            for (int color = 0; color < FolderColor::Count; ++color)
+            {
+                ComPtr<IExplorerCommand> command;
+                RETURN_IF_FAILED_HR(MakeAndInitialize<ColorCommand>(&command, color));
+                list.push_back(command);
+            }
+            ComPtr<IExplorerCommand> reset;
+            RETURN_IF_FAILED_HR(MakeAndInitialize<ColorCommand>(&reset, FolderColor::Default));
+            list.push_back(reset);
+            return MakeAndInitialize<CommandList>(commands, std::move(list));
+        }
+
+        IFACEMETHODIMP Invoke(IShellItemArray*, IBindCtx*) override
+        {
+            return S_OK; // only opens the sub-menu
+        }
+    };
 }
 
 // "FolderTools ›": the entry File Explorer creates from the package manifest.
@@ -378,8 +516,11 @@ public:
     {
         DWORD count = 0;
         bool hasItems = items && SUCCEEDED(items->GetCount(&count)) && count > 0;
-        // Hidden by the user, or on items that are not folders of the file system (This PC, Control Panel...).
-        *state = HiddenBySettings() || (hasItems && FolderPaths(items).empty()) ? ECS_HIDDEN : ECS_ENABLED;
+        // Hidden by the user (the whole entry, or all its sub-entries), or on items that are not folders of the file
+        // system (This PC, Control Panel...).
+        bool allHidden = HiddenBySettings(HideSizeValue) && HiddenBySettings(HideCleanValue)
+            && (HiddenBySettings(HideColorValue) || !hasItems);
+        *state = HiddenBySettings() || allHidden || (hasItems && FolderPaths(items).empty()) ? ECS_HIDDEN : ECS_ENABLED;
         return S_OK;
     }
 
@@ -392,7 +533,13 @@ public:
     IFACEMETHODIMP EnumSubCommands(IEnumExplorerCommand** commands) override
     {
         // The sub-entries need the site too, to find the open folder when clicked on its background.
-        return MakeAndInitialize<SubCommands>(commands, m_site.Get());
+        ComPtr<IExplorerCommand> size;
+        ComPtr<IExplorerCommand> clean;
+        ComPtr<IExplorerCommand> color;
+        RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&size, Action::Size, m_site.Get()));
+        RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&clean, Action::Clean, m_site.Get()));
+        RETURN_IF_FAILED_HR(MakeAndInitialize<ColorMenu>(&color));
+        return MakeAndInitialize<CommandList>(commands, std::vector<ComPtr<IExplorerCommand>>{size, clean, color});
     }
 
     IFACEMETHODIMP Invoke(IShellItemArray*, IBindCtx*) override
@@ -413,12 +560,34 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID riid, void** instance)
     return Module<InProc>::GetModule().GetClassObject(clsid, riid, instance);
 }
 
+// Classic menu ("Show more options", Windows 10): rundll32.exe "<app>\FolderToolsMenu.dll",SetColor red "<folder>"
+// (or "default"). rundll32 calls this Unicode version for "SetColor".
+extern "C" void CALLBACK SetColorW(HWND, HINSTANCE, LPWSTR commandLine, int)
+{
+    int count = 0;
+    LPWSTR* args = CommandLineToArgvW(commandLine, &count);
+    if (!args)
+        return;
+    int color = count >= 2 ? FolderColor::Parse(args[0]) : -2;
+    if (color != -2)
+    {
+        HRESULT com = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+        for (int i = 1; i < count; ++i)
+            if (!PathIsRootW(args[i]))
+                FolderColor::Apply(args[i], color);
+        if (SUCCEEDED(com))
+            CoUninitialize();
+    }
+    LocalFree(args);
+}
+
 BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID)
 {
     if (reason == DLL_PROCESS_ATTACH)
     {
         g_module = module;
         DisableThreadLibraryCalls(module);
+        FolderColor::Initialize(ModuleFolder());
     }
     return TRUE;
 }

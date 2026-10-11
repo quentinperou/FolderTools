@@ -56,14 +56,29 @@
   entier…), où certains programmes ont besoin de leurs dossiers vides.
 - Pratique pour le **dossier temporaire** de Windows : la fenêtre d'accueil a un lien *Dossier temporaire*.
 
+### Couleur du dossier
+
+- **Clic droit sur un dossier → FolderTools › Couleur du dossier ›** : rouge, orange, jaune, vert, bleu, violet, rose
+  ou gris, comme les étiquettes de macOS ; **Couleur par défaut** rend au dossier sa propre icône. Fonctionne sur
+  plusieurs dossiers sélectionnés à la fois ; la couleur actuelle est cochée.
+- Le dossier prend une icône de dossier colorée dans le style de Windows 11, par le même réglage `desktop.ini` que
+  Propriétés → Personnaliser → Changer d'icône. Un dossier qui avait déjà sa propre icône (Téléchargements,
+  Documents…) la retrouve avec *Couleur par défaut* ; ses autres réglages (comme son nom traduit) ne sont jamais touchés.
+- Bon à savoir : la couleur n'est que l'icône du dossier. Elle ne se recherche pas comme une étiquette macOS, et un
+  dossier coloré n'affiche plus l'aperçu de son contenu en grandes icônes. Les icônes sont dans le dossier de
+  FolderTools : sur un PC sans FolderTools (ou après sa désinstallation), les dossiers colorés ont l'air de dossiers
+  ordinaires. Les lecteurs ne se colorent pas.
+- Sous Windows 10, ça fonctionne de la même façon (menu classique), avec des icônes au style de Windows 11 au milieu
+  de dossiers au style de Windows 10.
+
 ### Et aussi
 
 - Apparence Windows 11 (Fluent, Mica) qui **suit le thème clair/sombre** de Windows ; le thème peut aussi être forcé
   en clair ou en sombre dans les **Paramètres**.
 - **Français et anglais** : l'application, le menu clic droit et l'installeur suivent la langue d'affichage de
   Windows ; la langue de l'application peut aussi être choisie dans les **Paramètres**.
-- L'entrée du nouveau menu de Windows 11 peut être **désactivée** dans les paramètres ; elle reste alors dans
-  « Afficher plus d'options ».
+- L'entrée du nouveau menu de Windows 11 peut être **désactivée** dans les paramètres, ou réduite à certaines de ses
+  trois entrées ; tout reste dans « Afficher plus d'options ».
 - **Mises à jour en un clic** : au démarrage, l'application consulte les Releases GitHub ; un bandeau en haut de chaque
   fenêtre propose la nouvelle version (**Nouveautés** / **Mettre à jour**), qui s'installe et redémarre l'application. Dans les **Paramètres** : vérifier maintenant,
   désactiver la vérification au démarrage, ou choisir le canal **Bêta** pour recevoir les nouveautés en avance.
@@ -95,6 +110,8 @@ Désinstaller : **Paramètres → Applications → Applications installées → 
 
 Elle garde :
 
+- la couleur des dossiers colorés, dans leur `desktop.ini` : sans les icônes de FolderTools ils ont l'air de dossiers
+  ordinaires, et réinstaller FolderTools leur rend leur couleur ;
 - les paramètres des **autres** comptes Windows (un désinstalleur ne peut pas les atteindre ; ce n'est qu'un petit
   `settings.json` par compte) ;
 - le .NET Desktop Runtime (d'autres applications peuvent s'en servir) ;
@@ -177,7 +194,7 @@ tools/                  Outil de dev : InvokeMenu (lance les commandes du menu i
 | Quoi | Où |
 |------|-----|
 | Textes de l'application | `src/FolderTools/Properties/Strings.resx` (anglais, par défaut) et `Strings.fr.resx` (français). Les tests vérifient que les deux ont les mêmes clés et les mêmes paramètres. |
-| Libellés du menu clic droit | Tables de chaînes dans `src/FolderTools.Shell/FolderToolsMenu.rc` |
+| Libellés du menu clic droit (entrées et couleurs) | Tables de chaînes dans `src/FolderTools.Shell/FolderToolsMenu.rc` |
 | Messages de l'installeur | `[Languages]` et `[CustomMessages]` dans `installer/FolderTools.iss` |
 | Langues proposées dans les paramètres | `AppSettings.SupportedLanguages` dans `src/FolderTools/AppSettings.cs` |
 
@@ -201,7 +218,7 @@ demande UAC pendant l'installation.
 
 ## Feuille de route
 
-- [ ] **Couleurs de dossiers**, comme les étiquettes de macOS : « FolderTools › Couleur › » pose une icône de dossier colorée.
+- [ ] Icônes de dossiers colorés au style de Windows 10, choisies automatiquement sous Windows 10.
 - [ ] **Signature gratuite** de l'installeur et du package via [SignPath Foundation](https://signpath.org) : plus
       d'avertissement SmartScreen, et plus besoin de droits administrateur pour le menu.
 - [ ] Version ARM64.

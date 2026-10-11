@@ -14,6 +14,16 @@ BEGIN
     IDS_MENU_TITLE "FolderTools"
     IDS_MENU_SIZE "Folder sizes"
     IDS_MENU_CLEAN "Delete empty folders"
+    IDS_MENU_COLOR "Folder color"
+    IDS_COLOR_RED "Red"
+    IDS_COLOR_ORANGE "Orange"
+    IDS_COLOR_YELLOW "Yellow"
+    IDS_COLOR_GREEN "Green"
+    IDS_COLOR_BLUE "Blue"
+    IDS_COLOR_PURPLE "Purple"
+    IDS_COLOR_PINK "Pink"
+    IDS_COLOR_GRAY "Gray"
+    IDS_COLOR_DEFAULT "Default color"
 END
 
 // US English is the loader's last-resort fallback for languages without a table here.
@@ -23,6 +33,16 @@ BEGIN
     IDS_MENU_TITLE "FolderTools"
     IDS_MENU_SIZE "Folder sizes"
     IDS_MENU_CLEAN "Delete empty folders"
+    IDS_MENU_COLOR "Folder color"
+    IDS_COLOR_RED "Red"
+    IDS_COLOR_ORANGE "Orange"
+    IDS_COLOR_YELLOW "Yellow"
+    IDS_COLOR_GREEN "Green"
+    IDS_COLOR_BLUE "Blue"
+    IDS_COLOR_PURPLE "Purple"
+    IDS_COLOR_PINK "Pink"
+    IDS_COLOR_GRAY "Gray"
+    IDS_COLOR_DEFAULT "Default color"
 END
 
 LANGUAGE LANG_FRENCH, SUBLANG_NEUTRAL
@@ -31,8 +51,19 @@ BEGIN
     IDS_MENU_TITLE "FolderTools"
     IDS_MENU_SIZE "Taille des dossiers"
     IDS_MENU_CLEAN "Supprimer les dossiers vides"
+    IDS_MENU_COLOR "Couleur du dossier"
+    IDS_COLOR_RED "Rouge"
+    IDS_COLOR_ORANGE "Orange"
+    IDS_COLOR_YELLOW "Jaune"
+    IDS_COLOR_GREEN "Vert"
+    IDS_COLOR_BLUE "Bleu"
+    IDS_COLOR_PURPLE "Violet"
+    IDS_COLOR_PINK "Rose"
+    IDS_COLOR_GRAY "Gris"
+    IDS_COLOR_DEFAULT "Couleur par défaut"
 END
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 IDI_MENU_SIZE ICON "SizeMenu.ico"
 IDI_MENU_CLEAN ICON "CleanMenu.ico"
+IDI_MENU_COLOR ICON "ColorMenu.ico"

@@ -75,6 +75,9 @@
                 <Setter TargetName="Track" Property="Background" Value="{DynamicResource ToggleSwitchFillOnPointerOver}" />
                 <Setter TargetName="Knob" Property="Fill" Value="{DynamicResource ToggleSwitchKnobFillOnPointerOver}" />
               </MultiTrigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Track" Property="Opacity" Value="0.4" />
+              </Trigger>
             </ControlTemplate.Triggers>
           </ControlTemplate>
         </Setter.Value>
@@ -197,18 +200,45 @@
           </DockPanel>
         </Border>
 
-        <!-- "FolderTools ›" in the new Windows 11 context menu (always under "Show more options"). -->
-        <Border Style="{StaticResource Card}">
-          <DockPanel>
-            <TextBlock DockPanel.Dock="Left" Style="{StaticResource CardIcon}" Text="&#xE8B7;" />
-            <CheckBox x:Name="NewMenuBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
-                      VerticalAlignment="Center" Margin="16,0,0,0" Checked="NewMenu_Changed" Unchecked="NewMenu_Changed"
-                      AutomationProperties.Name="{local:Tr SettingsNewMenu}" />
-            <StackPanel VerticalAlignment="Center">
-              <TextBlock Text="{local:Tr SettingsNewMenu}" />
-              <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsNewMenuDescription}" />
+        <!-- "FolderTools ›" in the new Windows 11 context menu, then each of its entries (always all under
+             "Show more options"). -->
+        <Border Style="{StaticResource Card}" Padding="0">
+          <StackPanel>
+            <DockPanel Margin="16,14">
+              <TextBlock DockPanel.Dock="Left" Style="{StaticResource CardIcon}" Text="&#xE8B7;" />
+              <CheckBox x:Name="NewMenuBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                        VerticalAlignment="Center" Margin="16,0,0,0" Checked="NewMenu_Changed" Unchecked="NewMenu_Changed"
+                        AutomationProperties.Name="{local:Tr SettingsNewMenu}" />
+              <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="{local:Tr SettingsNewMenu}" />
+                <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsNewMenuDescription}" />
+              </StackPanel>
+            </DockPanel>
+
+            <StackPanel x:Name="MenuEntries">
+              <Rectangle Style="{StaticResource CardDivider}" />
+              <DockPanel Style="{StaticResource CardSubRow}">
+                <CheckBox x:Name="SizeEntryBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                          VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
+                          AutomationProperties.Name="{local:Tr ActionSize}" />
+                <TextBlock Text="{local:Tr ActionSize}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Rectangle Style="{StaticResource CardDivider}" />
+              <DockPanel Style="{StaticResource CardSubRow}">
+                <CheckBox x:Name="CleanEntryBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                          VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
+                          AutomationProperties.Name="{local:Tr ActionClean}" />
+                <TextBlock Text="{local:Tr ActionClean}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Rectangle Style="{StaticResource CardDivider}" />
+              <DockPanel Style="{StaticResource CardSubRow}">
+                <CheckBox x:Name="ColorEntryBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                          VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
+                          AutomationProperties.Name="{local:Tr ActionColor}" />
+                <TextBlock Text="{local:Tr ActionColor}" VerticalAlignment="Center" />
+              </DockPanel>
             </StackPanel>
-          </DockPanel>
+          </StackPanel>
         </Border>
       </StackPanel>
     </ScrollViewer>

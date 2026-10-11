@@ -46,6 +46,10 @@ public partial class SettingsWindow : Window
         Closed += (_, _) => Updater.Checked -= Updater_Checked;
 
         NewMenuBox.IsChecked = AppSettings.ShowInNewContextMenu;
+        SizeEntryBox.IsChecked = AppSettings.ShowSizeEntry;
+        CleanEntryBox.IsChecked = AppSettings.ShowCleanEntry;
+        ColorEntryBox.IsChecked = AppSettings.ShowColorEntry;
+        MenuEntries.IsEnabled = NewMenuBox.IsChecked == true;
 
         DeleteModeBox.Items.Add(Strings.Get("DeleteModeRecycle"));
         DeleteModeBox.Items.Add(Strings.Get("DeleteModePermanent"));
@@ -106,8 +110,23 @@ public partial class SettingsWindow : Window
     // Checked/Unchecked rather than Click: a toggle through UI Automation raises no Click.
     private void NewMenu_Changed(object sender, RoutedEventArgs e)
     {
-        if (_initialized)
-            AppSettings.ShowInNewContextMenu = NewMenuBox.IsChecked == true;
+        if (!_initialized)
+            return;
+        AppSettings.ShowInNewContextMenu = NewMenuBox.IsChecked == true;
+        MenuEntries.IsEnabled = NewMenuBox.IsChecked == true;
+    }
+
+    // One switch per entry of "FolderTools ›" in the new menu; with all three off, the entry itself goes.
+    private void MenuEntry_Changed(object sender, RoutedEventArgs e)
+    {
+        if (!_initialized)
+            return;
+        if (sender == SizeEntryBox)
+            AppSettings.ShowSizeEntry = SizeEntryBox.IsChecked == true;
+        else if (sender == CleanEntryBox)
+            AppSettings.ShowCleanEntry = CleanEntryBox.IsChecked == true;
+        else if (sender == ColorEntryBox)
+            AppSettings.ShowColorEntry = ColorEntryBox.IsChecked == true;
     }
 
     private void DeleteModeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

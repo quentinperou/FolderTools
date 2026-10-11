@@ -53,13 +53,27 @@
   some programs need their empty folders.
 - Handy for the **temporary folder** of Windows: the home window has a *Temporary folder* link.
 
+### Folder color
+
+- **Right-click a folder → FolderTools › Folder color ›**: red, orange, yellow, green, blue, purple, pink or gray,
+  like the tags of macOS; **Default color** gives the folder its own icon back. Works on several selected folders at
+  once; the current color is checked.
+- The folder gets a colored folder icon in the style of Windows 11, through the same `desktop.ini` setting as
+  Properties → Customize → Change Icon. A folder that already had its own icon (Downloads, Documents…) gets it back
+  with *Default color*; its other settings (such as its translated name) are never touched.
+- Good to know: the color is the folder's icon, nothing more. It cannot be searched like a macOS tag, and a colored
+  folder no longer shows a preview of its content in large icons. The icons live in the FolderTools folder: on a PC
+  without FolderTools (or after uninstalling it), colored folders look like ordinary ones. Drives cannot be colored.
+- On Windows 10 it works the same (classic menu), with Windows 11 style icons among Windows 10 style folders.
+
 ### And also
 
 - Windows 11 look (Fluent, Mica) that **follows the light/dark theme** of Windows; the theme can also be set to
   light or dark in **Settings**.
 - **English and French**: the app, the context menu and the installer follow the Windows display language; the
   app language can also be chosen in **Settings**.
-- The entry of the new Windows 11 menu can be **turned off** in Settings; it then stays under “Show more options”.
+- The entry of the new Windows 11 menu can be **turned off** in Settings, or limited to some of its three entries;
+  everything stays under “Show more options”.
 - **Updates in one click**: at startup the app checks the GitHub Releases; a bar at the top of every window offers
   the new version (**What's new** / **Update**), which installs itself and restarts the app. In **Settings**: check now, turn off the check at startup, or
   choose the **Beta** channel to get new versions earlier.
@@ -91,6 +105,8 @@ To uninstall: **Settings → Apps → Installed apps → FolderTools**. It remov
 
 It keeps:
 
+- the color of colored folders, in their `desktop.ini`: without the FolderTools icons they look like ordinary folders,
+  and installing FolderTools again brings their colors back;
 - the settings of the **other** Windows accounts (an uninstaller cannot reach them; each is a small `settings.json`);
 - the .NET Desktop Runtime (other apps may use it);
 - what you made with the app: CSV exports, folders sent to the recycle bin.
@@ -171,7 +187,7 @@ tools/                  Dev tool: InvokeMenu (runs the installed menu commands l
 | What | Where |
 |------|-------|
 | App texts | `src/FolderTools/Properties/Strings.resx` (English, the default) and `Strings.fr.resx` (French). The tests check that both have the same keys and placeholders. |
-| Context menu labels | String tables in `src/FolderTools.Shell/FolderToolsMenu.rc` |
+| Context menu labels (entries and colors) | String tables in `src/FolderTools.Shell/FolderToolsMenu.rc` |
 | Installer messages | `[Languages]` and `[CustomMessages]` in `installer/FolderTools.iss` |
 | Languages offered in Settings | `AppSettings.SupportedLanguages` in `src/FolderTools/AppSettings.cs` |
 
@@ -194,7 +210,7 @@ and declares `FolderToolsMenu.dll`, which shows “FolderTools ›” and its tw
 
 ## Roadmap
 
-- [ ] **Folder colors**, like the tags of macOS: “FolderTools › Color ›” sets a colored folder icon.
+- [ ] Colored folder icons in the style of Windows 10, picked automatically on Windows 10.
 - [ ] **Free signing** of the installer and package through [SignPath Foundation](https://signpath.org): no more
       SmartScreen warning, and no administrator rights needed for the menu.
 - [ ] ARM64 build.

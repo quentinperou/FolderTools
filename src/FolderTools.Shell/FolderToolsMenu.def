@@ -2,3 +2,5 @@ LIBRARY FolderToolsMenu
 EXPORTS
     DllCanUnloadNow PRIVATE
     DllGetClassObject PRIVATE
+    ; Classic menu: rundll32.exe "<app>\FolderToolsMenu.dll",SetColor red "<folder>"
+    SetColorW

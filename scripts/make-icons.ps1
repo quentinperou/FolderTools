@@ -22,7 +22,8 @@ function New-RoundedRectPath([System.Drawing.RectangleF]$r, [float]$radius) {
 }
 
 # Rounded square in the yellow of File Explorer folders, with a white line drawing:
-#   Folder: the app (a filled folder with its tab); Size: three bars (folder sizes); Clean: the folder with a cross.
+#   Folder: the app (a filled folder with its tab); Size: three bars (folder sizes); Clean: the folder with a cross;
+#   Color: three dots (the folder color sub-menu).
 # -Hinted (small sizes): lines of a whole number of pixels, snapped to the pixel grid, so that they stay sharp.
 function New-IconBitmap([int]$size, [float]$padding = 0.04, [switch]$Hinted, [string]$Glyph = 'Folder') {
     $bmp = New-Object System.Drawing.Bitmap $size, $size, ([System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
@@ -73,6 +74,13 @@ function New-IconBitmap([int]$size, [float]$padding = 0.04, [switch]$Hinted, [st
             $g.DrawLine($pen, (P 0.50 0.76), (P 0.50 0.24))
             $g.DrawLine($pen, (P 0.70 0.76), (P 0.70 0.40))
         }
+        'Color' {
+            # Three dots, like a palette.
+            foreach ($dot in @(@(0.36, 0.38), @(0.64, 0.38), @(0.50, 0.64))) {
+                $dd = [float]($s * 0.22)
+                $g.FillEllipse([System.Drawing.Brushes]::White, [float]($m + $dot[0] * $s - $dd / 2), [float]($m + $dot[1] * $s - $dd / 2), $dd, $dd)
+            }
+        }
         'Clean' {
             # A cross cut out of the folder, in the background gradient.
             # Up to 20 px: a bigger cross with a thinner line, otherwise it fills in and reads as a blob.
@@ -104,14 +112,8 @@ function Save-Png([int]$size, [string]$path, [float]$padding = 0.04) {
     Write-Host "  $path"
 }
 
-# ICO file made of PNG-compressed entries (supported since Windows Vista). The small sizes (taskbar, Start menu,
-# File Explorer) fill the whole square, like other Windows 11 app icons; from 48 px on, a 4 % margin is kept.
-function Save-Ico([int[]]$sizes, [string]$path, [string]$Glyph = 'Folder') {
-    $images = foreach ($size in $sizes) {
-        $b = if ($size -le 40) { New-IconBitmap $size 0 -Hinted -Glyph $Glyph } else { New-IconBitmap $size -Glyph $Glyph }
-        , (Get-PngBytes $b)
-        $b.Dispose()
-    }
+# ICO file made of PNG-compressed entries (supported since Windows Vista).
+function Write-IcoFile([int[]]$sizes, [object[]]$images, [string]$path) {
     $fs = [System.IO.File]::Create($path)
     $bw = New-Object System.IO.BinaryWriter $fs
     $bw.Write([UInt16]0); $bw.Write([UInt16]1); $bw.Write([UInt16]$sizes.Count)
@@ -128,11 +130,84 @@ function Save-Ico([int[]]$sizes, [string]$path, [string]$Glyph = 'Folder') {
     Write-Host "  $path"
 }
 
+# App and menu icons. The small sizes (taskbar, Start menu, File Explorer) fill the whole square, like other
+# Windows 11 app icons; from 48 px on, a 4 % margin is kept.
+function Save-Ico([int[]]$sizes, [string]$path, [string]$Glyph = 'Folder') {
+    $images = foreach ($size in $sizes) {
+        $b = if ($size -le 40) { New-IconBitmap $size 0 -Hinted -Glyph $Glyph } else { New-IconBitmap $size -Glyph $Glyph }
+        , (Get-PngBytes $b)
+        $b.Dispose()
+    }
+    Write-IcoFile $sizes $images $path
+}
+
+# ---------------------------------------------------------------- Folder colors
+
+# Colors of "FolderTools › Color ›", in the order of the menu (installer\FolderTools.iss and dllmain.cpp use the
+# same names and order).
+$FolderColors = [ordered]@{
+    Red = 0xE5484D; Orange = 0xF5891F; Yellow = 0xF5C02B; Green = 0x3DAA5B
+    Blue = 0x3B82F6; Purple = 0x8E5BD9; Pink = 0xE85A9E; Gray = 0x8A8F98
+}
+
+function Get-Shade([int]$rgb, [double]$k) {
+    $r = ($rgb -shr 16) -band 255; $g = ($rgb -shr 8) -band 255; $b = $rgb -band 255
+    if ($k -ge 0) { $r += (255 - $r) * $k; $g += (255 - $g) * $k; $b += (255 - $b) * $k }
+    else { $r *= (1 + $k); $g *= (1 + $k); $b *= (1 + $k) }
+    [System.Drawing.Color]::FromArgb(255, [int]$r, [int]$g, [int]$b)
+}
+
+# A folder in the flat style of Windows 11: back with its tab (darker), front panel with a light gradient.
+# Up to 48 px the edges sit on whole pixels, so that they stay sharp in the Details and List views.
+function New-ColorFolderBitmap([int]$size, [int]$rgb) {
+    $bmp = New-Object System.Drawing.Bitmap $size, $size, ([System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+    $g = [System.Drawing.Graphics]::FromImage($bmp)
+    $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+    $g.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+    $g.Clear([System.Drawing.Color]::Transparent)
+    $hinted = $size -le 48
+    function X([float]$v) { $c = $v * $size; if ($hinted) { [float][Math]::Round($c) } else { [float]$c } }
+    $r = [float][Math]::Max(1, [Math]::Round(0.05 * $size)); $d = 2 * $r
+
+    $back = New-Object System.Drawing.Drawing2D.GraphicsPath
+    $back.AddArc((X 0.06), (X 0.16), $d, $d, 180, 90)
+    $back.AddLine((X 0.06) + $r, (X 0.16), (X 0.38), (X 0.16))
+    $back.AddLine((X 0.38), (X 0.16), (X 0.46), (X 0.25))
+    $back.AddArc((X 0.94) - $d, (X 0.25), $d, $d, 270, 90)
+    $back.AddArc((X 0.94) - $d, (X 0.84) - $d, $d, $d, 0, 90)
+    $back.AddArc((X 0.06), (X 0.84) - $d, $d, $d, 90, 90)
+    $back.CloseFigure()
+    $backBrush = New-Object System.Drawing.SolidBrush (Get-Shade $rgb -0.18)
+    $g.FillPath($backBrush, $back)
+
+    $frontRect = New-Object System.Drawing.RectangleF (X 0.06), (X 0.33), ((X 0.94) - (X 0.06)), ((X 0.84) - (X 0.33))
+    $front = New-RoundedRectPath $frontRect $r
+    $frontBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush $frontRect, (Get-Shade $rgb 0.22), (Get-Shade $rgb 0), ([float]90)
+    $g.FillPath($frontBrush, $front)
+
+    $frontBrush.Dispose(); $front.Dispose(); $backBrush.Dispose(); $back.Dispose(); $g.Dispose()
+    return $bmp
+}
+
+function Save-ColorIco([string]$name, [int]$rgb, [string]$path) {
+    $sizes = @(16, 20, 24, 32, 40, 48, 64, 96, 128, 256)
+    $images = foreach ($size in $sizes) {
+        $b = New-ColorFolderBitmap $size $rgb
+        , (Get-PngBytes $b)
+        $b.Dispose()
+    }
+    Write-IcoFile $sizes $images $path
+}
 Write-Host 'Generated icons:'
 Save-Ico @(16, 20, 24, 32, 40, 48, 64, 256) (Join-Path $root 'src\FolderTools\Assets\FolderTools.ico')
 # Sub-entries of "FolderTools ›" in the context menu (resources of FolderToolsMenu.dll).
 Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\SizeMenu.ico') 'Size'
 Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\CleanMenu.ico') 'Clean'
+Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\ColorMenu.ico') 'Color'
+# The colored folders, installed in <app>\Colors and referenced by the desktop.ini of the colored folders.
+$colorDir = Join-Path $root 'src\FolderTools.Shell\Colors'
+[System.IO.Directory]::CreateDirectory($colorDir) | Out-Null
+foreach ($name in $FolderColors.Keys) { Save-ColorIco $name $FolderColors[$name] (Join-Path $colorDir "$name.ico") }
 Save-Png 44 (Join-Path $root 'package\Assets\Square44x44Logo.png')
 Save-Png 150 (Join-Path $root 'package\Assets\Square150x150Logo.png') 0.2
 Save-Png 50 (Join-Path $root 'package\Assets\StoreLogo.png')

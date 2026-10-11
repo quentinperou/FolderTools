@@ -190,7 +190,7 @@
     <value>[{0} fichiers dans ce dossier]</value>
   </data>
   <data name="HomeContextMenuHint" xml:space="preserve">
-    <value>Les deux outils sont aussi dans le menu clic droit des dossiers et des lecteurs : clic droit › FolderTools.</value>
+    <value>Ces outils, et la couleur des dossiers, sont aussi dans le menu clic droit des dossiers et des lecteurs : clic droit › FolderTools.</value>
   </data>
   <data name="HomeDropHint" xml:space="preserve">
     <value>ou déposez un dossier sur cette fenêtre</value>
@@ -297,7 +297,7 @@ Ils n'iront pas à la corbeille.</value>
     <value>Menu clic droit de Windows 11</value>
   </data>
   <data name="SettingsNewMenuDescription" xml:space="preserve">
-    <value>Affiche « FolderTools › » dans le nouveau menu clic droit des dossiers et des lecteurs. Il reste toujours dans « Afficher plus d'options ».</value>
+    <value>Affiche « FolderTools › » dans le nouveau menu clic droit des dossiers et des lecteurs, avec les entrées choisies ci-dessous. Tout reste toujours dans « Afficher plus d'options ».</value>
   </data>
   <data name="SettingsTheme" xml:space="preserve">
     <value>Thème</value>
@@ -387,4 +387,4 @@ Ils n'iront pas à la corbeille.</value>
   <data name="UpdatesTitle" xml:space="preserve">
     <value>Mises à jour</value>
   </data>
-<data name="SettingsGeneral" xml:space="preserve"><value>Général</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Dossiers vides</value></data><data name="SettingsIgnoredFolders" xml:space="preserve"><value>Dossiers ignorés</value></data><data name="SettingsIgnoredFoldersDescription" xml:space="preserve"><value>Jamais explorés ni supprimés, et un dossier qui en contient un n'est pas vide : les dépôts de gestion de versions (.git…) ont besoin de leurs dossiers vides. Un nom par ligne, * et ? acceptés.</value></data><data name="CleanInsideIgnored" xml:space="preserve"><value>Rien à chercher ici.</value></data><data name="CleanInsideIgnoredDetail" xml:space="preserve"><value>Ce dossier est dans un dossier ignoré (.git, .svn… : voir Paramètres → Dossiers vides), dont les dossiers vides doivent rester.</value></data></root>
+<data name="SettingsGeneral" xml:space="preserve"><value>Général</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Dossiers vides</value></data><data name="SettingsIgnoredFolders" xml:space="preserve"><value>Dossiers ignorés</value></data><data name="SettingsIgnoredFoldersDescription" xml:space="preserve"><value>Jamais explorés ni supprimés, et un dossier qui en contient un n'est pas vide : les dépôts de gestion de versions (.git…) ont besoin de leurs dossiers vides. Un nom par ligne, * et ? acceptés.</value></data><data name="CleanInsideIgnored" xml:space="preserve"><value>Rien à chercher ici.</value></data><data name="CleanInsideIgnoredDetail" xml:space="preserve"><value>Ce dossier est dans un dossier ignoré (.git, .svn… : voir Paramètres → Dossiers vides), dont les dossiers vides doivent rester.</value></data><data name="ActionColor" xml:space="preserve"><value>Couleur du dossier</value></data></root>

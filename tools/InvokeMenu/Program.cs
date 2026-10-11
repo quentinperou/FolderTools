@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 //
 //   dotnet run --project tools\InvokeMenu -- C:\temp\folder            (lists, invokes nothing)
 //   dotnet run --project tools\InvokeMenu -- C:\temp\folder size|clean
+//   dotnet run --project tools\InvokeMenu -- C:\temp\folder color:1      (Red ... color:9 = Default color)
 //
 // Then check the started FolderTools.exe: its parent must be explorer.exe and it must have no package identity.
 
@@ -33,23 +34,35 @@ static partial class Program
         Marshal.ThrowExceptionForHR(SHCreateShellItemArrayFromShellItem(item, ref itemArrayId, out var items));
 
         Describe("Entry", command, items);
-        command.GetFlags(out uint flags);
-        Console.WriteLine($"  Flags: {flags} (1 = has sub-entries)");
 
-        Marshal.ThrowExceptionForHR(command.EnumSubCommands(out var enumPointer));
-        var subCommands = (IEnumExplorerCommand)Marshal.GetObjectForIUnknown(enumPointer);
-        var found = new List<IExplorerCommand>();
-        while (subCommands.Next(1, out var sub, out uint fetched) == 0 && fetched == 1)
-            found.Add(sub);
+        var found = SubCommands(command);
         for (int i = 0; i < found.Count; i++)
             Describe($"Sub-entry {i + 1}", found[i], items);
+        // "Folder color ›" (third): its colors, then Default.
+        var colors = found.Count > 2 ? SubCommands(found[2]) : [];
+        for (int i = 0; i < colors.Count; i++)
+            Describe($"  Color {i + 1}", colors[i], items);
 
         if (action is null)
             return 0;
-        var chosen = found[action.Equals("clean", StringComparison.OrdinalIgnoreCase) ? 1 : 0];
+        // "size", "clean", or "color:<1-9>" (9 = Default color).
+        var chosen = action.StartsWith("color:", StringComparison.OrdinalIgnoreCase)
+            ? colors[int.Parse(action["color:".Length..]) - 1]
+            : found[action.Equals("clean", StringComparison.OrdinalIgnoreCase) ? 1 : 0];
         int hr = chosen.Invoke(items, IntPtr.Zero);
         Console.WriteLine($"Invoke {action}: 0x{hr:X8}");
         return hr == 0 ? 0 : 1;
+    }
+
+    private static List<IExplorerCommand> SubCommands(IExplorerCommand command)
+    {
+        var list = new List<IExplorerCommand>();
+        if (command.EnumSubCommands(out var enumPointer) != 0)
+            return list;
+        var subCommands = (IEnumExplorerCommand)Marshal.GetObjectForIUnknown(enumPointer);
+        while (subCommands.Next(1, out var sub, out uint fetched) == 0 && fetched == 1)
+            list.Add(sub);
+        return list;
     }
 
     private static void Describe(string label, IExplorerCommand command, IntPtr items)
@@ -59,7 +72,8 @@ static partial class Program
         command.GetState(items, false, out var state);
         Console.WriteLine($"{label}: {title}");
         Console.WriteLine($"  Icon:  {icon}");
-        Console.WriteLine($"  State: {state} (0 = enabled, 2 = hidden)");
+        command.GetFlags(out uint flags);
+        Console.WriteLine($"  State: {state} (0 = enabled, 2 = hidden, 8 = checked), flags: {flags}");
     }
 
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]

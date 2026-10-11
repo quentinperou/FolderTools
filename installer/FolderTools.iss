@@ -106,6 +106,28 @@ Name: "{autoprograms}\FolderTools"; Filename: "{app}\{#AppExe}"
 {#MenuEntry("Directory")}
 {#MenuEntry("Directory\Background")}
 {#MenuEntry("Drive")}
+; "Folder color >" (folders only): each color runs the SetColor export of the DLL through rundll32. Labels: string
+; table of the DLL (104 Folder color, 110-117 the colors, 118 Default color); icons: the colored folders themselves
+; (Icon: the file name in {app}\Colors, or "" for the ordinary folder icon of Windows).
+#define ColorKey "Software\Classes\Directory\shell\FolderTools\shell\3Color"
+#define ColorItem(Key, Arg, Label, Icon) \
+  'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-' + Label + '"' + NewLine + \
+  'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '"; ValueType: string; ValueName: "Icon"; ValueData: "' + (Icon == "" ? '{sys}\imageres.dll,-3' : '{app}\Colors\' + Icon + '.ico') + '"' + NewLine + \
+  'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '\command"; ValueType: string; ValueName: ""; ValueData: """{sys}\rundll32.exe"" ""{app}\' + MenuDll + '"",SetColor ' + Arg + ' ""%1"""' + NewLine
+Root: HKLM; Subkey: "{#ColorKey}"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\{#MenuDll},-104"
+Root: HKLM; Subkey: "{#ColorKey}"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\{#MenuDll}"",-203"
+Root: HKLM; Subkey: "{#ColorKey}"; ValueType: string; ValueName: "SubCommands"; ValueData: ""
+{#ColorItem("1Red", "red", "110", "Red")}
+{#ColorItem("2Orange", "orange", "111", "Orange")}
+{#ColorItem("3Yellow", "yellow", "112", "Yellow")}
+{#ColorItem("4Green", "green", "113", "Green")}
+{#ColorItem("5Blue", "blue", "114", "Blue")}
+{#ColorItem("6Purple", "purple", "115", "Purple")}
+{#ColorItem("7Pink", "pink", "116", "Pink")}
+{#ColorItem("8Gray", "gray", "117", "Gray")}
+{#ColorItem("9Default", "default", "118", "")}
+; A separator above "Default color".
+Root: HKLM; Subkey: "{#ColorKey}\shell\9Default"; ValueType: dword; ValueName: "CommandFlags"; ValueData: "$20"
 ; The preprocessed script, to check the lines generated above: build\FolderTools.preprocessed.iss
 #expr SaveToFile(AddBackslash(SourcePath) + "..\build\FolderTools.preprocessed.iss")
 

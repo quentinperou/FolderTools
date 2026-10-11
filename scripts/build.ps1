@@ -77,6 +77,8 @@ $shellBuild = Join-Path $build 'shell'
 Invoke-Native { cmake -S (Join-Path $root 'src\FolderTools.Shell') -B $shellBuild -G Ninja -DCMAKE_BUILD_TYPE=Release } 'CMake configuration'
 Invoke-Native { cmake --build $shellBuild } 'Building the DLL'
 Copy-Item (Join-Path $shellBuild 'FolderToolsMenu.dll') $appDir
+# The colored folder icons of "Folder color ›", referenced by the desktop.ini of colored folders.
+Copy-Item (Join-Path $root 'src\FolderTools.Shell\Colors') (Join-Path $appDir 'Colors') -Recurse
 
 Write-Step 'Sparse package (Windows 11 menu)'
 Invoke-Native { makeappx pack /o /nv /d (Join-Path $root 'package') /p (Join-Path $dist 'FolderTools.Menu.msix') } 'makeappx'
