@@ -39,8 +39,10 @@ public sealed class FileRow(FileEntry file, FolderNode root)
 
     public string ShareText => (Share * 100).ToString("0.0", CultureInfo.CurrentCulture) + " %";
 
-    /// <summary>The file's folder, relative to the folder shown; "." for the folder itself.</summary>
-    public string FolderText => Path.GetRelativePath(root.FullPath, File.Folder.FullPath);
+    /// <summary>The file's folder, relative to the folder shown; the name of the folder shown for its own files.</summary>
+    public string FolderText => File.Folder == root
+        ? Path.GetFileName(Path.TrimEndingDirectorySeparator(root.FullPath)) is { Length: > 0 } name ? name : root.FullPath
+        : Path.GetRelativePath(root.FullPath, File.Folder.FullPath);
 
     public string ModifiedText => File.LastWriteUtc.ToLocalTime().ToString("g", CultureInfo.CurrentCulture);
 

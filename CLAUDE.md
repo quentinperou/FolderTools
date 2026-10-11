@@ -57,12 +57,17 @@ Not verified yet:
 
 The repository is public (https://github.com/quentinperou/FolderTools), CI passes on push.
 
-**README screenshot** (`.github/screenshot.png`, one English image for both READMEs, as decided by the author):
-the size window, light theme, 1100 × 610, on a **fictitious** tree (no personal folder names): `S:\Archives`
-(Photos/2023-2025/Edits, Videos, Music, Projects, Old backups, Documents, Temp, two .iso files, ~90 GB) made of
-sparse files (real sizes, no disk space; `FSCTL_SET_SPARSE` + `SetLength`), mounted with `subst S: <folder>`;
-started with `FOLDERTOOLS_LANG=en`, `FOLDERTOOLS_THEME=Light`, “Photos” expanded by selecting its row through UI
-Automation (rows are `DataItem`s) then posting `WM_KEYDOWN VK_RIGHT`, captured with `PrintWindow`.
+**README screenshots** (`.github/screenshots/`, English images shared by both READMEs, one per feature, as decided
+by the author on October 12, 2026): `folder-sizes.png` (top of the READMEs), `largest-files.png`, `empty-folders.png`,
+`photo-sort.png`, all 1100 × 640, light theme, on **fictitious** data (no personal folder names): `S:\Archives`
+(Photos/2023-2025/Edits, Videos, Music, Projects, Old backups, Documents, Temp, two .iso files and a few big videos,
+~100 GB, plus nine empty folders) made of sparse files (real sizes, no disk space; `FSCTL_SET_SPARSE` + `SetLength`),
+and `S:\Camera import` (tiny JPEGs holding only an EXIF date, CR3/MP4 placeholders), mounted with `subst S:
+<folder>`. Started with `FOLDERTOOLS_LANG=en`, `FOLDERTOOLS_THEME=Light`, driven through UI Automation (rows
+selected with `SelectionItemPattern`, not `SetFocus`, which draws a focus rectangle; the size tree's “Photos” expanded
+by posting `WM_KEYDOWN VK_RIGHT`), moved to a screen without the mouse pointer (hover color), captured with
+`PrintWindow`. `folder-colors.png` is not a capture (Claude Code's sandboxed writes are invisible to File Explorer):
+the real 96 px icons of `Colors\*.ico`, drawn with fictitious folder names on white.
 
 **v1.0.0 is released** (October 11, 2026): tag `v1.0.0` on `da46744`, built and published by the CI
 (`FolderTools-Setup-1.0.0.exe`, 5.9 MB, SHA-256 `fefe757d…871287`), release notes in English written by hand
@@ -81,7 +86,8 @@ Users of 1.0.0 are offered it by the app.
 
 **v1.2.0 released** (October 12, 2026): the “Largest files” tab (tag `v1.2.0` on `0f60381`, “latest”, `FolderTools-Setup-1.2.0.exe`, SHA-256 `9c922a7b…b4fc60`, hand-written notes).
 
-**v1.3.0-beta.1** (October 12, 2026, published as a **pre-release**, Beta channel only, at the author's request):
+**v1.3.0-beta.1** (October 12, 2026, published as a **pre-release**, Beta channel only, at the author's request; tag
+`v1.3.0-beta.1` on `647d73a`, `FolderTools-Setup-1.3.0-beta.1.exe`, SHA-256 `12fcd91b…297dbf`, hand-written notes):
 **sort photos by date**. 113 unit tests pass; sort, undo and the “leave in place” option checked on a test folder
 through UI Automation; installed and validated by the author (“ça marche”). Windows 10 (renumbered classic keys) not
 tried. Next: the stable 1.3.0 once the beta has been used on real photos.
@@ -382,5 +388,4 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
 - Then (author's picks for later versions): **new dated folder** (folder background, `2026-10-12` or a chosen
   pattern), **flatten a folder** (move the files of the subfolders up, renaming duplicates), **duplicates** (identical
   files by hash, preview before deleting).
-- Redo the README screenshot at the end (the size window has tabs since 1.2.0; maybe the photo sort).
 - Signing through SignPath Foundation (see CropPdf); Windows 10 style colored folders; ARM64; more languages.

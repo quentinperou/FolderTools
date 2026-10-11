@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src=".github/screenshot.png" width="900" alt="FolderTools : l'arborescence des tailles d'un dossier, les plus gros en premier, avec leurs fichiers, sous-dossiers, part et fichier le plus récent">
+  <img src=".github/screenshots/folder-sizes.png" width="900" alt="FolderTools : l'arborescence des tailles d'un dossier, les plus gros en premier, avec leurs fichiers, sous-dossiers, part et fichier le plus récent">
 </p>
 
 ---
@@ -46,6 +46,10 @@
   virgule décimale de vos paramètres régionaux.
 - Les dossiers illisibles (accès refusé) sont comptés et signalés, avec un bouton **Relancer en administrateur**.
 
+<p align="center">
+  <img src=".github/screenshots/largest-files.png" width="800" alt="L'onglet Plus gros fichiers : les plus gros fichiers du dossier avec leur taille, part, dossier et date">
+</p>
+
 ### Supprimer les dossiers vides
 
 - Trouve les dossiers vides, **les affiche d'abord** (tous cochés), et ne supprime que ceux qui restent cochés.
@@ -62,6 +66,10 @@
   entier…), où certains programmes ont besoin de leurs dossiers vides.
 - Pratique pour le **dossier temporaire** de Windows : la fenêtre d'accueil a un lien *Dossier temporaire*.
 
+<p align="center">
+  <img src=".github/screenshots/empty-folders.png" width="800" alt="Supprimer les dossiers vides : les dossiers vides trouvés, cochés, avec leurs sous-dossiers vides">
+</p>
+
 ### Trier les photos par date
 
 - Range les **photos, RAW et vidéos** posées directement dans le dossier dans des **dossiers datés** à l'intérieur,
@@ -74,6 +82,10 @@
 - **Aperçu d'abord** : les dossiers datés et ce qui va dans chacun, puis **Trier**. Rien n'est écrasé (un nom déjà
   pris dans un dossier daté reçoit « (2) ») ; les sous-dossiers et les autres fichiers ne bougent jamais.
 - **Annuler le tri** : remet chaque fichier à sa place et supprime les dossiers datés créés, s'ils sont de nouveau vides.
+
+<p align="center">
+  <img src=".github/screenshots/photo-sort.png" width="800" alt="Trier les photos par date : l'aperçu des dossiers datés, un RAW avec son JPEG, l'heure de chaque photo">
+</p>
 
 ### Couleur du dossier
 
@@ -89,6 +101,10 @@
   ordinaires. Les lecteurs ne se colorent pas.
 - Sous Windows 10, ça fonctionne de la même façon (menu classique), avec des icônes au style de Windows 11 au milieu
   de dossiers au style de Windows 10.
+
+<p align="center">
+  <img src=".github/screenshots/folder-colors.png" width="700" alt="Les huit couleurs de dossier : rouge, orange, jaune, vert, bleu, violet, rose et gris">
+</p>
 
 ### Et aussi
 

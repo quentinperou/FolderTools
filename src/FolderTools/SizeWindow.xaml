@@ -183,7 +183,7 @@
                   </DataTemplate>
                 </GridViewColumn.CellTemplate>
               </GridViewColumn>
-              <GridViewColumn x:Name="ModifiedColumn" Width="140">
+              <GridViewColumn x:Name="ModifiedColumn" Width="165">
                 <GridViewColumn.CellTemplate>
                   <DataTemplate>
                     <TextBlock Text="{Binding ModifiedText}" Style="{StaticResource NumberCell}" />
@@ -279,7 +279,7 @@
                     </DataTemplate>
                   </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-                <GridViewColumn x:Name="FileModifiedColumn" Width="140">
+                <GridViewColumn x:Name="FileModifiedColumn" Width="165">
                   <GridViewColumn.CellTemplate>
                     <DataTemplate>
                       <TextBlock Text="{Binding ModifiedText}" Style="{StaticResource NumberCell}" />

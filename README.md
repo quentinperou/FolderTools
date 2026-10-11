@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src=".github/screenshot.png" width="900" alt="FolderTools: the size tree of a folder, biggest folders first, with their files, subfolders, share and newest file">
+  <img src=".github/screenshots/folder-sizes.png" width="900" alt="FolderTools: the size tree of a folder, biggest folders first, with their files, subfolders, share and newest file">
 </p>
 
 ---
@@ -42,6 +42,10 @@
   of your regional settings.
 - Folders that cannot be read (access denied) are counted and reported, with a **Run as administrator** button.
 
+<p align="center">
+  <img src=".github/screenshots/largest-files.png" width="800" alt="The Largest files tab: the biggest files of the folder with their size, share, folder and date">
+</p>
+
 ### Delete empty folders
 
 - Finds the empty folders, **shows them first** (all checked), and deletes only the ones left checked.
@@ -57,6 +61,10 @@
   some programs need their empty folders.
 - Handy for the **temporary folder** of Windows: the home window has a *Temporary folder* link.
 
+<p align="center">
+  <img src=".github/screenshots/empty-folders.png" width="800" alt="Delete empty folders: the empty folders found, checked, with their empty subfolders">
+</p>
+
 ### Sort photos by date
 
 - Moves the **photos, RAW files and videos** sitting directly in the folder into **date folders** inside it, from
@@ -70,6 +78,10 @@
   taken in a date folder gets “ (2)”); subfolders and other files never move.
 - **Undo the sort**: puts every file back and removes the date folders it created, when they are empty again.
 
+<p align="center">
+  <img src=".github/screenshots/photo-sort.png" width="800" alt="Sort photos by date: the preview of the date folders, a RAW file with its JPEG, the time each photo was taken">
+</p>
+
 ### Folder color
 
 - **Right-click a folder → FolderTools ›**, below the tools: red, orange, yellow, green, blue, purple, pink or gray,
@@ -82,6 +94,10 @@
   folder no longer shows a preview of its content in large icons. The icons live in the FolderTools folder: on a PC
   without FolderTools (or after uninstalling it), colored folders look like ordinary ones. Drives cannot be colored.
 - On Windows 10 it works the same (classic menu), with Windows 11 style icons among Windows 10 style folders.
+
+<p align="center">
+  <img src=".github/screenshots/folder-colors.png" width="700" alt="The eight folder colors: red, orange, yellow, green, blue, purple, pink and gray">
+</p>
 
 ### And also
 
