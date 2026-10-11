@@ -24,7 +24,7 @@
   <Identity
     Name="FolderTools.ContextMenu"
     Publisher="CN=FolderTools, OID.2.25.311729368913984317654407730594956997722=1"
-    Version="1.0.0.0"
+    Version="1.1.0.0"
     ProcessorArchitecture="neutral" />
 
   <Properties>
@@ -69,6 +69,8 @@
           <desktop4:FileExplorerContextMenus>
             <desktop5:ItemType Type="Directory">
               <desktop5:Verb Id="FolderTools" Clsid="8119219C-28DF-42B9-B5B3-9B2904535DDC" />
+              <!-- "Folder color >": an entry of its own, since a sub-menu inside a sub-menu shows empty. -->
+              <desktop5:Verb Id="FolderToolsColor" Clsid="07A048EB-4FAE-4897-A619-4E4DA25C1376" />
             </desktop5:ItemType>
             <desktop5:ItemType Type="Directory\Background">
               <desktop5:Verb Id="FolderTools" Clsid="8119219C-28DF-42B9-B5B3-9B2904535DDC" />
@@ -81,6 +83,7 @@
           <com:ComServer>
             <com:SurrogateServer DisplayName="FolderTools context menu">
               <com:Class Id="8119219C-28DF-42B9-B5B3-9B2904535DDC" Path="FolderToolsMenu.dll" ThreadingModel="STA" />
+              <com:Class Id="07A048EB-4FAE-4897-A619-4E4DA25C1376" Path="FolderToolsMenu.dll" ThreadingModel="STA" />
             </com:SurrogateServer>
           </com:ComServer>
         </com:Extension>

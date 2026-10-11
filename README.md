@@ -21,7 +21,7 @@
 ## Features
 
 - **Right-click a folder, a drive or the background of an open folder → “FolderTools ›”**, in the new Windows 11
-  context menu (and under “Show more options” / on Windows 10), with two tools:
+  context menu (and under “Show more options” / on Windows 10), with two tools, and **“Folder color ›”** on folders:
 
 ### Folder sizes
 
@@ -72,8 +72,8 @@
   light or dark in **Settings**.
 - **English and French**: the app, the context menu and the installer follow the Windows display language; the
   app language can also be chosen in **Settings**.
-- The entry of the new Windows 11 menu can be **turned off** in Settings, or limited to some of its three entries;
-  everything stays under “Show more options”.
+- The context menu entries can be **turned off** in Settings, all together or one by one (Folder sizes, Delete empty
+  folders, Folder color).
 - **Updates in one click**: at startup the app checks the GitHub Releases; a bar at the top of every window offers
   the new version (**What's new** / **Update**), which installs itself and restarts the app. In **Settings**: check now, turn off the check at startup, or
   choose the **Beta** channel to get new versions earlier.
@@ -115,8 +115,9 @@ An update installed over the app does not uninstall it: the settings stay. If Fi
 loaded, Windows finishes deleting the install folder at the next restart.
 
 **Requirements:** Windows 11 x64 for the new context menu (Windows 10 2004+ works, with the entry in the classic
-menu). In the new Windows 11 menu, the entry shows on folders and folder backgrounds; on a **drive**, it is under
-“Show more options” (Windows does not let packaged menu entries target drives).
+menu). On Windows 11, the entries show on folders and folder backgrounds, in the new menu and under “Show more
+options”; on a **drive**, FolderTools is only under “Show more options” (Windows does not let packaged menu entries
+target drives).
 
 ## Development
 

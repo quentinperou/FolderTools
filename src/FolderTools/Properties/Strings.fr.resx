@@ -294,10 +294,10 @@ Ils n'iront pas à la corbeille.</value>
     <value>Langue de l'application. Le menu clic droit suit la langue d'affichage de Windows.</value>
   </data>
   <data name="SettingsNewMenu" xml:space="preserve">
-    <value>Menu clic droit de Windows 11</value>
+    <value>Menu clic droit</value>
   </data>
   <data name="SettingsNewMenuDescription" xml:space="preserve">
-    <value>Affiche « FolderTools › » dans le nouveau menu clic droit des dossiers et des lecteurs, avec les entrées choisies ci-dessous. Tout reste toujours dans « Afficher plus d'options ».</value>
+    <value>Affiche « FolderTools › » et « Couleur du dossier › » dans le menu clic droit des dossiers, avec les entrées choisies ci-dessous. Sur les lecteurs, FolderTools reste dans « Afficher plus d'options ».</value>
   </data>
   <data name="SettingsTheme" xml:space="preserve">
     <value>Thème</value>

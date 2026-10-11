@@ -21,7 +21,8 @@
 ## Fonctionnalités
 
 - **Clic droit sur un dossier, un lecteur ou le fond d'un dossier ouvert → « FolderTools › »**, dans le nouveau menu
-  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec deux outils :
+  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec deux outils, et **« Couleur du
+  dossier › »** sur les dossiers :
 
 ### Taille des dossiers
 
@@ -77,8 +78,8 @@
   en clair ou en sombre dans les **Paramètres**.
 - **Français et anglais** : l'application, le menu clic droit et l'installeur suivent la langue d'affichage de
   Windows ; la langue de l'application peut aussi être choisie dans les **Paramètres**.
-- L'entrée du nouveau menu de Windows 11 peut être **désactivée** dans les paramètres, ou réduite à certaines de ses
-  trois entrées ; tout reste dans « Afficher plus d'options ».
+- Les entrées du menu clic droit peuvent être **désactivées** dans les paramètres, toutes ensemble ou une par une
+  (Taille des dossiers, Supprimer les dossiers vides, Couleur du dossier).
 - **Mises à jour en un clic** : au démarrage, l'application consulte les Releases GitHub ; un bandeau en haut de chaque
   fenêtre propose la nouvelle version (**Nouveautés** / **Mettre à jour**), qui s'installe et redémarre l'application. Dans les **Paramètres** : vérifier maintenant,
   désactiver la vérification au démarrage, ou choisir le canal **Bêta** pour recevoir les nouveautés en avance.
@@ -121,9 +122,9 @@ Une mise à jour installée par-dessus ne désinstalle pas l'application : les p
 avait encore le menu chargé, Windows termine la suppression du dossier d'installation au prochain redémarrage.
 
 **Configuration requise :** Windows 11 x64 pour le nouveau menu clic droit (Windows 10 2004+ fonctionne, avec
-l'entrée dans le menu classique). Dans le nouveau menu de Windows 11, l'entrée apparaît sur les dossiers et le fond des
-dossiers ; sur un **lecteur**, elle est dans « Afficher plus d'options » (Windows ne permet pas aux entrées de menu
-empaquetées de viser les lecteurs).
+l'entrée dans le menu classique). Sous Windows 11, les entrées apparaissent sur les dossiers et le fond des dossiers,
+dans le nouveau menu et dans « Afficher plus d'options » ; sur un **lecteur**, FolderTools n'est que dans « Afficher
+plus d'options » (Windows ne permet pas aux entrées de menu empaquetées de viser les lecteurs).
 
 ## Développement
 
