@@ -18,6 +18,8 @@
 #define AppExe "FolderTools.exe"
 #define MenuDll "FolderToolsMenu.dll"
 #define PackageName "FolderTools.ContextMenu"
+; "Folder color ›" has a package of its own: one verb per package (see package\Color\AppxManifest.xml).
+#define ColorPackageName "FolderTools.ColorMenu"
 ; What the app creates for the user, removed at uninstall (installer\UserDataCleanup.iss).
 #define UserDataName "FolderTools"
 #define UpdateTempName "FolderTools-Update"
@@ -80,6 +82,7 @@ Source: "..\dist\app\*"; DestDir: "{app}"; Excludes: "{#MenuDll}"; Flags: ignore
 ; Explorer may still have the DLL loaded during an update: it is then replaced at the next restart.
 Source: "..\dist\app\{#MenuDll}"; DestDir: "{app}"; Flags: ignoreversion restartreplace uninsrestartdelete
 Source: "..\dist\FolderTools.Menu.msix"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\dist\FolderTools.ColorMenu.msix"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 ; The app's name, not translated.
@@ -172,17 +175,17 @@ procedure UnregisterContextMenu(AllUsers: Boolean);
 begin
   if AllUsers then
   begin
-    if RunPowerShell('Get-AppxPackage -AllUsers -Name {#PackageName} | Remove-AppxPackage -AllUsers') then
+    if RunPowerShell('''{#PackageName}'', ''{#ColorPackageName}'' | ForEach-Object { Get-AppxPackage -AllUsers -Name $_ } | Remove-AppxPackage -AllUsers') then
     begin
-      Log('Cleanup: package {#PackageName} removed for all accounts');
+      Log('Cleanup: packages {#PackageName} and {#ColorPackageName} removed for all accounts');
       Exit;
     end;
     Log('Cleanup: removing the package for all accounts failed, trying the current account');
   end;
-  if RunPowerShell('Get-AppxPackage -Name {#PackageName} | Remove-AppxPackage') then
-    Log('Cleanup: package {#PackageName} removed for the current account')
+  if RunPowerShell('''{#PackageName}'', ''{#ColorPackageName}'' | ForEach-Object { Get-AppxPackage -Name $_ } | Remove-AppxPackage') then
+    Log('Cleanup: packages removed for the current account')
   else
-    Log('Cleanup: could not remove the package {#PackageName}');
+    Log('Cleanup: could not remove the packages');
 end;
 
 { Versions up to 1.0.2 wrote classic entries for folders on Windows 11 too: with the package's, they were listed twice
@@ -203,8 +206,10 @@ begin
     command text: a quote in the install folder (L'appli, or the typographic ’ that PowerShell also treats as a
     quote) would end a quoted string and break the command. }
   SetEnvironmentVariable('FOLDERTOOLS_MSIX', ExpandConstant('{app}\FolderTools.Menu.msix'));
+  SetEnvironmentVariable('FOLDERTOOLS_COLOR_MSIX', ExpandConstant('{app}\FolderTools.ColorMenu.msix'));
   SetEnvironmentVariable('FOLDERTOOLS_LOCATION', ExpandConstant('{app}'));
-  if not RunPowerShell('Add-AppxPackage -Path $env:FOLDERTOOLS_MSIX -ExternalLocation $env:FOLDERTOOLS_LOCATION -AllowUnsigned') then
+  if not RunPowerShell('Add-AppxPackage -Path $env:FOLDERTOOLS_MSIX -ExternalLocation $env:FOLDERTOOLS_LOCATION -AllowUnsigned; ' +
+    'Add-AppxPackage -Path $env:FOLDERTOOLS_COLOR_MSIX -ExternalLocation $env:FOLDERTOOLS_LOCATION -AllowUnsigned') then
     MsgBox(CustomMessage('MenuNotRegistered'), mbInformation, MB_OK);
 end;
 

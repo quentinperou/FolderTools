@@ -5,7 +5,8 @@
 // Expects the ISPP defines:
 //   UserDataName    folder %LOCALAPPDATA%\<name> (settings.json) and key HKCU\Software\<name> (menu toggle)
 //   UpdateTempName  folder %TEMP%\<name>, where the app downloads an update installer
-//   PackageName     (optional) sparse package, whose %LOCALAPPDATA%\Packages\<name>_* folder Windows may leave
+//   PackageName, ColorPackageName  (optional) sparse packages, whose %LOCALAPPDATA%\Packages\<name>_* folder Windows
+//                   may leave
 //
 // Run as administrator, {localappdata}, the temp folder and HKCU are those of the account that accepted the UAC
 // prompt: other Windows accounts keep their settings (out of reach, on purpose).
@@ -57,7 +58,7 @@ end;
 
 #ifdef PackageName
 { Remove-AppxPackage normally deletes the package's data folder; if Windows left it, it goes now. }
-procedure CleanupDeletePackageData;
+procedure CleanupDeletePackageData(const Name: String);
 var
   FindRec: TFindRec;
   Root: String;
@@ -65,7 +66,7 @@ var
 begin
   Root := ExpandConstant('{localappdata}\Packages\');
   Found := False;
-  if FindFirst(Root + '{#PackageName}_*', FindRec) then
+  if FindFirst(Root + Name + '_*', FindRec) then
   begin
     repeat
       if (FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0 then
@@ -77,7 +78,7 @@ begin
     FindClose(FindRec);
   end;
   if not Found then
-    Log('Cleanup: no package data folder left');
+    Log('Cleanup: no data folder left for the package ' + Name);
 end;
 #endif
 
@@ -90,6 +91,9 @@ begin
   CleanupDeleteUserKey('Software\{#UserDataName}');
   CleanupDeleteMuiCache(AppDir);
 #ifdef PackageName
-  CleanupDeletePackageData;
+  CleanupDeletePackageData('{#PackageName}');
+#endif
+#ifdef ColorPackageName
+  CleanupDeletePackageData('{#ColorPackageName}');
 #endif
 end;

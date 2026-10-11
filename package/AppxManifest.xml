@@ -2,7 +2,8 @@
 <!--
   "Sparse" package (package with external location): it contains only this manifest and the logos.
   It gives FolderTools a package identity so that Windows 11 shows "FolderTools ›" in the NEW File Explorer
-  context menu. The app files stay in the install folder, passed at registration:
+  context menu. "Folder color ›" has a package of its own (package\Color): with two verbs in one package, Windows
+  gathers them in a flyout named after the package ("FolderTools › FolderTools ›"), without icon. The app files stay in the install folder, passed at registration:
     Add-AppxPackage -Path FolderTools.Menu.msix -ExternalLocation <install folder> -AllowUnsigned
 
   The package is not signed: the OID in Publisher marks it as an unsigned package, which Windows 11
@@ -69,8 +70,7 @@
           <desktop4:FileExplorerContextMenus>
             <desktop5:ItemType Type="Directory">
               <desktop5:Verb Id="FolderTools" Clsid="8119219C-28DF-42B9-B5B3-9B2904535DDC" />
-              <!-- "Folder color >": an entry of its own, since a sub-menu inside a sub-menu shows empty. -->
-              <desktop5:Verb Id="FolderToolsColor" Clsid="07A048EB-4FAE-4897-A619-4E4DA25C1376" />
+
             </desktop5:ItemType>
             <desktop5:ItemType Type="Directory\Background">
               <desktop5:Verb Id="FolderTools" Clsid="8119219C-28DF-42B9-B5B3-9B2904535DDC" />
@@ -83,7 +83,6 @@
           <com:ComServer>
             <com:SurrogateServer DisplayName="FolderTools context menu">
               <com:Class Id="8119219C-28DF-42B9-B5B3-9B2904535DDC" Path="FolderToolsMenu.dll" ThreadingModel="STA" />
-              <com:Class Id="07A048EB-4FAE-4897-A619-4E4DA25C1376" Path="FolderToolsMenu.dll" ThreadingModel="STA" />
             </com:SurrogateServer>
           </com:ComServer>
         </com:Extension>

@@ -34,12 +34,13 @@ Show "Settings: $env:LOCALAPPDATA\FolderTools" (Test-Path "$env:LOCALAPPDATA\Fol
 Show "Roaming (not used by the app): $env:APPDATA\FolderTools" (Test-Path "$env:APPDATA\FolderTools")
 $updateDir = Join-Path ([IO.Path]::GetTempPath()) 'FolderTools-Update'
 Show "Update download: $updateDir" (Test-Path $updateDir)
-$packageData = @(Get-ChildItem "$env:LOCALAPPDATA\Packages" -Directory -Filter 'FolderTools.ContextMenu_*' -ErrorAction SilentlyContinue)
-Show "Package data: $env:LOCALAPPDATA\Packages\FolderTools.ContextMenu_*" ($packageData.Count -gt 0) (($packageData | ForEach-Object Name) -join ', ')
+$packageData = @(Get-ChildItem "$env:LOCALAPPDATA\Packages" -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'FolderTools.ContextMenu_*' -or $_.Name -like 'FolderTools.ColorMenu_*' })
+Show "Package data: $env:LOCALAPPDATA\Packages\FolderTools.ContextMenu_*, FolderTools.ColorMenu_*" ($packageData.Count -gt 0) (($packageData | ForEach-Object Name) -join ', ')
 
 Section 'Registry'
 foreach ($type in 'Directory', 'Directory\Background', 'Drive') {
     Show "HKLM\SOFTWARE\Classes\$type\shell\FolderTools (classic menu)" (Test-Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Classes\$type\shell\FolderTools")
+    if ($type -eq 'Directory') { Show 'HKLM\SOFTWARE\Classes\Directory\shell\FolderToolsColor (classic menu, Windows 10)' (Test-Path 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\FolderToolsColor') }
     Show "HKCU\Software\Classes\$type\shell\FolderTools" (Test-Path "Registry::HKEY_CURRENT_USER\Software\Classes\$type\shell\FolderTools")
 }
 foreach ($root in 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall') {
@@ -56,11 +57,13 @@ foreach ($run in 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run', 'HKLM:\S
 }
 
 Section 'Windows'
-Show 'Package FolderTools.ContextMenu (current account)' ($null -ne (Get-AppxPackage -Name FolderTools.ContextMenu -ErrorAction SilentlyContinue))
+foreach ($name in 'FolderTools.ContextMenu', 'FolderTools.ColorMenu') {
+    Show "Package $name (current account)" ($null -ne (Get-AppxPackage -Name $name -ErrorAction SilentlyContinue))
+}
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if ($isAdmin) {
-    $all = @(Get-AppxPackage -AllUsers -Name FolderTools.ContextMenu -ErrorAction SilentlyContinue)
-    Show 'Package FolderTools.ContextMenu (any account)' ($all.Count -gt 0) (($all.PackageUserInformation | ForEach-Object { "$($_.UserSecurityId.Username): $($_.InstallState)" }) -join ', ')
+    $all = @('FolderTools.ContextMenu', 'FolderTools.ColorMenu' | ForEach-Object { Get-AppxPackage -AllUsers -Name $_ -ErrorAction SilentlyContinue })
+    Show 'Packages of FolderTools (any account)' ($all.Count -gt 0) (($all.PackageUserInformation | ForEach-Object { "$($_.UserSecurityId.Username): $($_.InstallState)" }) -join ', ')
 }
 else {
     Write-Host '    (package of other accounts: run from an elevated prompt to check)' -ForegroundColor DarkGray
