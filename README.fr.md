@@ -224,6 +224,12 @@ demande UAC pendant l'installation.
 
 ## Feuille de route
 
+- [ ] **Trier les photos par date** : clic droit sur un dossier › FolderTools › ranger ses photos, RAW et vidéos dans
+      des dossiers `2025\2025-06-14\…` d'après leur date de prise de vue (EXIF), avec aperçu et annulation.
+- [ ] **Nouveau dossier daté** : sur le fond d'un dossier, créer `2026-10-12` (ou un modèle choisi) en un clic.
+- [ ] **Aplatir un dossier** : remonter tous les fichiers des sous-dossiers dans le dossier lui-même, en renommant
+      les doublons de noms.
+- [ ] **Doublons** : trouver les fichiers identiques (comparés par empreinte), avec aperçu avant suppression.
 - [ ] Icônes de dossiers colorés au style de Windows 10, choisies automatiquement sous Windows 10.
 - [ ] **Signature gratuite** de l'installeur et du package via [SignPath Foundation](https://signpath.org) : plus
       d'avertissement SmartScreen, et plus besoin de droits administrateur pour le menu.

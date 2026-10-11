@@ -215,6 +215,11 @@ and declares `FolderToolsMenu.dll`, which shows “FolderTools ›” and its tw
 
 ## Roadmap
 
+- [ ] **Sort photos by date**: right-click a folder › FolderTools › move its photos, RAW files and videos into
+      `2025\2025-06-14\…` folders from their date taken (EXIF), with a preview and an undo.
+- [ ] **New dated folder**: on the background of a folder, create `2026-10-12` (or a chosen pattern) in one click.
+- [ ] **Flatten a folder**: move every file of the subfolders up to the folder itself, renaming the duplicates.
+- [ ] **Duplicates**: find identical files (compared by hash), with a preview before deleting.
 - [ ] Colored folder icons in the style of Windows 10, picked automatically on Windows 10.
 - [ ] **Free signing** of the installer and package through [SignPath Foundation](https://signpath.org): no more
       SmartScreen warning, and no administrator rights needed for the menu.
