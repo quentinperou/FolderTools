@@ -169,22 +169,28 @@ function New-ColorFolderBitmap([int]$size, [int]$rgb) {
     function X([float]$v) { $c = $v * $size; if ($hinted) { [float][Math]::Round($c) } else { [float]$c } }
     $r = [float][Math]::Max(1, [Math]::Round(0.05 * $size)); $d = 2 * $r
 
+    # Proportions of the Windows 11 folder icon (imageres.dll,-3), measured at each size: the colored folders must
+    # take the same room as the ordinary ones next to them (Details view, tabs). 16 and 20 px have their own layout,
+    # like Windows' own: the whole width at 16 px.
+    $L = 0.06; $R = 0.94; $T = 0.135; $B = 0.82; $tab = 0.40; $slope = 0.47; $body = 0.21; $frontTop = 0.29
+    if ($size -le 16) { $L = 0; $R = 1; $T = 0.0625; $B = 0.875; $tab = 0.375; $slope = 0.44; $body = 0.1875; $frontTop = 0.25 }
+    elseif ($size -le 20) { $L = 0.05; $R = 0.95; $T = 0.15; $B = 0.85; $tab = 0.40; $slope = 0.47; $body = 0.20; $frontTop = 0.30 }
+
     $back = New-Object System.Drawing.Drawing2D.GraphicsPath
-    $back.AddArc((X 0.06), (X 0.16), $d, $d, 180, 90)
-    $back.AddLine((X 0.06) + $r, (X 0.16), (X 0.38), (X 0.16))
-    $back.AddLine((X 0.38), (X 0.16), (X 0.46), (X 0.25))
-    $back.AddArc((X 0.94) - $d, (X 0.25), $d, $d, 270, 90)
-    $back.AddArc((X 0.94) - $d, (X 0.84) - $d, $d, $d, 0, 90)
-    $back.AddArc((X 0.06), (X 0.84) - $d, $d, $d, 90, 90)
+    $back.AddArc((X $L), (X $T), $d, $d, 180, 90)
+    $back.AddLine((X $L) + $r, (X $T), (X $tab), (X $T))
+    $back.AddLine((X $tab), (X $T), (X $slope), (X $body))
+    $back.AddArc((X $R) - $d, (X $body), $d, $d, 270, 90)
+    $back.AddArc((X $R) - $d, (X $B) - $d, $d, $d, 0, 90)
+    $back.AddArc((X $L), (X $B) - $d, $d, $d, 90, 90)
     $back.CloseFigure()
     $backBrush = New-Object System.Drawing.SolidBrush (Get-Shade $rgb -0.18)
     $g.FillPath($backBrush, $back)
 
-    $frontRect = New-Object System.Drawing.RectangleF (X 0.06), (X 0.33), ((X 0.94) - (X 0.06)), ((X 0.84) - (X 0.33))
+    $frontRect = New-Object System.Drawing.RectangleF (X $L), (X $frontTop), ((X $R) - (X $L)), ((X $B) - (X $frontTop))
     $front = New-RoundedRectPath $frontRect $r
     $frontBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush $frontRect, (Get-Shade $rgb 0.22), (Get-Shade $rgb 0), ([float]90)
     $g.FillPath($frontBrush, $front)
-
     $frontBrush.Dispose(); $front.Dispose(); $backBrush.Dispose(); $back.Dispose(); $g.Dispose()
     return $bmp
 }
