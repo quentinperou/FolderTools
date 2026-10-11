@@ -71,7 +71,9 @@ Automation (rows are `DataItem`s) then posting `WM_KEYDOWN VK_RIGHT`, captured w
 **v1.0.1** (October 11, 2026): **ignored folders** for the empty-folder cleanup (default `.git`, `.svn`, `.hg`,
 setting under *Empty folders*), after the author's real run on `Downloads` offered `.git\objects\info` folders; the
 “folder with a cross” icon for the *Delete empty folders* menu entry (variant C chosen among four); the cleaning window
-opens at 1000 × 680. 91 unit tests pass.
+opens at 1000 × 680. 91 unit tests pass. **Released** (tag `v1.0.1` on `6de049f`, “latest”,
+`FolderTools-Setup-1.0.1.exe`, SHA-256 `bfe20e40…3984ab`, hand-written notes: Fixed / New / Changed / Installation).
+Users of 1.0.0 are offered it by the app.
 
 Next steps: test the new-menu toggle and the settings cleanup at uninstall for real; then v1.1
 (folder colors).
