@@ -1,0 +1,4 @@
+LIBRARY FolderToolsMenu
+EXPORTS
+    DllCanUnloadNow PRIVATE
+    DllGetClassObject PRIVATE

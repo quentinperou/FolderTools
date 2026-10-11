@@ -1,0 +1,392 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- French translation of Strings.resx. -->
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutDevelopedBy" xml:space="preserve">
+    <value>Développé par </value>
+  </data>
+  <data name="AboutSourceCode" xml:space="preserve">
+    <value>Code source sur GitHub</value>
+  </data>
+  <data name="AboutVersion" xml:space="preserve">
+    <value>Version {0} · licence MIT</value>
+  </data>
+  <data name="ActionClean" xml:space="preserve">
+    <value>Supprimer les dossiers vides</value>
+  </data>
+  <data name="ActionCleanDescription" xml:space="preserve">
+    <value>Trouve les dossiers vides et les affiche ; seuls ceux que vous laissez cochés sont supprimés.</value>
+  </data>
+  <data name="ActionSize" xml:space="preserve">
+    <value>Taille des dossiers</value>
+  </data>
+  <data name="ActionSizeDescription" xml:space="preserve">
+    <value>Taille, nombre de fichiers et de sous-dossiers de chaque dossier, en arborescence.</value>
+  </data>
+  <data name="AppTitle" xml:space="preserve">
+    <value>FolderTools</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Parcourir…</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="CleanChangeMode" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="CleanDelete" xml:space="preserve">
+    <value>Supprimer ({0})</value>
+  </data>
+  <data name="CleanDeleting" xml:space="preserve">
+    <value>Suppression…</value>
+  </data>
+  <data name="CleanDoneDeleted_One" xml:space="preserve">
+    <value>{0} dossier supprimé.</value>
+  </data>
+  <data name="CleanDoneDeleted_Other" xml:space="preserve">
+    <value>{0} dossiers supprimés.</value>
+  </data>
+  <data name="CleanDoneRecycled_One" xml:space="preserve">
+    <value>{0} dossier envoyé à la corbeille.</value>
+  </data>
+  <data name="CleanDoneRecycled_Other" xml:space="preserve">
+    <value>{0} dossiers envoyés à la corbeille.</value>
+  </data>
+  <data name="CleanFailures_One" xml:space="preserve">
+    <value>{0} dossier n'a pas pu être supprimé :</value>
+  </data>
+  <data name="CleanFailures_Other" xml:space="preserve">
+    <value>{0} dossiers n'ont pas pu être supprimés :</value>
+  </data>
+  <data name="CleanFoundDetail" xml:space="preserve">
+    <value>Un dossier qui ne contient que des dossiers vides est listé une seule fois, avec eux. Décochez ce que vous voulez garder.</value>
+  </data>
+  <data name="CleanFound_One" xml:space="preserve">
+    <value>{0} dossier vide trouvé.</value>
+  </data>
+  <data name="CleanFound_Other" xml:space="preserve">
+    <value>{0} dossiers vides trouvés.</value>
+  </data>
+  <data name="CleanInaccessibleAdmin_One" xml:space="preserve">
+    <value>{0} dossier n'a pas pu être lu, même en administrateur : il n'est pas touché.</value>
+  </data>
+  <data name="CleanInaccessibleAdmin_Other" xml:space="preserve">
+    <value>{0} dossiers n'ont pas pu être lus, même en administrateur : ils ne sont pas touchés.</value>
+  </data>
+  <data name="CleanInaccessible_One" xml:space="preserve">
+    <value>{0} dossier n'a pas pu être lu (accès refusé) : il n'est pas touché.</value>
+  </data>
+  <data name="CleanInaccessible_Other" xml:space="preserve">
+    <value>{0} dossiers n'ont pas pu être lus (accès refusé) : ils ne sont pas touchés.</value>
+  </data>
+  <data name="CleanModePermanent" xml:space="preserve">
+    <value>Les dossiers cochés seront supprimés définitivement.</value>
+  </data>
+  <data name="CleanModeRecycle" xml:space="preserve">
+    <value>Les dossiers cochés iront à la corbeille.</value>
+  </data>
+  <data name="CleanNested_One" xml:space="preserve">
+    <value>+ {0} sous-dossier vide</value>
+  </data>
+  <data name="CleanNested_Other" xml:space="preserve">
+    <value>+ {0} sous-dossiers vides</value>
+  </data>
+  <data name="CleanNoneFound" xml:space="preserve">
+    <value>Aucun dossier vide.</value>
+  </data>
+  <data name="CleanRescan" xml:space="preserve">
+    <value>Rechercher à nouveau</value>
+  </data>
+  <data name="CleanSearchCancelled" xml:space="preserve">
+    <value>Recherche annulée.</value>
+  </data>
+  <data name="CleanSearching" xml:space="preserve">
+    <value>Recherche des dossiers vides…</value>
+  </data>
+  <data name="CleanWindowTitle" xml:space="preserve">
+    <value>Supprimer les dossiers vides – {0}</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="ColumnFiles" xml:space="preserve">
+    <value>Fichiers</value>
+  </data>
+  <data name="ColumnFolders" xml:space="preserve">
+    <value>Dossiers</value>
+  </data>
+  <data name="ColumnModified" xml:space="preserve">
+    <value>Modifié</value>
+  </data>
+  <data name="ColumnName" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="ColumnShare" xml:space="preserve">
+    <value>Part</value>
+  </data>
+  <data name="ColumnSize" xml:space="preserve">
+    <value>Taille</value>
+  </data>
+  <data name="ConfirmRecycleFolder" xml:space="preserve">
+    <value>Envoyer « {0} » à la corbeille ?
+
+{1} · {2} fichiers</value>
+  </data>
+  <data name="CsvFilter" xml:space="preserve">
+    <value>Fichier CSV (*.csv)|*.csv</value>
+  </data>
+  <data name="CsvHeaders" xml:space="preserve">
+    <value>Chemin|Nom|Niveau|Taille (octets)|Taille (Go)|Fichiers|Dossiers|% du parent|Fichier le plus récent</value>
+  </data>
+  <data name="DeleteModePermanent" xml:space="preserve">
+    <value>Suppression définitive</value>
+  </data>
+  <data name="DeleteModeRecycle" xml:space="preserve">
+    <value>Corbeille</value>
+  </data>
+  <data name="ErrorExport" xml:space="preserve">
+    <value>Le fichier n'a pas pu être enregistré : {0}</value>
+  </data>
+  <data name="ErrorSearch" xml:space="preserve">
+    <value>Le dossier n'a pas pu être lu : {0}</value>
+  </data>
+  <data name="ErrorUpdate" xml:space="preserve">
+    <value>La mise à jour a échoué : {0}</value>
+  </data>
+  <data name="ErrorUpdateIntegrity" xml:space="preserve">
+    <value>le fichier téléchargé est endommagé, réessayez.</value>
+  </data>
+  <data name="ErrorUpdateOffline" xml:space="preserve">
+    <value>GitHub est injoignable (pas de connexion Internet ?).</value>
+  </data>
+  <data name="ErrorUpdateRateLimited" xml:space="preserve">
+    <value>GitHub limite le nombre de vérifications, réessayez dans un moment.</value>
+  </data>
+  <data name="FailureAccessDenied" xml:space="preserve">
+    <value>accès refusé</value>
+  </data>
+  <data name="FailureInUse" xml:space="preserve">
+    <value>utilisé ou verrouillé</value>
+  </data>
+  <data name="FailureNoLongerEmpty" xml:space="preserve">
+    <value>n'est plus vide</value>
+  </data>
+  <data name="FilesRow_One" xml:space="preserve">
+    <value>[{0} fichier dans ce dossier]</value>
+  </data>
+  <data name="FilesRow_Other" xml:space="preserve">
+    <value>[{0} fichiers dans ce dossier]</value>
+  </data>
+  <data name="HomeContextMenuHint" xml:space="preserve">
+    <value>Les deux outils sont aussi dans le menu clic droit des dossiers et des lecteurs : clic droit › FolderTools.</value>
+  </data>
+  <data name="HomeDropHint" xml:space="preserve">
+    <value>ou déposez un dossier sur cette fenêtre</value>
+  </data>
+  <data name="HomeFolder" xml:space="preserve">
+    <value>Dossier</value>
+  </data>
+  <data name="HomeSubtitle" xml:space="preserve">
+    <value>Taille des dossiers et nettoyage des dossiers vides</value>
+  </data>
+  <data name="HomeTempFolder" xml:space="preserve">
+    <value>Dossier temporaire</value>
+  </data>
+  <data name="InaccessibleFoldersAdmin_One" xml:space="preserve">
+    <value>{0} dossier n'a pas pu être lu, même en administrateur : sa taille n'est pas comptée.</value>
+  </data>
+  <data name="InaccessibleFoldersAdmin_Other" xml:space="preserve">
+    <value>{0} dossiers n'ont pas pu être lus, même en administrateur : leur taille n'est pas comptée.</value>
+  </data>
+  <data name="InaccessibleFolders_One" xml:space="preserve">
+    <value>{0} dossier n'a pas pu être lu (accès refusé) : sa taille n'est pas comptée.</value>
+  </data>
+  <data name="InaccessibleFolders_Other" xml:space="preserve">
+    <value>{0} dossiers n'ont pas pu être lus (accès refusé) : leur taille n'est pas comptée.</value>
+  </data>
+  <data name="InaccessibleToolTip" xml:space="preserve">
+    <value>{0}
+Illisible (accès refusé).</value>
+  </data>
+  <data name="LanguageSystem" xml:space="preserve">
+    <value>Langue du système (automatique)</value>
+  </data>
+  <data name="LinkToolTip" xml:space="preserve">
+    <value>{0}
+Lien (jonction ou lien symbolique) : non suivi, sa cible est comptée là où elle se trouve.</value>
+  </data>
+  <data name="MenuCopyPath" xml:space="preserve">
+    <value>Copier le chemin</value>
+  </data>
+  <data name="MenuDelete" xml:space="preserve">
+    <value>Supprimer (corbeille)</value>
+  </data>
+  <data name="MenuOpenInExplorer" xml:space="preserve">
+    <value>Ouvrir dans l'Explorateur</value>
+  </data>
+  <data name="MenuShowOnly" xml:space="preserve">
+    <value>Afficher seulement ce dossier</value>
+  </data>
+  <data name="PermanentDeleteQuestion_One" xml:space="preserve">
+    <value>Supprimer définitivement {0} dossier vide ?
+Il n'ira pas à la corbeille.</value>
+  </data>
+  <data name="PermanentDeleteQuestion_Other" xml:space="preserve">
+    <value>Supprimer définitivement {0} dossiers vides ?
+Ils n'iront pas à la corbeille.</value>
+  </data>
+  <data name="RunAsAdmin" xml:space="preserve">
+    <value>Relancer en administrateur</value>
+  </data>
+  <data name="ScanCancelled" xml:space="preserve">
+    <value>Analyse annulée.</value>
+  </data>
+  <data name="ScanDone" xml:space="preserve">
+    <value>Total {0} · {1} fichiers · {2} dossiers · analysé en {3} s</value>
+  </data>
+  <data name="ScanProgress" xml:space="preserve">
+    <value>Analyse… {0} fichiers · {1} · {2}</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Tout sélectionner</value>
+  </data>
+  
+  <data name="SensitiveWarning" xml:space="preserve">
+    <value>C'est un dossier système ou de profil : certains programmes ont besoin de leurs dossiers vides. Vérifiez bien la liste avant de supprimer.</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>À propos</value>
+  </data>
+  <data name="SettingsDeleteMode" xml:space="preserve">
+    <value>Dossiers vides supprimés</value>
+  </data>
+  <data name="SettingsDeleteModeDescription" xml:space="preserve">
+    <value>Corbeille, ou suppression définitive (avec confirmation).</value>
+  </data>
+  <data name="SettingsIgnoredFiles" xml:space="preserve">
+    <value>Fichiers ignorés</value>
+  </data>
+  <data name="SettingsIgnoredFilesDescription" xml:space="preserve">
+    <value>Un dossier qui ne contient que ces fichiers compte comme vide ; ils sont supprimés avec lui. Un nom par ligne, * et ? acceptés.</value>
+  </data>
+  <data name="SettingsIgnoredFilesReset" xml:space="preserve">
+    <value>Rétablir la liste par défaut</value>
+  </data>
+  <data name="SettingsLanguage" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="SettingsLanguageDescription" xml:space="preserve">
+    <value>Langue de l'application. Le menu clic droit suit la langue d'affichage de Windows.</value>
+  </data>
+  <data name="SettingsNewMenu" xml:space="preserve">
+    <value>Menu clic droit de Windows 11</value>
+  </data>
+  <data name="SettingsNewMenuDescription" xml:space="preserve">
+    <value>Affiche « FolderTools › » dans le nouveau menu clic droit des dossiers et des lecteurs. Il reste toujours dans « Afficher plus d'options ».</value>
+  </data>
+  <data name="SettingsTheme" xml:space="preserve">
+    <value>Thème</value>
+  </data>
+  <data name="SettingsThemeDescription" xml:space="preserve">
+    <value>Apparence claire ou sombre. Le mode automatique suit celui de Windows.</value>
+  </data>
+  <data name="SizeExport" xml:space="preserve">
+    <value>Exporter en CSV</value>
+  </data>
+  <data name="SizeRescan" xml:space="preserve">
+    <value>Analyser à nouveau</value>
+  </data>
+  <data name="SizeUnits" xml:space="preserve">
+    <value>octets,Ko,Mo,Go,To,Po</value>
+  </data>
+  <data name="SizeUp" xml:space="preserve">
+    <value>Dossier parent</value>
+  </data>
+  <data name="SizeWindowTitle" xml:space="preserve">
+    <value>Taille des dossiers – {0}</value>
+  </data>
+  <data name="ThemeDark" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="ThemeLight" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="ThemeSystem" xml:space="preserve">
+    <value>Thème du système (automatique)</value>
+  </data>
+  <data name="UpdateBarButton" xml:space="preserve">
+    <value>Voir</value>
+  </data>
+  <data name="UpdateBarText" xml:space="preserve">
+    <value>FolderTools {0} est disponible.</value>
+  </data>
+  <data name="UpdateCancelled" xml:space="preserve">
+    <value>La mise à jour n'a pas été installée.</value>
+  </data>
+  <data name="UpdateChannel" xml:space="preserve">
+    <value>Canal de mise à jour</value>
+  </data>
+  <data name="UpdateChannelBeta" xml:space="preserve">
+    <value>Bêta</value>
+  </data>
+  <data name="UpdateChannelDescription" xml:space="preserve">
+    <value>Les versions bêta reçoivent les nouveautés en avance, mais peuvent être moins stables. En revenant au canal stable, vous gardez la bêta jusqu'à la version stable suivante.</value>
+  </data>
+  <data name="UpdateChannelStable" xml:space="preserve">
+    <value>Stable</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Rechercher des mises à jour</value>
+  </data>
+  <data name="UpdateCheckAtStartup" xml:space="preserve">
+    <value>Rechercher les mises à jour au démarrage</value>
+  </data>
+  <data name="UpdateCheckAtStartupDescription" xml:space="preserve">
+    <value>Interroge GitHub à chaque lancement de l'application pour connaître la dernière version.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Téléchargement de la mise à jour…</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>Mettre à jour</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Installation… acceptez la demande de Windows pour continuer.</value>
+  </data>
+  <data name="UpdateStatusAvailable" xml:space="preserve">
+    <value>Version {0} · la version {1} est disponible.</value>
+  </data>
+  <data name="UpdateStatusChecking" xml:space="preserve">
+    <value>Recherche de mises à jour…</value>
+  </data>
+  <data name="UpdateStatusFailed" xml:space="preserve">
+    <value>Version {0} · impossible de rechercher les mises à jour : {1}</value>
+  </data>
+  <data name="UpdateStatusIdle" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="UpdateStatusUpToDate" xml:space="preserve">
+    <value>Version {0} · l'application est à jour.</value>
+  </data>
+  <data name="UpdateWhatsNew" xml:space="preserve">
+    <value>Nouveautés</value>
+  </data>
+  <data name="UpdatesTitle" xml:space="preserve">
+    <value>Mises à jour</value>
+  </data>
+<data name="SettingsGeneral" xml:space="preserve"><value>Général</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Dossiers vides</value></data></root>

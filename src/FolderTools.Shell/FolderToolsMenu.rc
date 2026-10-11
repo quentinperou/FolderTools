@@ -1,0 +1,38 @@
+// Context menu labels, in each supported language. Windows picks the table matching the user's display
+// language (or its parent, e.g. fr-CA -> fr), then falls back to the user/system UI language and finally
+// to US English. Do not mark a table LANG_NEUTRAL: the loader would pick it first, whatever the language.
+// "FolderTools" is the app's name: it is not translated.
+#include <windows.h>
+#include "resource.h"
+
+#pragma code_page(65001)
+
+// Any English variant (en-GB, en-CA...).
+LANGUAGE LANG_ENGLISH, SUBLANG_NEUTRAL
+STRINGTABLE
+BEGIN
+    IDS_MENU_TITLE "FolderTools"
+    IDS_MENU_SIZE "Folder sizes"
+    IDS_MENU_CLEAN "Delete empty folders"
+END
+
+// US English is the loader's last-resort fallback for languages without a table here.
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+STRINGTABLE
+BEGIN
+    IDS_MENU_TITLE "FolderTools"
+    IDS_MENU_SIZE "Folder sizes"
+    IDS_MENU_CLEAN "Delete empty folders"
+END
+
+LANGUAGE LANG_FRENCH, SUBLANG_NEUTRAL
+STRINGTABLE
+BEGIN
+    IDS_MENU_TITLE "FolderTools"
+    IDS_MENU_SIZE "Taille des dossiers"
+    IDS_MENU_CLEAN "Supprimer les dossiers vides"
+END
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+IDI_MENU_SIZE ICON "SizeMenu.ico"
+IDI_MENU_CLEAN ICON "CleanMenu.ico"

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  "Sparse" package (package with external location): it contains only this manifest and the logos.
+  It gives FolderTools a package identity so that Windows 11 shows "FolderTools ›" in the NEW File Explorer
+  context menu. The app files stay in the install folder, passed at registration:
+    Add-AppxPackage -Path FolderTools.Menu.msix -ExternalLocation <install folder> -AllowUnsigned
+
+  The package is not signed: the OID in Publisher marks it as an unsigned package, which Windows 11
+  installs with -AllowUnsigned from an elevated prompt (the installer does it).
+
+  Only bump Version when this file changes: the installer re-registers the package on every install.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
+  xmlns:desktop5="http://schemas.microsoft.com/appx/manifest/desktop/windows10/5"
+  xmlns:desktop6="http://schemas.microsoft.com/appx/manifest/desktop/windows10/6"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap10 desktop4 desktop5 desktop6 com rescap">
+
+  <Identity
+    Name="FolderTools.ContextMenu"
+    Publisher="CN=FolderTools, OID.2.25.311729368913984317654407730594956997722=1"
+    Version="1.0.0.0"
+    ProcessorArchitecture="neutral" />
+
+  <Properties>
+    <DisplayName>FolderTools</DisplayName>
+    <PublisherDisplayName>QuentinPerou</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <uap10:AllowExternalContent>true</uap10:AllowExternalContent>
+    <!-- The menu DLL reads HKCU\Software\FolderTools (written by the app, which has no package identity). With
+         registry virtualization on, a packaged process does not see keys created outside the package. -->
+    <desktop6:RegistryWriteVirtualization>disabled</desktop6:RegistryWriteVirtualization>
+    <desktop6:FileSystemWriteVirtualization>disabled</desktop6:FileSystemWriteVirtualization>
+  </Properties>
+
+  <Resources>
+    <Resource Language="en-us" />
+    <Resource Language="fr-fr" />
+  </Resources>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.22000.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+    <rescap:Capability Name="unvirtualizedResources" />
+  </Capabilities>
+
+  <Applications>
+    <Application Id="FolderTools" Executable="FolderTools.exe" uap10:TrustLevel="mediumIL" uap10:RuntimeBehavior="win32App">
+      <uap:VisualElements
+        AppListEntry="none"
+        DisplayName="FolderTools"
+        Description="Folder sizes and empty folder cleanup from the File Explorer context menu"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png" />
+
+      <Extensions>
+        <!-- The menu entry: on a folder and on the background of an open folder ("Drive" is not an allowed type
+             here; drives have the classic entry, registered by the installer). -->
+        <desktop4:Extension Category="windows.fileExplorerContextMenus">
+          <desktop4:FileExplorerContextMenus>
+            <desktop5:ItemType Type="Directory">
+              <desktop5:Verb Id="FolderTools" Clsid="8119219C-28DF-42B9-B5B3-9B2904535DDC" />
+            </desktop5:ItemType>
+            <desktop5:ItemType Type="Directory\Background">
+              <desktop5:Verb Id="FolderTools" Clsid="8119219C-28DF-42B9-B5B3-9B2904535DDC" />
+            </desktop5:ItemType>
+          </desktop4:FileExplorerContextMenus>
+        </desktop4:Extension>
+
+        <!-- The COM class behind it: FolderToolsMenu.dll (src/FolderTools.Shell), loaded in a surrogate process. -->
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:SurrogateServer DisplayName="FolderTools context menu">
+              <com:Class Id="8119219C-28DF-42B9-B5B3-9B2904535DDC" Path="FolderToolsMenu.dll" ThreadingModel="STA" />
+            </com:SurrogateServer>
+          </com:ComServer>
+        </com:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+</Package>

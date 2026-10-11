@@ -1,0 +1,392 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- English: default UI language. Every key must also exist in Strings.fr.resx (checked by the tests). -->
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutDevelopedBy" xml:space="preserve">
+    <value>Developed by </value>
+  </data>
+  <data name="AboutSourceCode" xml:space="preserve">
+    <value>Source code on GitHub</value>
+  </data>
+  <data name="AboutVersion" xml:space="preserve">
+    <value>Version {0} · MIT license</value>
+  </data>
+  <data name="ActionClean" xml:space="preserve">
+    <value>Delete empty folders</value>
+  </data>
+  <data name="ActionCleanDescription" xml:space="preserve">
+    <value>Finds the empty folders and shows them; only the ones you leave checked are deleted.</value>
+  </data>
+  <data name="ActionSize" xml:space="preserve">
+    <value>Folder sizes</value>
+  </data>
+  <data name="ActionSizeDescription" xml:space="preserve">
+    <value>Size, number of files and subfolders of every folder, as a tree.</value>
+  </data>
+  <data name="AppTitle" xml:space="preserve">
+    <value>FolderTools</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse…</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CleanChangeMode" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="CleanDelete" xml:space="preserve">
+    <value>Delete ({0})</value>
+  </data>
+  <data name="CleanDeleting" xml:space="preserve">
+    <value>Deleting…</value>
+  </data>
+  <data name="CleanDoneDeleted_One" xml:space="preserve">
+    <value>{0} folder deleted.</value>
+  </data>
+  <data name="CleanDoneDeleted_Other" xml:space="preserve">
+    <value>{0} folders deleted.</value>
+  </data>
+  <data name="CleanDoneRecycled_One" xml:space="preserve">
+    <value>{0} folder sent to the recycle bin.</value>
+  </data>
+  <data name="CleanDoneRecycled_Other" xml:space="preserve">
+    <value>{0} folders sent to the recycle bin.</value>
+  </data>
+  <data name="CleanFailures_One" xml:space="preserve">
+    <value>{0} folder could not be deleted:</value>
+  </data>
+  <data name="CleanFailures_Other" xml:space="preserve">
+    <value>{0} folders could not be deleted:</value>
+  </data>
+  <data name="CleanFoundDetail" xml:space="preserve">
+    <value>A folder that only holds empty folders is listed once, with them. Uncheck what you want to keep.</value>
+  </data>
+  <data name="CleanFound_One" xml:space="preserve">
+    <value>{0} empty folder found.</value>
+  </data>
+  <data name="CleanFound_Other" xml:space="preserve">
+    <value>{0} empty folders found.</value>
+  </data>
+  <data name="CleanInaccessibleAdmin_One" xml:space="preserve">
+    <value>{0} folder could not be read, even as administrator: it is left alone.</value>
+  </data>
+  <data name="CleanInaccessibleAdmin_Other" xml:space="preserve">
+    <value>{0} folders could not be read, even as administrator: they are left alone.</value>
+  </data>
+  <data name="CleanInaccessible_One" xml:space="preserve">
+    <value>{0} folder could not be read (access denied): it is left alone.</value>
+  </data>
+  <data name="CleanInaccessible_Other" xml:space="preserve">
+    <value>{0} folders could not be read (access denied): they are left alone.</value>
+  </data>
+  <data name="CleanModePermanent" xml:space="preserve">
+    <value>The checked folders will be deleted for good.</value>
+  </data>
+  <data name="CleanModeRecycle" xml:space="preserve">
+    <value>The checked folders will go to the recycle bin.</value>
+  </data>
+  <data name="CleanNested_One" xml:space="preserve">
+    <value>+ {0} empty subfolder</value>
+  </data>
+  <data name="CleanNested_Other" xml:space="preserve">
+    <value>+ {0} empty subfolders</value>
+  </data>
+  <data name="CleanNoneFound" xml:space="preserve">
+    <value>No empty folder.</value>
+  </data>
+  <data name="CleanRescan" xml:space="preserve">
+    <value>Search again</value>
+  </data>
+  <data name="CleanSearchCancelled" xml:space="preserve">
+    <value>Search cancelled.</value>
+  </data>
+  <data name="CleanSearching" xml:space="preserve">
+    <value>Looking for empty folders…</value>
+  </data>
+  <data name="CleanWindowTitle" xml:space="preserve">
+    <value>Delete empty folders – {0}</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ColumnFiles" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="ColumnFolders" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="ColumnModified" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="ColumnName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ColumnShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="ColumnSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="ConfirmRecycleFolder" xml:space="preserve">
+    <value>Send “{0}” to the recycle bin?
+
+{1} · {2} files</value>
+  </data>
+  <data name="CsvFilter" xml:space="preserve">
+    <value>CSV file (*.csv)|*.csv</value>
+  </data>
+  <data name="CsvHeaders" xml:space="preserve">
+    <value>Path|Name|Level|Size (bytes)|Size (GB)|Files|Folders|% of parent|Newest file</value>
+  </data>
+  <data name="DeleteModePermanent" xml:space="preserve">
+    <value>Delete for good</value>
+  </data>
+  <data name="DeleteModeRecycle" xml:space="preserve">
+    <value>Recycle bin</value>
+  </data>
+  <data name="ErrorExport" xml:space="preserve">
+    <value>The file could not be saved: {0}</value>
+  </data>
+  <data name="ErrorSearch" xml:space="preserve">
+    <value>The folder could not be read: {0}</value>
+  </data>
+  <data name="ErrorUpdate" xml:space="preserve">
+    <value>The update failed: {0}</value>
+  </data>
+  <data name="ErrorUpdateIntegrity" xml:space="preserve">
+    <value>the downloaded file is damaged, try again.</value>
+  </data>
+  <data name="ErrorUpdateOffline" xml:space="preserve">
+    <value>GitHub cannot be reached (no Internet connection?).</value>
+  </data>
+  <data name="ErrorUpdateRateLimited" xml:space="preserve">
+    <value>GitHub limits the number of checks, try again in a while.</value>
+  </data>
+  <data name="FailureAccessDenied" xml:space="preserve">
+    <value>access denied</value>
+  </data>
+  <data name="FailureInUse" xml:space="preserve">
+    <value>in use or locked</value>
+  </data>
+  <data name="FailureNoLongerEmpty" xml:space="preserve">
+    <value>no longer empty</value>
+  </data>
+  <data name="FilesRow_One" xml:space="preserve">
+    <value>[{0} file in this folder]</value>
+  </data>
+  <data name="FilesRow_Other" xml:space="preserve">
+    <value>[{0} files in this folder]</value>
+  </data>
+  <data name="HomeContextMenuHint" xml:space="preserve">
+    <value>Both tools are also in the context menu of folders and drives: right-click › FolderTools.</value>
+  </data>
+  <data name="HomeDropHint" xml:space="preserve">
+    <value>or drop a folder on this window</value>
+  </data>
+  <data name="HomeFolder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="HomeSubtitle" xml:space="preserve">
+    <value>Folder sizes and empty folder cleanup</value>
+  </data>
+  <data name="HomeTempFolder" xml:space="preserve">
+    <value>Temporary folder</value>
+  </data>
+  <data name="InaccessibleFoldersAdmin_One" xml:space="preserve">
+    <value>{0} folder could not be read, even as administrator: its size is not counted.</value>
+  </data>
+  <data name="InaccessibleFoldersAdmin_Other" xml:space="preserve">
+    <value>{0} folders could not be read, even as administrator: their size is not counted.</value>
+  </data>
+  <data name="InaccessibleFolders_One" xml:space="preserve">
+    <value>{0} folder could not be read (access denied): its size is not counted.</value>
+  </data>
+  <data name="InaccessibleFolders_Other" xml:space="preserve">
+    <value>{0} folders could not be read (access denied): their size is not counted.</value>
+  </data>
+  <data name="InaccessibleToolTip" xml:space="preserve">
+    <value>{0}
+Could not be read (access denied).</value>
+  </data>
+  <data name="LanguageSystem" xml:space="preserve">
+    <value>System language (automatic)</value>
+  </data>
+  <data name="LinkToolTip" xml:space="preserve">
+    <value>{0}
+Link (junction or symbolic link): not followed, its target is counted where it is.</value>
+  </data>
+  <data name="MenuCopyPath" xml:space="preserve">
+    <value>Copy path</value>
+  </data>
+  <data name="MenuDelete" xml:space="preserve">
+    <value>Delete (recycle bin)</value>
+  </data>
+  <data name="MenuOpenInExplorer" xml:space="preserve">
+    <value>Open in File Explorer</value>
+  </data>
+  <data name="MenuShowOnly" xml:space="preserve">
+    <value>Show only this folder</value>
+  </data>
+  <data name="PermanentDeleteQuestion_One" xml:space="preserve">
+    <value>Delete {0} empty folder for good?
+It will not go to the recycle bin.</value>
+  </data>
+  <data name="PermanentDeleteQuestion_Other" xml:space="preserve">
+    <value>Delete {0} empty folders for good?
+They will not go to the recycle bin.</value>
+  </data>
+  <data name="RunAsAdmin" xml:space="preserve">
+    <value>Run as administrator</value>
+  </data>
+  <data name="ScanCancelled" xml:space="preserve">
+    <value>Analysis cancelled.</value>
+  </data>
+  <data name="ScanDone" xml:space="preserve">
+    <value>Total {0} · {1} files · {2} folders · analyzed in {3} s</value>
+  </data>
+  <data name="ScanProgress" xml:space="preserve">
+    <value>Analyzing… {0} files · {1} · {2}</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  
+  <data name="SensitiveWarning" xml:space="preserve">
+    <value>This is a system or profile folder: some programs need their empty folders. Check the list carefully before deleting.</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsAbout" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="SettingsDeleteMode" xml:space="preserve">
+    <value>Deleted empty folders</value>
+  </data>
+  <data name="SettingsDeleteModeDescription" xml:space="preserve">
+    <value>Recycle bin, or deleted for good (asks for confirmation).</value>
+  </data>
+  <data name="SettingsIgnoredFiles" xml:space="preserve">
+    <value>Ignored files</value>
+  </data>
+  <data name="SettingsIgnoredFilesDescription" xml:space="preserve">
+    <value>A folder holding only these files counts as empty; they are deleted with it. One name per line, * and ? allowed.</value>
+  </data>
+  <data name="SettingsIgnoredFilesReset" xml:space="preserve">
+    <value>Restore the default list</value>
+  </data>
+  <data name="SettingsLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="SettingsLanguageDescription" xml:space="preserve">
+    <value>Language of the app. The right-click menu follows the Windows display language.</value>
+  </data>
+  <data name="SettingsNewMenu" xml:space="preserve">
+    <value>Windows 11 context menu</value>
+  </data>
+  <data name="SettingsNewMenuDescription" xml:space="preserve">
+    <value>Shows “FolderTools ›” in the new context menu of folders and drives. It always stays under “Show more options”.</value>
+  </data>
+  <data name="SettingsTheme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="SettingsThemeDescription" xml:space="preserve">
+    <value>Light or dark appearance. Automatic follows Windows.</value>
+  </data>
+  <data name="SizeExport" xml:space="preserve">
+    <value>Export to CSV</value>
+  </data>
+  <data name="SizeRescan" xml:space="preserve">
+    <value>Analyze again</value>
+  </data>
+  <data name="SizeUnits" xml:space="preserve">
+    <value>bytes,KB,MB,GB,TB,PB</value>
+  </data>
+  <data name="SizeUp" xml:space="preserve">
+    <value>Parent folder</value>
+  </data>
+  <data name="SizeWindowTitle" xml:space="preserve">
+    <value>Folder sizes – {0}</value>
+  </data>
+  <data name="ThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="ThemeLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="ThemeSystem" xml:space="preserve">
+    <value>System theme (automatic)</value>
+  </data>
+  <data name="UpdateBarButton" xml:space="preserve">
+    <value>See</value>
+  </data>
+  <data name="UpdateBarText" xml:space="preserve">
+    <value>FolderTools {0} is available.</value>
+  </data>
+  <data name="UpdateCancelled" xml:space="preserve">
+    <value>The update was not installed.</value>
+  </data>
+  <data name="UpdateChannel" xml:space="preserve">
+    <value>Update channel</value>
+  </data>
+  <data name="UpdateChannelBeta" xml:space="preserve">
+    <value>Beta</value>
+  </data>
+  <data name="UpdateChannelDescription" xml:space="preserve">
+    <value>Beta versions get new features earlier but may be less stable. Back on Stable, you keep the beta until the next stable version.</value>
+  </data>
+  <data name="UpdateChannelStable" xml:space="preserve">
+    <value>Stable</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="UpdateCheckAtStartup" xml:space="preserve">
+    <value>Check for updates at startup</value>
+  </data>
+  <data name="UpdateCheckAtStartupDescription" xml:space="preserve">
+    <value>Asks GitHub for the latest version each time the app starts.</value>
+  </data>
+  <data name="UpdateDownloading" xml:space="preserve">
+    <value>Downloading the update…</value>
+  </data>
+  <data name="UpdateInstall" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="UpdateStarting" xml:space="preserve">
+    <value>Installing… accept the Windows prompt to continue.</value>
+  </data>
+  <data name="UpdateStatusAvailable" xml:space="preserve">
+    <value>Version {0} · version {1} is available.</value>
+  </data>
+  <data name="UpdateStatusChecking" xml:space="preserve">
+    <value>Checking for updates…</value>
+  </data>
+  <data name="UpdateStatusFailed" xml:space="preserve">
+    <value>Version {0} · could not check for updates: {1}</value>
+  </data>
+  <data name="UpdateStatusIdle" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="UpdateStatusUpToDate" xml:space="preserve">
+    <value>Version {0} · FolderTools is up to date.</value>
+  </data>
+  <data name="UpdateWhatsNew" xml:space="preserve">
+    <value>What's new</value>
+  </data>
+  <data name="UpdatesTitle" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+<data name="SettingsGeneral" xml:space="preserve"><value>General</value></data><data name="SettingsEmptyFolders" xml:space="preserve"><value>Empty folders</value></data></root>

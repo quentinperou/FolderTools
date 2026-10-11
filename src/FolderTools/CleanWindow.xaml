@@ -1,0 +1,102 @@
+<Window x:Class="FolderTools.CleanWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:FolderTools"
+        Icon="Assets/FolderTools.ico"
+        Width="760" Height="600" MinWidth="520" MinHeight="380"
+        WindowStartupLocation="CenterScreen">
+
+  <DockPanel Margin="24,20,24,20">
+    <!-- Title and folder. -->
+    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+      <Button DockPanel.Dock="Right" Click="Settings_Click" Padding="8" VerticalAlignment="Top"
+              ToolTip="{local:Tr Settings}" AutomationProperties.Name="{local:Tr Settings}">
+        <TextBlock Style="{StaticResource IconText}" Text="&#xE713;" FontSize="14" />
+      </Button>
+      <StackPanel>
+        <TextBlock Text="{local:Tr ActionClean}" FontSize="22" FontWeight="SemiBold" />
+        <TextBlock x:Name="PathText" Style="{StaticResource SecondaryText}" TextWrapping="NoWrap"
+                   TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+      </StackPanel>
+    </DockPanel>
+
+    <!-- System folders: some programs need their empty folders. -->
+    <Border x:Name="SensitiveBar" DockPanel.Dock="Top" Style="{StaticResource WarningBar}" Margin="0,0,0,10"
+            Visibility="Collapsed">
+      <DockPanel>
+        <TextBlock Style="{StaticResource IconText}" Text="&#xE7BA;" Margin="0,0,10,0" />
+        <TextBlock Text="{local:Tr SensitiveWarning}" TextWrapping="Wrap" />
+      </DockPanel>
+    </Border>
+
+    <!-- Folders that could not be read. -->
+    <Border x:Name="InaccessibleBar" DockPanel.Dock="Top" Style="{StaticResource WarningBar}" Margin="0,0,0,10"
+            Visibility="Collapsed">
+      <DockPanel>
+        <Button x:Name="AdminButton" DockPanel.Dock="Right" Click="RunAsAdmin_Click" Margin="12,0,0,0">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource IconText}" Text="&#xEA18;" Margin="0,0,8,0" />
+            <TextBlock Text="{local:Tr RunAsAdmin}" />
+          </StackPanel>
+        </Button>
+        <TextBlock Style="{StaticResource IconText}" Text="&#xE7BA;" Margin="0,0,10,0" />
+        <TextBlock x:Name="InaccessibleText" VerticalAlignment="Center" TextWrapping="Wrap" />
+      </DockPanel>
+    </Border>
+
+    <!-- Buttons. -->
+    <DockPanel DockPanel.Dock="Bottom" Margin="0,14,0,0" LastChildFill="False">
+      <Button x:Name="CloseButton" DockPanel.Dock="Right" Content="{local:Tr Close}" Click="Close_Click" MinWidth="96"
+              Margin="8,0,0,0" IsCancel="True" />
+      <Button x:Name="DeleteButton" DockPanel.Dock="Right" Style="{DynamicResource AccentButtonStyle}" MinWidth="120"
+              Click="Delete_Click" />
+      <Button x:Name="RescanButton" DockPanel.Dock="Right" Content="{local:Tr CleanRescan}" Click="Rescan_Click"
+              MinWidth="96" Margin="0,0,8,0" />
+      <Button x:Name="CancelButton" DockPanel.Dock="Right" Content="{local:Tr Cancel}" Click="Cancel_Click" MinWidth="96" />
+    </DockPanel>
+
+    <!-- Where they go: recycle bin or deleted for good (a setting). -->
+    <TextBlock x:Name="ModeText" DockPanel.Dock="Bottom" Style="{StaticResource SecondaryText}" Margin="0,10,0,0">
+      <Run x:Name="ModeRun" />
+      <Hyperlink Click="Settings_Click"><Run Text="{local:Tr CleanChangeMode}" /></Hyperlink>
+    </TextBlock>
+
+    <!-- Summary and progress. -->
+    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+      <TextBlock x:Name="SummaryText" FontWeight="SemiBold" TextWrapping="Wrap" />
+      <TextBlock x:Name="DetailText" Style="{StaticResource SecondaryText}" TextTrimming="CharacterEllipsis"
+                 TextWrapping="NoWrap" Margin="0,2,0,0" />
+      <ProgressBar x:Name="Progress" Margin="0,8,0,0" Maximum="1" />
+    </StackPanel>
+
+    <!-- Checks or unchecks every folder; shows a dash when only some are checked. Aligned with the item check boxes. -->
+    <CheckBox x:Name="AllBox" DockPanel.Dock="Top" Content="{local:Tr SelectAll}" Margin="11,0,0,6"
+              Click="AllBox_Click" />
+
+    <!-- Found folders (checkable), or the folders that could not be deleted. -->
+    <ListBox x:Name="FolderList" ItemsSource="{Binding Items, RelativeSource={RelativeSource AncestorType=Window}}"
+             VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
+             HorizontalContentAlignment="Stretch" AutomationProperties.Name="{local:Tr ActionClean}">
+      <ListBox.ItemContainerStyle>
+        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+          <Setter Property="MinHeight" Value="34" />
+          <Setter Property="Padding" Value="10,2" />
+        </Style>
+      </ListBox.ItemContainerStyle>
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <DockPanel ToolTip="{Binding Path}">
+            <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsChecked}" Visibility="{Binding CheckVisibility}"
+                      VerticalAlignment="Center" Margin="0,0,4,0" MinWidth="0"
+                      AutomationProperties.Name="{Binding RelativePath}" />
+            <TextBlock DockPanel.Dock="Left" Style="{StaticResource IconText}" Text="&#xE8B7;"
+                       Foreground="{StaticResource FolderBrush}" FontSize="15" Margin="0,0,8,0" />
+            <TextBlock DockPanel.Dock="Right" Text="{Binding Detail}" Style="{StaticResource SecondaryText}"
+                       VerticalAlignment="Center" Margin="12,0,0,0" TextWrapping="NoWrap" />
+            <TextBlock Text="{Binding RelativePath}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+          </DockPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+  </DockPanel>
+</Window>
