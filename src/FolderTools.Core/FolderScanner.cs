@@ -39,6 +39,15 @@ public sealed class FolderScanner
     /// <summary>The root node, available as soon as <see cref="ScanAsync"/> has started.</summary>
     public FolderNode? Root { get; private set; }
 
+    /// <summary>The largest files met so far (readable during the scan).</summary>
+    public LargestFiles LargestFiles { get; }
+
+    /// <param name="largestFiles">How many of the largest files to keep.</param>
+    public FolderScanner(int largestFiles = Core.LargestFiles.DefaultCapacity)
+    {
+        LargestFiles = new LargestFiles(largestFiles);
+    }
+
     /// <summary>Scans <paramref name="path"/> on worker threads. Throws <see cref="OperationCanceledException"/> when cancelled.</summary>
     public Task<FolderNode> ScanAsync(string path, CancellationToken cancellationToken = default)
     {
@@ -79,6 +88,7 @@ public sealed class FolderScanner
                 }
                 node.OwnFileCount++;
                 node.OwnFilesSize += entry.Length;
+                LargestFiles.Offer(node, entry.Name, entry.Length, entry.LastWriteUtc);
                 if (newest is null || entry.LastWriteUtc > newest)
                     newest = entry.LastWriteUtc;
             }

@@ -38,7 +38,12 @@
   (leur cible est comptée là où elle se trouve) ; les dossiers OneDrive sont lus normalement.
 - Clic droit sur une ligne : **ouvrir dans l'Explorateur**, **copier le chemin**, **afficher seulement ce dossier**,
   **supprimer** (vers la corbeille, après confirmation).
-- **Export CSV** (pour Excel) : une ligne par dossier, avec le séparateur et la virgule décimale de vos paramètres régionaux.
+- Onglet **Plus gros fichiers** : les plus gros fichiers du dossier (l'analyse retient les 1 000 plus gros), avec leur
+  taille, leur part, leur dossier et leur date, 100 à la fois. Un double-clic affiche le fichier dans l'Explorateur ;
+  clic droit : ouvrir, afficher dans l'Explorateur, copier le chemin, supprimer (vers la corbeille, les totaux des
+  dossiers suivent).
+- **Export CSV** (pour Excel) de l'onglet affiché : une ligne par dossier ou par fichier, avec le séparateur et la
+  virgule décimale de vos paramètres régionaux.
 - Les dossiers illisibles (accès refusé) sont comptés et signalés, avec un bouton **Relancer en administrateur**.
 
 ### Supprimer les dossiers vides

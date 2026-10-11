@@ -93,6 +93,30 @@ public sealed class FolderNode
         Parent = null;
     }
 
+    /// <summary>True for this folder and every folder inside it.</summary>
+    public bool IsSameOrInside(FolderNode folder)
+    {
+        for (var node = this; node is not null; node = node.Parent)
+            if (node == folder)
+                return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Takes a file of this folder out of the totals once it has been deleted, in this folder and every parent.
+    /// The newest-file dates are not recomputed.
+    /// </summary>
+    public void RemoveFile(long length)
+    {
+        OwnFilesSize -= length;
+        OwnFileCount--;
+        for (var node = this; node is not null; node = node.Parent)
+        {
+            node.Size -= length;
+            node.FileCount--;
+        }
+    }
+
     // "C:\" stays "C:\", "D:\Photos\" becomes "Photos".
     private static string DisplayName(string path)
     {

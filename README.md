@@ -35,7 +35,11 @@
   counted where it lives); OneDrive folders are read normally.
 - Right-click a line: **open in File Explorer**, **copy the path**, **show only this folder**, **delete** (to the
   recycle bin, after confirmation).
-- **Export to CSV** (for Excel): one line per folder, with the separator and decimal mark of your regional settings.
+- **Largest files** tab: the largest files of the folder (the analysis keeps the 1,000 largest), with their size,
+  share, folder and date, 100 at a time. Double-click shows the file in File Explorer; right-click: open, show in
+  File Explorer, copy the path, delete (to the recycle bin, the folder totals follow).
+- **Export to CSV** (for Excel), the tab shown: one line per folder or per file, with the separator and decimal mark
+  of your regional settings.
 - Folders that cannot be read (access denied) are counted and reported, with a **Run as administrator** button.
 
 ### Delete empty folders

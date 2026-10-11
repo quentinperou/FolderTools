@@ -58,6 +58,9 @@ public partial class SizeWindow : Window, IRebuildable
         _filesRows.Clear();
         _expanded.Clear();
         Rows.Clear();
+        FileRows.Clear();
+        _filesShown = FilesPage;
+        _filesVersion = -1;
         InaccessibleBar.Visibility = Visibility.Collapsed;
         SetBusy(true);
         _clock = Stopwatch.StartNew();
@@ -97,6 +100,7 @@ public partial class SizeWindow : Window, IRebuildable
         _clock.Stop();
         SetBusy(false);
         RefreshRows();
+        RefreshFiles(force: true);
         ShowTotals();
     }
 
@@ -244,6 +248,7 @@ public partial class SizeWindow : Window, IRebuildable
         if (IsScanning)
             StatusText.Text = Strings.Format("ScanProgress", WindowsShell.FormatCount(_scanner.FilesScanned),
                 WindowsShell.FormatSize(_scanner.BytesScanned), _scanner.CurrentFolder);
+        RefreshFiles(force: false);
     }
 
     // Resetting the whole list (new top folder, new sort) is much faster than moving every line.
@@ -269,6 +274,8 @@ public partial class SizeWindow : Window, IRebuildable
         Title = Strings.Format("SizeWindowTitle", _viewRoot?.Name ?? _path);
         UpButton.IsEnabled = _viewRoot?.Parent is not null;
         ResetRows();
+        _filesShown = FilesPage;
+        RefreshFiles(force: true);
         if (!IsScanning)
             ShowTotals();
     }
@@ -364,6 +371,14 @@ public partial class SizeWindow : Window, IRebuildable
         FilesColumn.Header = Header(Strings.Get("ColumnFiles"), SortKey.Files);
         FoldersColumn.Header = Header(Strings.Get("ColumnFolders"), SortKey.Folders);
         ModifiedColumn.Header = Header(Strings.Get("ColumnModified"), SortKey.Modified);
+
+        string FileHeader(string text, FileSortKey key) =>
+            key == _fileSortKey ? $"{text} {(_fileDescending ? "▼" : "▲")}" : text;
+        FileNameColumn.Header = FileHeader(Strings.Get("ColumnName"), FileSortKey.Name);
+        FileSizeColumn.Header = FileHeader(Strings.Get("ColumnSize"), FileSortKey.Size);
+        FileShareColumn.Header = Strings.Get("ColumnShare");
+        FileFolderColumn.Header = FileHeader(Strings.Get("ColumnFolder"), FileSortKey.Folder);
+        FileModifiedColumn.Header = FileHeader(Strings.Get("ColumnModified"), FileSortKey.Modified);
     }
 
     // ---------------------------------------------------------------- Row menu
@@ -450,16 +465,22 @@ public partial class SizeWindow : Window, IRebuildable
     {
         if (_viewRoot is not { } root)
             return;
+        // The tab shown is the one exported: the folder tree, or the largest files (all those kept for this folder).
+        bool files = Tabs.SelectedItem == FilesTab;
         var dialog = new SaveFileDialog
         {
             Filter = Strings.Get("CsvFilter"),
-            FileName = $"{Strings.Get("ActionSize")} - {string.Concat(root.Name.Split(Path.GetInvalidFileNameChars()))} - {DateTime.Now:yyyy-MM-dd}.csv",
+            FileName = $"{Strings.Get(files ? "TabFiles" : "ActionSize")} - {string.Concat(root.Name.Split(Path.GetInvalidFileNameChars()))} - {DateTime.Now:yyyy-MM-dd}.csv",
         };
         if (dialog.ShowDialog(this) != true)
             return;
         try
         {
-            CsvExport.WriteFile(root, dialog.FileName, Strings.Get("CsvHeaders").Split('|'), CultureInfo.CurrentCulture);
+            if (files)
+                CsvExport.WriteFilesFile(SortedFiles(), root, dialog.FileName, Strings.Get("CsvFileHeaders").Split('|'),
+                    CultureInfo.CurrentCulture);
+            else
+                CsvExport.WriteFile(root, dialog.FileName, Strings.Get("CsvHeaders").Split('|'), CultureInfo.CurrentCulture);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -469,4 +490,171 @@ public partial class SizeWindow : Window, IRebuildable
     }
 
     private void Settings_Click(object sender, RoutedEventArgs e) => App.OpenSettings(this);
+
+    // ---------------------------------------------------------------- Largest files
+
+    private enum FileSortKey { Name, Size, Folder, Modified }
+
+    // Lines shown at once; "Show 100 more" adds as many, up to all those the analysis kept.
+    private const int FilesPage = 100;
+
+    private int _filesShown = FilesPage;
+    private int _filesVersion = -1;
+    private FolderNode? _filesRoot;
+    private FileSortKey _fileSortKey = FileSortKey.Size;
+    private bool _fileDescending = true;
+
+    public ObservableCollection<FileRow> FileRows { get; } = [];
+
+    private FileRow? SelectedFile => FileList.SelectedItem as FileRow;
+
+    /// <summary>The files of the folder shown that the analysis kept, in the order of the list.</summary>
+    private List<FileEntry> SortedFiles()
+    {
+        var files = _scanner.LargestFiles.Snapshot(_viewRoot == _scanRoot ? null : _viewRoot);
+        Func<FileEntry, object> key = _fileSortKey switch
+        {
+            FileSortKey.Name => f => f.Name,
+            FileSortKey.Folder => f => f.Folder.FullPath,
+            FileSortKey.Modified => f => f.LastWriteUtc,
+            _ => f => f.Length,
+        };
+        var comparer = Comparer<object>.Create((a, b) => a is string x && b is string y
+            ? string.Compare(x, y, StringComparison.CurrentCultureIgnoreCase)
+            : Comparer<object>.Default.Compare(a, b));
+        return (_fileDescending ? files.OrderByDescending(key, comparer) : files.OrderBy(key, comparer)).ToList();
+    }
+
+    /// <summary>
+    /// Fills the list from the files kept by the analysis. During the scan, it is called on every tick: it only
+    /// rebuilds when the kept files or the folder shown changed, and when the tab is shown.
+    /// </summary>
+    private void RefreshFiles(bool force)
+    {
+        if (_viewRoot is not { } root)
+            return;
+        int version = _scanner.LargestFiles.Version;
+        if (!force && (Tabs.SelectedItem != FilesTab || (version == _filesVersion && root == _filesRoot)))
+            return;
+        _filesVersion = version;
+        _filesRoot = root;
+
+        var selected = SelectedFile?.File;
+        var files = SortedFiles();
+        FileRows.Clear();
+        foreach (var file in files.Take(_filesShown))
+            FileRows.Add(new FileRow(file, root));
+        if (selected is not null && FileRows.FirstOrDefault(r => r.File == selected) is { } again)
+            FileList.SelectedItem = again;
+
+        int kept = _scanner.LargestFiles.Capacity;
+        FilesCountText.Text = files.Count == 0 ? Strings.Get("FilesNone")
+            : root == _scanRoot ? Strings.Format("FilesCount", WindowsShell.FormatCount(FileRows.Count), WindowsShell.FormatCount(kept))
+            : Strings.Format("FilesCountSubset", WindowsShell.FormatCount(FileRows.Count), WindowsShell.FormatCount(kept));
+        FilesMoreLink.Visibility = files.Count > FileRows.Count ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // The lists inside the tabs raise SelectionChanged too: only the tabs themselves matter here.
+        if (e.OriginalSource == Tabs)
+            RefreshFiles(force: false);
+    }
+
+    private void FilesMore_Click(object sender, RoutedEventArgs e)
+    {
+        _filesShown += FilesPage;
+        RefreshFiles(force: true);
+    }
+
+    private void FileHeader_Click(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is not GridViewColumnHeader { Column: { } column })
+            return;
+        var key = column == FileNameColumn ? FileSortKey.Name
+            : column == FileFolderColumn ? FileSortKey.Folder
+            : column == FileModifiedColumn ? FileSortKey.Modified
+            : FileSortKey.Size;
+        // A new column starts with what matters most: biggest first, newest first, A to Z.
+        _fileDescending = key == _fileSortKey ? !_fileDescending : key is FileSortKey.Size or FileSortKey.Modified;
+        _fileSortKey = key;
+        UpdateHeaders();
+        RefreshFiles(force: true);
+    }
+
+    private void FileList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (e.OriginalSource is FrameworkElement { DataContext: FileRow row })
+            WindowsShell.ShowInExplorer(row.File.FullPath);
+    }
+
+    private void FileList_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (SelectedFile is not { } row)
+            return;
+        if (e.Key == Key.Enter)
+            WindowsShell.ShowInExplorer(row.File.FullPath);
+        else if (e.Key == Key.Delete && !IsScanning)
+            DeleteFile(row);
+        else
+            return;
+        e.Handled = true;
+    }
+
+    private void FileList_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        if (SelectedFile is null)
+        {
+            e.Handled = true;
+            return;
+        }
+        DeleteFileMenuItem.IsEnabled = !IsScanning;
+    }
+
+    private void OpenFile_Click(object sender, RoutedEventArgs e)
+    {
+        if (SelectedFile is { } row)
+            WindowsShell.Open(row.File.FullPath);
+    }
+
+    private void ShowFileInExplorer_Click(object sender, RoutedEventArgs e)
+    {
+        if (SelectedFile is { } row)
+            WindowsShell.ShowInExplorer(row.File.FullPath);
+    }
+
+    private void CopyFilePath_Click(object sender, RoutedEventArgs e)
+    {
+        if (SelectedFile is { } row)
+            Clipboard.SetText(row.File.FullPath);
+    }
+
+    private void DeleteFile_Click(object sender, RoutedEventArgs e)
+    {
+        if (SelectedFile is { } row && !IsScanning)
+            DeleteFile(row);
+    }
+
+    private void DeleteFile(FileRow row)
+    {
+        var file = row.File;
+        string message = Strings.Format("ConfirmRecycleFile", file.Name, WindowsShell.FormatSize(file.Length));
+        if (MessageBox.Show(this, message, Strings.Get("MenuDelete"), MessageBoxButton.OKCancel, MessageBoxImage.Warning)
+            != MessageBoxResult.OK)
+            return;
+        if (!WindowsShell.RecycleWithDialogs(file.FullPath, this))
+            return; // cancelled, or an error Windows has already explained
+
+        // The totals of every folder above it, in both tabs, without analyzing again.
+        int index = FileRows.IndexOf(row);
+        file.Folder.RemoveFile(file.Length);
+        _scanner.LargestFiles.Remove(file);
+        RefreshFiles(force: true);
+        Reconcile();
+        foreach (var r in Rows)
+            r.Refresh();
+        ShowTotals();
+        if (FileRows.Count > 0)
+            FileList.SelectedIndex = Math.Min(index, FileRows.Count - 1);
+    }
 }

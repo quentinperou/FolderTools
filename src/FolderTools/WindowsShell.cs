@@ -39,16 +39,33 @@ public static class WindowsShell
     public static void OpenInExplorer(string folder) =>
         Process.Start(new ProcessStartInfo("explorer.exe", LaunchRequest.QuotePath(folder)) { UseShellExecute = true })?.Dispose();
 
-    /// <summary>
-    /// Sends one folder to the recycle bin, with File Explorer's own progress and error dialogs (a big folder may
-    /// take a while; a locked file is explained by Windows). Windows asks before deleting for good when the drive
-    /// has no recycle bin. Returns true when the folder is gone.
-    /// </summary>
-    public static bool RecycleWithDialogs(string folder, Window owner)
+    /// <summary>Opens the folder of a file in File Explorer, with the file selected.</summary>
+    public static void ShowInExplorer(string file) =>
+        Process.Start(new ProcessStartInfo("explorer.exe", "/select," + LaunchRequest.QuotePath(file)) { UseShellExecute = true })?.Dispose();
+
+    /// <summary>Opens a file with its default program, like a double-click in File Explorer.</summary>
+    public static void Open(string file)
     {
-        Recycle([folder], new WindowInteropHelper(owner).Handle,
+        try
+        {
+            Process.Start(new ProcessStartInfo(file) { UseShellExecute = true })?.Dispose();
+        }
+        catch (Win32Exception)
+        {
+            // No program for this kind of file, or the user cancelled the "open with" prompt: nothing to report.
+        }
+    }
+
+    /// <summary>
+    /// Sends one folder or file to the recycle bin, with File Explorer's own progress and error dialogs (a big folder
+    /// may take a while; a locked file is explained by Windows). Windows asks before deleting for good when the
+    /// drive has no recycle bin. Returns true when it is gone.
+    /// </summary>
+    public static bool RecycleWithDialogs(string path, Window owner)
+    {
+        Recycle([path], new WindowInteropHelper(owner).Handle,
             FileOperationFlags.AllowUndo | FileOperationFlags.NoConfirmation | FileOperationFlags.WantNukeWarning);
-        return !System.IO.Directory.Exists(folder);
+        return !System.IO.Directory.Exists(path) && !System.IO.File.Exists(path);
     }
 
     /// <summary>

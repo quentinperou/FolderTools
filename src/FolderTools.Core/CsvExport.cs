@@ -51,6 +51,41 @@ public static class CsvExport
         Write(root, writer, headers, culture);
     }
 
+    /// <summary>The largest files, one line each, in the given order.</summary>
+    /// <param name="headers">Column titles, localized by the caller: path, name, folder, size (bytes), size (GB),
+    /// % of the analyzed folder, modified.</param>
+    /// <param name="root">The analyzed folder: the share and the folder column are relative to it.</param>
+    public static void WriteFiles(IEnumerable<FileEntry> files, FolderNode root, TextWriter writer,
+        IReadOnlyList<string> headers, CultureInfo culture)
+    {
+        if (headers.Count != 7)
+            throw new ArgumentException("Seven column titles are expected.", nameof(headers));
+
+        string separator = culture.TextInfo.ListSeparator;
+        writer.WriteLine(string.Join(separator, headers.Select(h => Quote(h, separator))));
+        foreach (var file in files)
+        {
+            string[] fields =
+            [
+                file.FullPath,
+                file.Name,
+                Path.GetRelativePath(root.FullPath, file.Folder.FullPath),
+                file.Length.ToString(culture),
+                (file.Length / (1024.0 * 1024 * 1024)).ToString("0.000", culture),
+                (root.Size > 0 ? 100.0 * file.Length / root.Size : 0).ToString("0.0", culture),
+                file.LastWriteUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
+            ];
+            writer.WriteLine(string.Join(separator, fields.Select(f => Quote(f, separator))));
+        }
+    }
+
+    public static void WriteFilesFile(IEnumerable<FileEntry> files, FolderNode root, string path,
+        IReadOnlyList<string> headers, CultureInfo culture)
+    {
+        using var writer = new StreamWriter(path, false, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
+        WriteFiles(files, root, writer, headers, culture);
+    }
+
     private static string Quote(string field, string separator) =>
         field.Contains(separator) || field.Contains('"') || field.Contains('\n') || field.Contains('\r')
             ? $"\"{field.Replace("\"", "\"\"")}\""

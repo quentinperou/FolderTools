@@ -7,6 +7,35 @@
         WindowStartupLocation="CenterScreen">
 
   <Window.Resources>
+    <!-- Tabs like those of the Windows 11 apps: plain text, an accent bar under the selected one. -->
+    <Style TargetType="TabItem">
+      <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultControlFocusVisualStyle}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="TabItem">
+            <Grid Margin="0,0,4,0" Background="Transparent">
+              <Border x:Name="Back" CornerRadius="4" Padding="12,7" Margin="0,0,0,4">
+                <TextBlock x:Name="Label" Text="{TemplateBinding Header}"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+              </Border>
+              <Border x:Name="Bar" Height="3" Width="20" CornerRadius="1.5" VerticalAlignment="Bottom"
+                      Background="{DynamicResource AccentFillColorDefaultBrush}" Visibility="Hidden" />
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Back" Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+              </Trigger>
+              <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="Label" Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                <Setter TargetName="Label" Property="FontWeight" Value="SemiBold" />
+                <Setter TargetName="Bar" Property="Visibility" Value="Visible" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
     <Style x:Key="NumberCell" TargetType="TextBlock">
       <Setter Property="TextAlignment" Value="Right" />
       <Setter Property="VerticalAlignment" Value="Center" />
@@ -67,99 +96,201 @@
       <TextBlock x:Name="StatusText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
     </DockPanel>
 
-    <ListView x:Name="Tree" ItemsSource="{Binding Rows, RelativeSource={RelativeSource AncestorType=Window}}"
-              SelectionMode="Single"
-              VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
-              GridViewColumnHeader.Click="Header_Click" PreviewKeyDown="Tree_PreviewKeyDown"
-              MouseDoubleClick="Tree_MouseDoubleClick" ContextMenuOpening="Tree_ContextMenuOpening"
-              AutomationProperties.Name="{local:Tr ActionSize}">
-      <ListView.ItemContainerStyle>
-        <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Static GridView.GridViewItemContainerStyleKey}}">
-          <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-          <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
-          <!-- Denser than the default list rows: a tree is read as a whole. -->
-          <Setter Property="MinHeight" Value="30" />
-          <Setter Property="Padding" Value="0,2" />
-        </Style>
-      </ListView.ItemContainerStyle>
+    <!-- Two views of the same analysis: the folders as a tree, and the largest files. -->
+    <TabControl x:Name="Tabs" SelectionChanged="Tabs_SelectionChanged">
+      <TabItem Header="{local:Tr TabFolders}">
+        <ListView x:Name="Tree" ItemsSource="{Binding Rows, RelativeSource={RelativeSource AncestorType=Window}}"
+                  SelectionMode="Single"
+                  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
+                  GridViewColumnHeader.Click="Header_Click" PreviewKeyDown="Tree_PreviewKeyDown"
+                  MouseDoubleClick="Tree_MouseDoubleClick" ContextMenuOpening="Tree_ContextMenuOpening"
+                  AutomationProperties.Name="{local:Tr ActionSize}">
+          <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Static GridView.GridViewItemContainerStyleKey}}">
+              <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+              <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+              <!-- Denser than the default list rows: a tree is read as a whole. -->
+              <Setter Property="MinHeight" Value="30" />
+              <Setter Property="Padding" Value="0,2" />
+            </Style>
+          </ListView.ItemContainerStyle>
+    
+          <ListView.ContextMenu>
+            <ContextMenu>
+              <MenuItem x:Name="OpenMenuItem" Header="{local:Tr MenuOpenInExplorer}" Click="OpenInExplorer_Click">
+                <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE838;" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem x:Name="CopyMenuItem" Header="{local:Tr MenuCopyPath}" Click="CopyPath_Click">
+                <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE8C8;" /></MenuItem.Icon>
+              </MenuItem>
+              <MenuItem x:Name="FocusMenuItem" Header="{local:Tr MenuShowOnly}" Click="ShowOnly_Click">
+                <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE71E;" /></MenuItem.Icon>
+              </MenuItem>
+              <Separator />
+              <MenuItem x:Name="DeleteMenuItem" Header="{local:Tr MenuDelete}" Click="Delete_Click">
+                <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE74D;" /></MenuItem.Icon>
+              </MenuItem>
+            </ContextMenu>
+          </ListView.ContextMenu>
+    
+          <ListView.View>
+            <GridView>
+              <GridViewColumn x:Name="NameColumn" Width="380">
+                <GridViewColumn.CellTemplate>
+                  <DataTemplate>
+                    <DockPanel Margin="{Binding Indent}" ToolTip="{Binding ToolTip}">
+                      <TextBlock DockPanel.Dock="Left" Style="{StaticResource IconText}" Text="{Binding Chevron}"
+                                 Visibility="{Binding ChevronVisibility}" FontSize="10" Width="16" Padding="0,2"
+                                 Background="Transparent" Cursor="Hand" MouseLeftButtonDown="Chevron_MouseLeftButtonDown" />
+                      <TextBlock DockPanel.Dock="Left" Style="{StaticResource IconText}" Text="{Binding Glyph}"
+                                 Foreground="{StaticResource FolderBrush}" FontSize="15" Margin="2,0,8,0" />
+                      <TextBlock Text="{Binding Name}" FontStyle="{Binding FontStyle}" VerticalAlignment="Center"
+                                 TextTrimming="CharacterEllipsis" />
+                    </DockPanel>
+                  </DataTemplate>
+                </GridViewColumn.CellTemplate>
+              </GridViewColumn>
+              <GridViewColumn x:Name="SizeColumn" Width="100">
+                <GridViewColumn.CellTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding SizeText}" Style="{StaticResource NumberCell}" />
+                  </DataTemplate>
+                </GridViewColumn.CellTemplate>
+              </GridViewColumn>
+              <GridViewColumn x:Name="ShareColumn" Width="150">
+                <GridViewColumn.CellTemplate>
+                  <DataTemplate>
+                    <DockPanel>
+                      <TextBlock DockPanel.Dock="Right" Text="{Binding ShareText}" Style="{StaticResource NumberCell}"
+                                 Width="52" Margin="6,0,0,0" FontSize="12" />
+                      <ProgressBar Maximum="1" Value="{Binding Share, Mode=OneWay}" Height="6" VerticalAlignment="Center"
+                                   Focusable="False" IsTabStop="False" />
+                    </DockPanel>
+                  </DataTemplate>
+                </GridViewColumn.CellTemplate>
+              </GridViewColumn>
+              <GridViewColumn x:Name="FilesColumn" Width="100">
+                <GridViewColumn.CellTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding FilesText}" Style="{StaticResource NumberCell}" />
+                  </DataTemplate>
+                </GridViewColumn.CellTemplate>
+              </GridViewColumn>
+              <GridViewColumn x:Name="FoldersColumn" Width="90">
+                <GridViewColumn.CellTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding FoldersText}" Style="{StaticResource NumberCell}" />
+                  </DataTemplate>
+                </GridViewColumn.CellTemplate>
+              </GridViewColumn>
+              <GridViewColumn x:Name="ModifiedColumn" Width="140">
+                <GridViewColumn.CellTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding ModifiedText}" Style="{StaticResource NumberCell}" />
+                  </DataTemplate>
+                </GridViewColumn.CellTemplate>
+              </GridViewColumn>
+            </GridView>
+          </ListView.View>
+        </ListView>
+      </TabItem>
 
-      <ListView.ContextMenu>
-        <ContextMenu>
-          <MenuItem x:Name="OpenMenuItem" Header="{local:Tr MenuOpenInExplorer}" Click="OpenInExplorer_Click">
-            <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE838;" /></MenuItem.Icon>
-          </MenuItem>
-          <MenuItem x:Name="CopyMenuItem" Header="{local:Tr MenuCopyPath}" Click="CopyPath_Click">
-            <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE8C8;" /></MenuItem.Icon>
-          </MenuItem>
-          <MenuItem x:Name="FocusMenuItem" Header="{local:Tr MenuShowOnly}" Click="ShowOnly_Click">
-            <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE71E;" /></MenuItem.Icon>
-          </MenuItem>
-          <Separator />
-          <MenuItem x:Name="DeleteMenuItem" Header="{local:Tr MenuDelete}" Click="Delete_Click">
-            <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE74D;" /></MenuItem.Icon>
-          </MenuItem>
-        </ContextMenu>
-      </ListView.ContextMenu>
+      <!-- The largest files met by the analysis (FolderScanner.LargestFiles), in the folder shown at the top. -->
+      <TabItem x:Name="FilesTab" Header="{local:Tr TabFiles}">
+        <DockPanel>
+          <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
+            <TextBlock x:Name="FilesCountText" Style="{StaticResource SecondaryText}" VerticalAlignment="Center" />
+            <TextBlock x:Name="FilesMoreLink" Style="{StaticResource SecondaryText}" Margin="6,0,0,0" VerticalAlignment="Center">
+              <Run Text="·" />
+              <Hyperlink Click="FilesMore_Click"><Run Text="{local:Tr FilesMore}" /></Hyperlink>
+            </TextBlock>
+          </StackPanel>
 
-      <ListView.View>
-        <GridView>
-          <GridViewColumn x:Name="NameColumn" Width="380">
-            <GridViewColumn.CellTemplate>
-              <DataTemplate>
-                <DockPanel Margin="{Binding Indent}" ToolTip="{Binding ToolTip}">
-                  <TextBlock DockPanel.Dock="Left" Style="{StaticResource IconText}" Text="{Binding Chevron}"
-                             Visibility="{Binding ChevronVisibility}" FontSize="10" Width="16" Padding="0,2"
-                             Background="Transparent" Cursor="Hand" MouseLeftButtonDown="Chevron_MouseLeftButtonDown" />
-                  <TextBlock DockPanel.Dock="Left" Style="{StaticResource IconText}" Text="{Binding Glyph}"
-                             Foreground="{StaticResource FolderBrush}" FontSize="15" Margin="2,0,8,0" />
-                  <TextBlock Text="{Binding Name}" FontStyle="{Binding FontStyle}" VerticalAlignment="Center"
-                             TextTrimming="CharacterEllipsis" />
-                </DockPanel>
-              </DataTemplate>
-            </GridViewColumn.CellTemplate>
-          </GridViewColumn>
-          <GridViewColumn x:Name="SizeColumn" Width="100">
-            <GridViewColumn.CellTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding SizeText}" Style="{StaticResource NumberCell}" />
-              </DataTemplate>
-            </GridViewColumn.CellTemplate>
-          </GridViewColumn>
-          <GridViewColumn x:Name="ShareColumn" Width="150">
-            <GridViewColumn.CellTemplate>
-              <DataTemplate>
-                <DockPanel>
-                  <TextBlock DockPanel.Dock="Right" Text="{Binding ShareText}" Style="{StaticResource NumberCell}"
-                             Width="52" Margin="6,0,0,0" FontSize="12" />
-                  <ProgressBar Maximum="1" Value="{Binding Share, Mode=OneWay}" Height="6" VerticalAlignment="Center"
-                               Focusable="False" IsTabStop="False" />
-                </DockPanel>
-              </DataTemplate>
-            </GridViewColumn.CellTemplate>
-          </GridViewColumn>
-          <GridViewColumn x:Name="FilesColumn" Width="100">
-            <GridViewColumn.CellTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding FilesText}" Style="{StaticResource NumberCell}" />
-              </DataTemplate>
-            </GridViewColumn.CellTemplate>
-          </GridViewColumn>
-          <GridViewColumn x:Name="FoldersColumn" Width="90">
-            <GridViewColumn.CellTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding FoldersText}" Style="{StaticResource NumberCell}" />
-              </DataTemplate>
-            </GridViewColumn.CellTemplate>
-          </GridViewColumn>
-          <GridViewColumn x:Name="ModifiedColumn" Width="140">
-            <GridViewColumn.CellTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding ModifiedText}" Style="{StaticResource NumberCell}" />
-              </DataTemplate>
-            </GridViewColumn.CellTemplate>
-          </GridViewColumn>
-        </GridView>
-      </ListView.View>
-    </ListView>
+          <ListView x:Name="FileList" ItemsSource="{Binding FileRows, RelativeSource={RelativeSource AncestorType=Window}}"
+                    SelectionMode="Single"
+                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
+                    GridViewColumnHeader.Click="FileHeader_Click" PreviewKeyDown="FileList_PreviewKeyDown"
+                    MouseDoubleClick="FileList_MouseDoubleClick" ContextMenuOpening="FileList_ContextMenuOpening"
+                    AutomationProperties.Name="{local:Tr TabFiles}">
+            <ListView.ItemContainerStyle>
+              <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Static GridView.GridViewItemContainerStyleKey}}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                <Setter Property="MinHeight" Value="30" />
+                <Setter Property="Padding" Value="0,2" />
+              </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ContextMenu>
+              <ContextMenu>
+                <MenuItem Header="{local:Tr MenuOpen}" Click="OpenFile_Click">
+                  <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE768;" /></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{local:Tr MenuShowInExplorer}" Click="ShowFileInExplorer_Click">
+                  <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE838;" /></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{local:Tr MenuCopyPath}" Click="CopyFilePath_Click">
+                  <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE8C8;" /></MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem x:Name="DeleteFileMenuItem" Header="{local:Tr MenuDelete}" Click="DeleteFile_Click">
+                  <MenuItem.Icon><TextBlock Style="{StaticResource IconText}" Text="&#xE74D;" /></MenuItem.Icon>
+                </MenuItem>
+              </ContextMenu>
+            </ListView.ContextMenu>
+
+            <ListView.View>
+              <GridView>
+                <GridViewColumn x:Name="FileNameColumn" Width="340">
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <DockPanel ToolTip="{Binding ToolTip}" Margin="6,0,0,0">
+                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource IconText}" Text="{Binding Glyph}"
+                                   Foreground="{StaticResource FolderBrush}" FontSize="15" Margin="0,0,8,0" />
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                      </DockPanel>
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn x:Name="FileSizeColumn" Width="100">
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding SizeText}" Style="{StaticResource NumberCell}" />
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn x:Name="FileShareColumn" Width="150">
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <DockPanel>
+                        <TextBlock DockPanel.Dock="Right" Text="{Binding ShareText}" Style="{StaticResource NumberCell}"
+                                   Width="52" Margin="6,0,0,0" FontSize="12" />
+                        <ProgressBar Maximum="1" Value="{Binding Share, Mode=OneWay}" Height="6" VerticalAlignment="Center"
+                                     Focusable="False" IsTabStop="False" />
+                      </DockPanel>
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn x:Name="FileFolderColumn" Width="220">
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding FolderText}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn x:Name="FileModifiedColumn" Width="140">
+                  <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding ModifiedText}" Style="{StaticResource NumberCell}" />
+                    </DataTemplate>
+                  </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+              </GridView>
+            </ListView.View>
+          </ListView>
+        </DockPanel>
+      </TabItem>
+    </TabControl>
   </DockPanel>
 </Window>

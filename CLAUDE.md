@@ -201,6 +201,16 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   (selection and scroll stay); sorting or changing the top folder resets the list. The files directly in a folder
   that also has subfolders get a “[n files in this folder]” row. The analyzed folder's row shows the bytes counted
   so far. Shares are hidden until the parent's total is known.
+- **Largest files** (since 1.2.0, “Largest files” tab of the size window, mock-up validated by the author first;
+  the author tried the tab, not every action: deleting a file and the totals that follow, the list below a sub-folder
+  and the CSV export of files were only checked by the unit tests):
+  `FolderScanner.LargestFiles` keeps the 1,000 largest files met (`FileEntry`: folder node, name, size, date) in a
+  min-heap; a file under the current smallest one is turned down without the lock, so the scan does not slow down.
+  The tab lists the kept files inside the folder shown (`Snapshot(viewRoot)`, a note says smaller files may be missing
+  below the analyzed folder), 100 at a time, refreshed on the scan timer only when `Version` or the folder changed
+  and the tab is shown. Double-click / Enter: `explorer /select`; Delete: recycle bin, then `FolderNode.RemoveFile`
+  and `LargestFiles.Remove` update both tabs. Export CSV exports the tab shown (`CsvExport.WriteFiles`). Tabs use a
+  local `TabItem` style (accent bar under the selected one).
 - **Empty folders**: the outermost empty folders are listed, with their nested count. Deletion re-checks each folder
   first. *For good*: only ignored files and empty folders are removed, with non-recursive `RemoveDirectory`, so a
   file created in the meantime stops the deletion. *Recycle bin*: `SHFileOperation` in batches of 64, silent, on an
