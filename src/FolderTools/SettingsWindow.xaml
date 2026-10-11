@@ -295,7 +295,7 @@
     <ScrollViewer x:Name="AboutPage" Grid.Row="1" Grid.Column="1" Style="{StaticResource Page}" Margin="16,0,0,0">
       <Border Style="{StaticResource Card}" VerticalAlignment="Top">
         <DockPanel>
-          <Image DockPanel.Dock="Left" Source="Assets/FolderTools.ico" Width="40" Height="40" Margin="0,0,16,0"
+          <Image DockPanel.Dock="Left" Source="Assets/FolderTools.png" RenderOptions.BitmapScalingMode="HighQuality" Width="40" Height="40" Margin="0,0,16,0"
                  VerticalAlignment="Top" />
           <StackPanel VerticalAlignment="Center">
             <TextBlock Text="{local:Tr AppTitle}" FontWeight="SemiBold" />

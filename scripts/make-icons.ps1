@@ -130,3 +130,5 @@ Save-Png 44 (Join-Path $root 'package\Assets\Square44x44Logo.png')
 Save-Png 150 (Join-Path $root 'package\Assets\Square150x150Logo.png') 0.2
 Save-Png 50 (Join-Path $root 'package\Assets\StoreLogo.png')
 Save-Png 256 (Join-Path $root 'docs\icon-256.png')
+# Shown inside the app (home, About): WPF's Image would take a small frame of the .ico and blow it up.
+Save-Png 256 (Join-Path $root 'src\FolderTools\Assets\FolderTools.png')

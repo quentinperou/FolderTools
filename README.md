@@ -74,9 +74,23 @@ The installer:
 To update: the app offers new versions itself (a bar in the home window, or **Settings → Updates**); installing
 one asks for the administrator prompt again.
 
-To uninstall: **Settings → Apps → Installed apps → FolderTools**. Everything goes: the app, the context menu
-entries and, for the account that uninstalls, the app's settings. The .NET Desktop Runtime stays (other apps may
-use it).
+To uninstall: **Settings → Apps → Installed apps → FolderTools**. It removes:
+
+- the app (`C:\Program Files\FolderTools`), its Start menu shortcut and its uninstall entry;
+- the context menu: the classic entries (folders, folder backgrounds, drives) and the Windows 11 menu package, for
+  every Windows account;
+- for the account that accepts the administrator prompt: the settings (`%LOCALAPPDATA%\FolderTools`), the menu
+  setting (`HKCU\Software\FolderTools`), a downloaded update installer (`%TEMP%\FolderTools-Update`), and the names
+  Windows cached for the app (`MuiCache`).
+
+It keeps:
+
+- the settings of the **other** Windows accounts (an uninstaller cannot reach them; each is a small `settings.json`);
+- the .NET Desktop Runtime (other apps may use it);
+- what you made with the app: CSV exports, folders sent to the recycle bin.
+
+An update installed over the app does not uninstall it: the settings stay. If File Explorer still had the menu
+loaded, Windows finishes deleting the install folder at the next restart.
 
 **Requirements:** Windows 11 x64 for the new context menu (Windows 10 2004+ works, with the entry in the classic
 menu). In the new Windows 11 menu, the entry shows on folders and folder backgrounds; on a **drive**, it is under

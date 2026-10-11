@@ -18,6 +18,9 @@
 #define AppExe "FolderTools.exe"
 #define MenuDll "FolderToolsMenu.dll"
 #define PackageName "FolderTools.ContextMenu"
+; What the app creates for the user, removed at uninstall (installer\UserDataCleanup.iss).
+#define UserDataName "FolderTools"
+#define UpdateTempName "FolderTools-Update"
 
 [Setup]
 AppId={{19F0E0B9-1859-4642-894A-648B58719233}
@@ -48,8 +51,11 @@ CloseApplications=yes
 RestartApplications=no
 ; Only ask for the language when Windows uses one the installer does not have.
 ShowLanguageDialog=auto
-; The uninstaller removes the settings of the account that uninstalls (below): expected, not a mistake.
-UsedUserAreasWarning=no
+#ifdef UninstallLog
+; ISCC /DUninstallLog (build.ps1 -UninstallLog): the uninstaller always writes "Uninstall Log <date>.txt" in %TEMP%,
+; even when started from Windows Settings, which does not pass /LOG.
+UninstallLogging=yes
+#endif
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -103,13 +109,6 @@ Name: "{autoprograms}\FolderTools"; Filename: "{app}\{#AppExe}"
 ; The preprocessed script, to check the lines generated above: build\FolderTools.preprocessed.iss
 #expr SaveToFile(AddBackslash(SourcePath) + "..\build\FolderTools.preprocessed.iss")
 
-; The setting read by the menu DLL (Windows 11 menu shown or hidden), removed on uninstall only.
-Root: HKCU; Subkey: "Software\FolderTools"; Flags: uninsdeletekey dontcreatekey
-
-[UninstallDelete]
-; Settings of the app (settings.json).
-Type: filesandordirs; Name: "{localappdata}\FolderTools"
-
 [Run]
 ; Update installed from the app (silent, /RELAUNCH=1): start the app again, as the user, not elevated.
 Filename: "{app}\{#AppExe}"; Flags: nowait runasoriginaluser skipifnotsilent; Check: RelaunchRequested
@@ -138,10 +137,27 @@ begin
     '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
 end;
 
-{ Windows 11 new context menu: sparse package pointing at the install folder. }
-procedure UnregisterContextMenu;
+#include "UserDataCleanup.iss"
+
+{ Windows 11 new context menu: sparse package pointing at the install folder. An update drops the registration of
+  the current account only (it registers it again right after); the uninstaller drops it for every account, since
+  an administrator who is not the user may have accepted the UAC prompt of an earlier install. Removing the package
+  also ends the dllhost surrogate that has the menu DLL loaded, so that the DLL can be deleted. }
+procedure UnregisterContextMenu(AllUsers: Boolean);
 begin
-  RunPowerShell('Get-AppxPackage -Name {#PackageName} | Remove-AppxPackage');
+  if AllUsers then
+  begin
+    if RunPowerShell('Get-AppxPackage -AllUsers -Name {#PackageName} | Remove-AppxPackage -AllUsers') then
+    begin
+      Log('Cleanup: package {#PackageName} removed for all accounts');
+      Exit;
+    end;
+    Log('Cleanup: removing the package for all accounts failed, trying the current account');
+  end;
+  if RunPowerShell('Get-AppxPackage -Name {#PackageName} | Remove-AppxPackage') then
+    Log('Cleanup: package {#PackageName} removed for the current account')
+  else
+    Log('Cleanup: could not remove the package {#PackageName}');
 end;
 
 function SetEnvironmentVariable(Name, Value: String): BOOL;
@@ -191,7 +207,7 @@ begin
   begin
     { Update: drop the previous registration before the files are replaced. }
     if IsWindows11 then
-      UnregisterContextMenu;
+      UnregisterContextMenu(False);
   end
   else if CurStep = ssPostInstall then
   begin
@@ -201,8 +217,16 @@ begin
   end;
 end;
 
+{ Inno Setup removes what the installer created ([Files], [Icons], [Registry] uninsdeletekey); the rest is here.
+  The .NET Desktop Runtime is shared with other apps: never removed. }
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
-  if (CurUninstallStep = usUninstall) and IsWindows11 then
-    UnregisterContextMenu;
+  if CurUninstallStep = usUninstall then
+  begin
+    { Before the files go: the package points at them, and its surrogate process keeps the menu DLL loaded. }
+    if IsWindows11 then
+      UnregisterContextMenu(True);
+  end
+  else if CurUninstallStep = usPostUninstall then
+    DeleteUserData(ExpandConstant('{app}'));
 end;

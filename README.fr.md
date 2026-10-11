@@ -78,9 +78,24 @@ L'installeur :
 Mettre à jour : l'application propose elle-même les nouvelles versions (barre dans la fenêtre d'accueil, ou
 **Paramètres → Mises à jour**) ; l'installation redemande l'accord administrateur.
 
-Désinstaller : **Paramètres → Applications → Applications installées → FolderTools**. Tout part : l'application, les
-entrées du menu clic droit et, pour le compte qui désinstalle, les paramètres de l'application. Le .NET Desktop
-Runtime reste (d'autres applications peuvent s'en servir).
+Désinstaller : **Paramètres → Applications → Applications installées → FolderTools**. La désinstallation retire :
+
+- l'application (`C:\Program Files\FolderTools`), son raccourci du menu Démarrer et son entrée de désinstallation ;
+- le menu clic droit : les entrées classiques (dossiers, fond des dossiers, lecteurs) et le package du menu de
+  Windows 11, pour tous les comptes Windows ;
+- pour le compte qui accepte la demande d'administrateur : les paramètres (`%LOCALAPPDATA%\FolderTools`), le réglage
+  du menu (`HKCU\Software\FolderTools`), un installeur de mise à jour téléchargé (`%TEMP%\FolderTools-Update`) et les
+  noms que Windows a mis en cache pour l'application (`MuiCache`).
+
+Elle garde :
+
+- les paramètres des **autres** comptes Windows (un désinstalleur ne peut pas les atteindre ; ce n'est qu'un petit
+  `settings.json` par compte) ;
+- le .NET Desktop Runtime (d'autres applications peuvent s'en servir) ;
+- ce que vous avez produit avec l'application : exports CSV, dossiers envoyés à la corbeille.
+
+Une mise à jour installée par-dessus ne désinstalle pas l'application : les paramètres restent. Si l'Explorateur
+avait encore le menu chargé, Windows termine la suppression du dossier d'installation au prochain redémarrage.
 
 **Configuration requise :** Windows 11 x64 pour le nouveau menu clic droit (Windows 10 2004+ fonctionne, avec
 l'entrée dans le menu classique). Dans le nouveau menu de Windows 11, l'entrée apparaît sur les dossiers et le fond des

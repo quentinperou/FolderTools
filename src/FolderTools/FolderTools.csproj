@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\FolderTools.ico" />
+    <Resource Include="Assets\FolderTools.png" />
   </ItemGroup>
 
   <ItemGroup>

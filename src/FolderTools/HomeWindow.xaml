@@ -13,7 +13,7 @@
               ToolTip="{local:Tr Settings}" AutomationProperties.Name="{local:Tr Settings}">
         <TextBlock Style="{StaticResource IconText}" Text="&#xE713;" FontSize="16" />
       </Button>
-      <Image Source="Assets/FolderTools.ico" Width="32" Height="32" Margin="0,0,12,0" VerticalAlignment="Center" />
+      <Image Source="Assets/FolderTools.png" RenderOptions.BitmapScalingMode="HighQuality" Width="32" Height="32" Margin="0,0,12,0" VerticalAlignment="Center" />
       <StackPanel VerticalAlignment="Center">
         <TextBlock Text="{local:Tr AppTitle}" FontSize="24" FontWeight="SemiBold" />
         <TextBlock Text="{local:Tr HomeSubtitle}" Style="{StaticResource SecondaryText}" />

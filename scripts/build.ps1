@@ -16,13 +16,18 @@
 .PARAMETER SkipTests
     Do not run the unit tests.
 
+.PARAMETER UninstallLog
+    Build an installer whose uninstaller always writes "Uninstall Log <date>.txt" in %TEMP%, even when started from
+    Windows Settings (UninstallLogging=yes): to check what the uninstall removes (scripts\uninstall-inventory.ps1).
+
 .EXAMPLE
     .\scripts\build.ps1
 #>
 [CmdletBinding()]
 param(
     [switch]$NoInstaller,
-    [switch]$SkipTests
+    [switch]$SkipTests,
+    [switch]$UninstallLog
 )
 
 $ErrorActionPreference = 'Stop'
@@ -85,7 +90,9 @@ if (-not $NoInstaller) {
         (Join-Path $env:LOCALAPPDATA 'Programs\Inno Setup 6\ISCC.exe')
     ) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
     if ($iscc) {
-        Invoke-Native { & $iscc /Q "/DAppVersion=$version" (Join-Path $root 'installer\FolderTools.iss') } 'Inno Setup'
+        $defines = @("/DAppVersion=$version")
+        if ($UninstallLog) { $defines += '/DUninstallLog' }
+        Invoke-Native { & $iscc /Q @defines (Join-Path $root 'installer\FolderTools.iss') } 'Inno Setup'
     }
     else {
         Write-Warning 'Inno Setup 6 not found: installer not built (winget install JRSoftware.InnoSetup).'
