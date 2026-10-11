@@ -79,14 +79,14 @@ Users of 1.0.0 are offered it by the app.
 (installs from the bar, like CropPdf), asked by the author; every start checks for updates (privacy policy updated). **Released** (tag `v1.0.2` on `10cddb5`, “latest”,
 `FolderTools-Setup-1.0.2.exe`, SHA-256 `cd332216…ac3745`).
 
-**v1.1.0 (validated by the author on October 12, 2026, not released yet)**: **folder colors** (8 colors + Default
+**v1.1.0 (released October 12, 2026: tag `v1.1.0` on `053a1c6`, “latest”, `FolderTools-Setup-1.1.0.exe`, SHA-256 `d5b5b0fb…ad7e9a`, hand-written notes)**: **folder colors** (8 colors + Default
 color, right in “FolderTools ›” after a separator), decided with the author on October 11, 2026: the palette of the
 mock-up (red, orange, yellow, green, blue, purple, pink, gray), icons kept in the install folder (not copied into each
 folder), folders only (not the background of a folder, not drives), and one switch per entry in Settings → General.
 Checked: `rundll32 …,SetColor` on test folders (color, change of color, Default on an ordinary folder → no
 desktop.ini nor attribute left; on a folder with its own icon → its icon and its translated name come back); the
 installed menu, new and classic, validated by the author (“ça marche”) after four layouts (see “Technical choices”).
-Also: the duplicate classic entries of Windows 11 are gone.
+Also: the duplicate classic entries of Windows 11 are gone. Not exercised for real: the installer ending the menu's surrogate before removing the package (no surrogate was running during the last test install); the icon cache refresh was logged.
 
 Next steps: test the new-menu toggle and the settings cleanup at uninstall for real; then v1.1
 (folder colors).
