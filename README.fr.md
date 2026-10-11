@@ -12,6 +12,10 @@
   <a href="README.md">English</a> · <b>Français</b>
 </p>
 
+<p align="center">
+  <img src=".github/screenshot.png" width="900" alt="FolderTools : l'arborescence des tailles d'un dossier, les plus gros en premier, avec leurs fichiers, sous-dossiers, part et fichier le plus récent">
+</p>
+
 ---
 
 ## Fonctionnalités

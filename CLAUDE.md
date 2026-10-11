@@ -55,9 +55,17 @@ Not verified yet:
 - English Windows, Windows 10;
 - the update path (no release exists yet).
 
-Next steps: install `dist\FolderTools-Setup-1.0.0.exe` and check the menu; create the GitHub repository (author's
-go-ahead needed for `git init` / push); README screenshots (`.github/screenshot.png`, `.github/screenshot.fr.png`,
-on a neutral folder: no personal folder names); release v1.0.0; then v1.1 (folder colors).
+The repository is public (https://github.com/quentinperou/FolderTools), CI passes on push.
+
+**README screenshot** (`.github/screenshot.png`, one English image for both READMEs, as decided by the author):
+the size window, light theme, 1100 × 610, on a **fictitious** tree (no personal folder names): `S:\Archives`
+(Photos/2023-2025/Edits, Videos, Music, Projects, Old backups, Documents, Temp, two .iso files, ~90 GB) made of
+sparse files (real sizes, no disk space; `FSCTL_SET_SPARSE` + `SetLength`), mounted with `subst S: <folder>`;
+started with `FOLDERTOOLS_LANG=en`, `FOLDERTOOLS_THEME=Light`, “Photos” expanded by selecting its row through UI
+Automation (rows are `DataItem`s) then posting `WM_KEYDOWN VK_RIGHT`, captured with `PrintWindow`.
+
+Next steps: release v1.0.0; test the new-menu toggle and the settings cleanup at uninstall for real; then v1.1
+(folder colors).
 
 ## Commands
 
@@ -70,7 +78,9 @@ dotnet run --project src\FolderTools -- size "D:\Photos"
 dotnet run --project src\FolderTools -- clean "%TEMP%"
 ```
 
-- `FOLDERTOOLS_THEME=Light|Dark` and `FOLDERTOOLS_LANG=en|fr` force the theme / UI language at startup.
+- `FOLDERTOOLS_THEME=Light|Dark` and `FOLDERTOOLS_LANG=en|fr` force the theme / UI language at startup;
+  `FOLDERTOOLS_LANG` also forces the number and date formats (en-US / fr-FR), which otherwise follow the Windows
+  regional settings.
 - User settings: `%LOCALAPPDATA%\FolderTools\settings.json`; the new-menu toggle: `HKCU\Software\FolderTools`,
   DWORD `HideInNewContextMenu` (read by the DLL each time the menu opens).
 - The context menu can only be tested installed (`dist\FolderTools-Setup-<version>.exe`, UAC prompt).

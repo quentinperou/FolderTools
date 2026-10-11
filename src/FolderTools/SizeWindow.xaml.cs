@@ -111,7 +111,9 @@ public partial class SizeWindow : Window, IRebuildable
         if (_viewRoot is not { } root)
             return;
         StatusText.Text = Strings.Format("ScanDone", WindowsShell.FormatSize(root.Size), WindowsShell.FormatCount(root.FileCount),
-            WindowsShell.FormatCount(root.FolderCount), _clock.Elapsed.TotalSeconds.ToString("0.0", CultureInfo.CurrentCulture));
+            WindowsShell.FormatCount(root.FolderCount),
+            // "0.04 s" rather than "0.0 s" for a small folder.
+            _clock.Elapsed.TotalSeconds.ToString(_clock.Elapsed.TotalSeconds < 1 ? "0.00" : "0.0", CultureInfo.CurrentCulture));
 
         long inaccessible = _scanRoot?.InaccessibleCount ?? 0;
         InaccessibleBar.Visibility = inaccessible > 0 ? Visibility.Visible : Visibility.Collapsed;

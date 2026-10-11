@@ -17,10 +17,17 @@ public partial class App : Application
         var settings = AppSettings.Load();
 
         // UI language: the one chosen in the settings, else the Windows one (French, otherwise English).
-        // FOLDERTOOLS_LANG=en|fr forces one, handy to test both.
-        ApplyLanguage(Environment.GetEnvironmentVariable("FOLDERTOOLS_LANG") is { Length: > 0 } forced
-            ? forced
-            : settings.Language);
+        // FOLDERTOOLS_LANG=en|fr forces one, handy to test both; it also forces the number and date formats
+        // (en-US, fr-FR), which otherwise follow the Windows regional settings (README screenshot).
+        if (Environment.GetEnvironmentVariable("FOLDERTOOLS_LANG") is { Length: > 0 } forced)
+        {
+            ApplyLanguage(forced);
+            var format = CultureInfo.CreateSpecificCulture(forced);
+            CultureInfo.DefaultThreadCurrentCulture = format;
+            CultureInfo.CurrentCulture = format;
+        }
+        else
+            ApplyLanguage(settings.Language);
 
         // Theme: the one chosen in the settings, Windows' light/dark by default.
         // FOLDERTOOLS_THEME=Light|Dark forces one, handy to test both.

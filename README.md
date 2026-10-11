@@ -12,6 +12,10 @@
   <b>English</b> · <a href="README.fr.md">Français</a>
 </p>
 
+<p align="center">
+  <img src=".github/screenshot.png" width="900" alt="FolderTools: the size tree of a folder, biggest folders first, with their files, subfolders, share and newest file">
+</p>
+
 ---
 
 ## Features
