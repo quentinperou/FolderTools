@@ -297,7 +297,7 @@ Ils n'iront pas à la corbeille.</value>
     <value>Menu clic droit</value>
   </data>
   <data name="SettingsNewMenuDescription" xml:space="preserve">
-    <value>Affiche « FolderTools › » et « Couleur du dossier › » dans le menu clic droit des dossiers, avec les entrées choisies ci-dessous. Sur les lecteurs, FolderTools reste dans « Afficher plus d'options ».</value>
+    <value>Affiche « FolderTools › » dans le menu clic droit des dossiers, avec les entrées choisies ci-dessous (les couleurs seulement sur les dossiers). Sur les lecteurs, FolderTools reste dans « Afficher plus d'options ».</value>
   </data>
   <data name="SettingsTheme" xml:space="preserve">
     <value>Thème</value>

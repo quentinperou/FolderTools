@@ -18,7 +18,7 @@
 #define AppExe "FolderTools.exe"
 #define MenuDll "FolderToolsMenu.dll"
 #define PackageName "FolderTools.ContextMenu"
-; "Folder color ›" has a package of its own: one verb per package (see package\Color\AppxManifest.xml).
+; A second package of development builds of 1.1.0 (never released): removed if present.
 #define ColorPackageName "FolderTools.ColorMenu"
 ; What the app creates for the user, removed at uninstall (installer\UserDataCleanup.iss).
 #define UserDataName "FolderTools"
@@ -82,7 +82,6 @@ Source: "..\dist\app\*"; DestDir: "{app}"; Excludes: "{#MenuDll}"; Flags: ignore
 ; Explorer may still have the DLL loaded during an update: it is then replaced at the next restart.
 Source: "..\dist\app\{#MenuDll}"; DestDir: "{app}"; Flags: ignoreversion restartreplace uninsrestartdelete
 Source: "..\dist\FolderTools.Menu.msix"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\dist\FolderTools.ColorMenu.msix"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 ; The app's name, not translated.
@@ -95,45 +94,42 @@ Name: "{autoprograms}\FolderTools"; Filename: "{app}\{#AppExe}"
 ; RemoveClassicEntries). MUIVerb points at the localized string table of the DLL (101 FolderTools, 102 Folder sizes,
 ; 103 Delete empty folders, 104 Folder color, 110-117 the colors, 118 Default color), so the labels follow each user's
 ; display language; the default values are a fallback in the installer's language. Sub-entries are listed in the
-; order of their key names, hence "1Size", "2Clean"...
+; order of their key names, hence "01Size", "02Clean", "03Red"...
 #define MenuEntry(Type, Condition) \
   'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-101"; Flags: uninsdeletekey' + Condition + NewLine + \
   'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\' + AppExe + '"",0"' + Condition + NewLine + \
   'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools"; ValueType: string; ValueName: "SubCommands"; ValueData: ""' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\1Size"; ValueType: string; ValueName: ""; ValueData: "{cm:MenuSize}"' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\1Size"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-102"' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\1Size"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\' + MenuDll + '"",-201"' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\1Size\command"; ValueType: string; ValueName: ""; ValueData: """{app}\' + AppExe + '"" size ""%V"""' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\2Clean"; ValueType: string; ValueName: ""; ValueData: "{cm:MenuClean}"' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\2Clean"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-103"' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\2Clean"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\' + MenuDll + '"",-202"' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\2Clean\command"; ValueType: string; ValueName: ""; ValueData: """{app}\' + AppExe + '"" clean ""%V"""' + Condition + NewLine
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\01Size"; ValueType: string; ValueName: ""; ValueData: "{cm:MenuSize}"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\01Size"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-102"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\01Size"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\' + MenuDll + '"",-201"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\01Size\command"; ValueType: string; ValueName: ""; ValueData: """{app}\' + AppExe + '"" size ""%V"""' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\02Clean"; ValueType: string; ValueName: ""; ValueData: "{cm:MenuClean}"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\02Clean"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-103"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\02Clean"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\' + MenuDll + '"",-202"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\02Clean\command"; ValueType: string; ValueName: ""; ValueData: """{app}\' + AppExe + '"" clean ""%V"""' + Condition + NewLine
 #define Windows10Only "; Check: not IsWindows11"
 {#MenuEntry("Directory", Windows10Only)}
 {#MenuEntry("Directory\Background", Windows10Only)}
 {#MenuEntry("Drive", "")}
-; "Folder color >" (folders, Windows 10): an entry of its own, like in the new menu. Each color runs the SetColor
-; export of the DLL through rundll32. Icons: the colored folders themselves (Icon: the file name in {app}\Colors,
-; or "" for the ordinary folder icon of Windows).
-#define ColorKey "Software\Classes\Directory\shell\FolderToolsColor"
+; The folder colors (folders, Windows 10), right in "FolderTools >" after a separator, like in the new menu. Each one
+; runs the SetColor export of the DLL through rundll32. Icons: the colored folders themselves (Icon: the file name in
+; {app}\Colors, or "" for the ordinary folder icon of Windows).
+#define ColorKey "Software\Classes\Directory\shell\FolderTools"
 #define ColorItem(Key, Arg, Label, Icon) \
   'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-' + Label + '"' + Windows10Only + NewLine + \
   'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '"; ValueType: string; ValueName: "Icon"; ValueData: "' + (Icon == "" ? '{sys}\imageres.dll,-3' : '{app}\Colors\' + Icon + '.ico') + '"' + Windows10Only + NewLine + \
   'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '\command"; ValueType: string; ValueName: ""; ValueData: """{sys}\rundll32.exe"" ""{app}\' + MenuDll + '"",SetColor ' + Arg + ' ""%1"""' + Windows10Only + NewLine
-Root: HKLM; Subkey: "{#ColorKey}"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\{#MenuDll},-104"; Flags: uninsdeletekey{#Windows10Only}
-Root: HKLM; Subkey: "{#ColorKey}"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\{#MenuDll}"",-203"{#Windows10Only}
-Root: HKLM; Subkey: "{#ColorKey}"; ValueType: string; ValueName: "SubCommands"; ValueData: ""{#Windows10Only}
-{#ColorItem("1Red", "red", "110", "Red")}
-{#ColorItem("2Orange", "orange", "111", "Orange")}
-{#ColorItem("3Yellow", "yellow", "112", "Yellow")}
-{#ColorItem("4Green", "green", "113", "Green")}
-{#ColorItem("5Blue", "blue", "114", "Blue")}
-{#ColorItem("6Purple", "purple", "115", "Purple")}
-{#ColorItem("7Pink", "pink", "116", "Pink")}
-{#ColorItem("8Gray", "gray", "117", "Gray")}
-{#ColorItem("9Default", "default", "118", "")}
-; A separator above "Default color".
-Root: HKLM; Subkey: "{#ColorKey}\shell\9Default"; ValueType: dword; ValueName: "CommandFlags"; ValueData: "$20"{#Windows10Only}
+{#ColorItem("03Red", "red", "110", "Red")}
+{#ColorItem("04Orange", "orange", "111", "Orange")}
+{#ColorItem("05Yellow", "yellow", "112", "Yellow")}
+{#ColorItem("06Green", "green", "113", "Green")}
+{#ColorItem("07Blue", "blue", "114", "Blue")}
+{#ColorItem("08Purple", "purple", "115", "Purple")}
+{#ColorItem("09Pink", "pink", "116", "Pink")}
+{#ColorItem("10Gray", "gray", "117", "Gray")}
+{#ColorItem("11Default", "default", "118", "")}
+; A separator between the tools and the colors.
+Root: HKLM; Subkey: "{#ColorKey}\shell\03Red"; ValueType: dword; ValueName: "CommandFlags"; ValueData: "$20"{#Windows10Only}
 ; The preprocessed script, to check the lines generated above: build\FolderTools.preprocessed.iss
 #expr SaveToFile(AddBackslash(SourcePath) + "..\build\FolderTools.preprocessed.iss")
 
@@ -206,10 +202,8 @@ begin
     command text: a quote in the install folder (L'appli, or the typographic ’ that PowerShell also treats as a
     quote) would end a quoted string and break the command. }
   SetEnvironmentVariable('FOLDERTOOLS_MSIX', ExpandConstant('{app}\FolderTools.Menu.msix'));
-  SetEnvironmentVariable('FOLDERTOOLS_COLOR_MSIX', ExpandConstant('{app}\FolderTools.ColorMenu.msix'));
   SetEnvironmentVariable('FOLDERTOOLS_LOCATION', ExpandConstant('{app}'));
-  if not RunPowerShell('Add-AppxPackage -Path $env:FOLDERTOOLS_MSIX -ExternalLocation $env:FOLDERTOOLS_LOCATION -AllowUnsigned; ' +
-    'Add-AppxPackage -Path $env:FOLDERTOOLS_COLOR_MSIX -ExternalLocation $env:FOLDERTOOLS_LOCATION -AllowUnsigned') then
+  if not RunPowerShell('Add-AppxPackage -Path $env:FOLDERTOOLS_MSIX -ExternalLocation $env:FOLDERTOOLS_LOCATION -AllowUnsigned') then
     MsgBox(CustomMessage('MenuNotRegistered'), mbInformation, MB_OK);
 end;
 

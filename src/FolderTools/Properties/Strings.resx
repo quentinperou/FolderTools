@@ -297,7 +297,7 @@ They will not go to the recycle bin.</value>
     <value>Context menu</value>
   </data>
   <data name="SettingsNewMenuDescription" xml:space="preserve">
-    <value>Shows “FolderTools ›” and “Folder color ›” in the context menu of folders, with the entries chosen below. On drives, FolderTools stays under “Show more options”.</value>
+    <value>Shows “FolderTools ›” in the context menu of folders, with the entries chosen below (the colors only on folders). On drives, FolderTools stays under “Show more options”.</value>
   </data>
   <data name="SettingsTheme" xml:space="preserve">
     <value>Theme</value>

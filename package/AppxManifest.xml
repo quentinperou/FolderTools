@@ -2,8 +2,8 @@
 <!--
   "Sparse" package (package with external location): it contains only this manifest and the logos.
   It gives FolderTools a package identity so that Windows 11 shows "FolderTools ›" in the NEW File Explorer
-  context menu. "Folder color ›" has a package of its own (package\Color): with two verbs in one package, Windows
-  gathers them in a flyout named after the package ("FolderTools › FolderTools ›"), without icon. The app files stay in the install folder, passed at registration:
+  context menu. One verb only, the colors included in its sub-menu: with several verbs (in one package, or in two
+  packages of the same app), Windows gathers them in an icon-less flyout named after the app. The app files stay in the install folder, passed at registration:
     Add-AppxPackage -Path FolderTools.Menu.msix -ExternalLocation <install folder> -AllowUnsigned
 
   The package is not signed: the OID in Publisher marks it as an unsigned package, which Windows 11

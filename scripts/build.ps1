@@ -6,7 +6,6 @@
     Output in the dist\ folder:
       app\                              the app (FolderTools.exe...) and the context menu DLL (FolderToolsMenu.dll)
       FolderTools.Menu.msix             the "sparse" package that adds "FolderTools ›" to the Windows 11 context menu
-      FolderTools.ColorMenu.msix        the one that adds "Folder color ›"
       FolderTools-Setup-<version>.exe   the installer (needs Inno Setup 6)
 
     Prerequisites: see "Development" in the README.
@@ -82,16 +81,7 @@ Copy-Item (Join-Path $shellBuild 'FolderToolsMenu.dll') $appDir
 Copy-Item (Join-Path $root 'src\FolderTools.Shell\Colors') (Join-Path $appDir 'Colors') -Recurse
 
 Write-Step 'Sparse package (Windows 11 menu)'
-# Two packages, one verb each (see package\Color\AppxManifest.xml), with the same logos; each one is staged in
-# build\ with only its manifest and the logos.
-foreach ($package in @(@('package-menu', 'AppxManifest.xml', 'FolderTools.Menu.msix'), @('package-color', 'Color\AppxManifest.xml', 'FolderTools.ColorMenu.msix'))) {
-    $stage = Join-Path $build $package[0]
-    if ([IO.Directory]::Exists($stage)) { [IO.Directory]::Delete($stage, $true) }
-    New-Item -ItemType Directory -Force $stage | Out-Null
-    Copy-Item (Join-Path $root 'package\Assets') (Join-Path $stage 'Assets') -Recurse
-    Copy-Item (Join-Path $root "package\$($package[1])") (Join-Path $stage 'AppxManifest.xml')
-    Invoke-Native { makeappx pack /o /nv /d $stage /p (Join-Path $dist $package[2]) } "makeappx ($($package[2]))"
-}
+Invoke-Native { makeappx pack /o /nv /d (Join-Path $root 'package') /p (Join-Path $dist 'FolderTools.Menu.msix') } 'makeappx'
 
 if (-not $NoInstaller) {
     Write-Step 'Installer (Inno Setup)'

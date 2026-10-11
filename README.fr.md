@@ -21,8 +21,8 @@
 ## Fonctionnalités
 
 - **Clic droit sur un dossier, un lecteur ou le fond d'un dossier ouvert → « FolderTools › »**, dans le nouveau menu
-  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec deux outils, et **« Couleur du
-  dossier › »** sur les dossiers :
+  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec deux outils et, sur les dossiers, les
+  couleurs de dossier :
 
 ### Taille des dossiers
 
@@ -59,7 +59,7 @@
 
 ### Couleur du dossier
 
-- **Clic droit sur un dossier → FolderTools › Couleur du dossier ›** : rouge, orange, jaune, vert, bleu, violet, rose
+- **Clic droit sur un dossier → FolderTools ›**, sous les outils : rouge, orange, jaune, vert, bleu, violet, rose
   ou gris, comme les étiquettes de macOS ; **Couleur par défaut** rend au dossier sa propre icône. Fonctionne sur
   plusieurs dossiers sélectionnés à la fois ; la couleur actuelle est cochée.
 - Le dossier prend une icône de dossier colorée dans le style de Windows 11, par le même réglage `desktop.ini` que

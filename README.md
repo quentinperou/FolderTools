@@ -21,7 +21,7 @@
 ## Features
 
 - **Right-click a folder, a drive or the background of an open folder → “FolderTools ›”**, in the new Windows 11
-  context menu (and under “Show more options” / on Windows 10), with two tools, and **“Folder color ›”** on folders:
+  context menu (and under “Show more options” / on Windows 10), with two tools and, on folders, the folder colors:
 
 ### Folder sizes
 
@@ -55,7 +55,7 @@
 
 ### Folder color
 
-- **Right-click a folder → FolderTools › Folder color ›**: red, orange, yellow, green, blue, purple, pink or gray,
+- **Right-click a folder → FolderTools ›**, below the tools: red, orange, yellow, green, blue, purple, pink or gray,
   like the tags of macOS; **Default color** gives the folder its own icon back. Works on several selected folders at
   once; the current color is checked.
 - The folder gets a colored folder icon in the style of Windows 11, through the same `desktop.ini` setting as

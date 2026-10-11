@@ -1,5 +1,5 @@
-// FolderTools - entries of the Windows 11 File Explorer context menu: "FolderTools ›" on folders and the background
-// of an open folder, with "Folder sizes" and "Delete empty folders", and "Folder color ›" on folders.
+// FolderTools - "FolderTools ›" entry of the Windows 11 File Explorer context menu, on folders and the background of
+// an open folder: "Folder sizes", "Delete empty folders", then, on folders, the folder colors (and "Default color").
 //
 // Explorer finds this COM class through the sparse package (package/AppxManifest.xml), loads the DLL in a
 // surrogate process and calls IExplorerCommand. The first two sub-entries start FolderTools.exe, installed next
@@ -361,7 +361,7 @@ namespace
         size_t m_index = 0;
     };
 
-    // A color of "Folder color ›" (or Default), checked when every selected folder has it.
+    // A folder color (or Default) of "FolderTools ›", checked when every selected folder has it.
     class ColorCommand final : public CommandBase<ColorCommand>
     {
     public:
@@ -396,17 +396,24 @@ namespace
 
         IFACEMETHODIMP GetState(IShellItemArray* items, BOOL, EXPCMDSTATE* state) override
         {
+            // Hidden by the user, on the background of an open folder (no items) and on drives, which have their own
+            // icon. Checked when every selected folder has this color.
             auto folders = FolderPaths(items, MaxFoldersPerColor);
+            bool hidden = HiddenBySettings(HideColorValue) || folders.empty();
             bool all = !folders.empty();
             for (const auto& folder : folders)
+            {
+                hidden = hidden || PathIsRootW(folder.c_str());
                 all = all && FolderColor::Current(folder) == m_color;
-            *state = all ? ECS_CHECKED : ECS_ENABLED;
+            }
+            *state = hidden ? ECS_HIDDEN : all ? ECS_CHECKED : ECS_ENABLED;
             return S_OK;
         }
 
         IFACEMETHODIMP GetFlags(EXPCMDFLAGS* flags) override
         {
-            *flags = m_color == FolderColor::Default ? ECF_SEPARATORBEFORE : ECF_DEFAULT;
+            // A separator between the tools and the colors.
+            *flags = m_color == 0 ? ECF_SEPARATORBEFORE : ECF_DEFAULT;
             return S_OK;
         }
 
@@ -427,73 +434,8 @@ namespace
         int m_color = FolderColor::Default;
     };
 
-    // True when a path is a drive root ("C:\"): drives have their own icon, not a folder's.
-    bool IsDriveRoot(const std::wstring& path) { return PathIsRootW(path.c_str()) != FALSE; }
-
 }
 
-// "Folder color ›": a second entry of the new menu, beside "FolderTools ›" rather than inside it, since File Explorer
-// does not show a sub-menu inside a sub-menu (documented in the remarks of IExplorerCommand::EnumSubCommands). On
-// folders only: not on the background of an open folder (not declared there in the manifest) nor on drives.
-class __declspec(uuid("07A048EB-4FAE-4897-A619-4E4DA25C1376")) FolderColorCommand final
-    : public CommandBase<FolderColorCommand>
-{
-public:
-    IFACEMETHODIMP GetTitle(IShellItemArray*, PWSTR* name) override
-    {
-        return SHStrDupW(LoadText(IDS_MENU_COLOR).c_str(), name);
-    }
-
-    IFACEMETHODIMP GetIcon(IShellItemArray*, PWSTR* icon) override
-    {
-        std::wstring resource = ModulePath() + L",-203";
-        return SHStrDupW(resource.c_str(), icon);
-    }
-
-    IFACEMETHODIMP GetCanonicalName(GUID* guid) override
-    {
-        *guid = __uuidof(FolderColorCommand);
-        return S_OK;
-    }
-
-    IFACEMETHODIMP GetState(IShellItemArray* items, BOOL, EXPCMDSTATE* state) override
-    {
-        auto folders = FolderPaths(items, MaxFoldersPerColor);
-        bool drive = false;
-        for (const auto& folder : folders)
-            drive = drive || IsDriveRoot(folder);
-        *state = HiddenBySettings() || HiddenBySettings(HideColorValue) || folders.empty() || drive ? ECS_HIDDEN : ECS_ENABLED;
-        return S_OK;
-    }
-
-    IFACEMETHODIMP GetFlags(EXPCMDFLAGS* flags) override
-    {
-        *flags = ECF_HASSUBCOMMANDS;
-        return S_OK;
-    }
-
-    IFACEMETHODIMP EnumSubCommands(IEnumExplorerCommand** commands) override
-    {
-        std::vector<ComPtr<IExplorerCommand>> list;
-        for (int color = 0; color < FolderColor::Count; ++color)
-        {
-            ComPtr<IExplorerCommand> command;
-            RETURN_IF_FAILED_HR(MakeAndInitialize<ColorCommand>(&command, color));
-            list.push_back(command);
-        }
-        ComPtr<IExplorerCommand> reset;
-        RETURN_IF_FAILED_HR(MakeAndInitialize<ColorCommand>(&reset, FolderColor::Default));
-        list.push_back(reset);
-        return MakeAndInitialize<CommandList>(commands, std::move(list));
-    }
-
-    IFACEMETHODIMP Invoke(IShellItemArray*, IBindCtx*) override
-    {
-        return S_OK; // only opens the sub-menu
-    }
-};
-
-CoCreatableClass(FolderColorCommand)
 // "FolderTools ›": the entry File Explorer creates from the package manifest.
 class __declspec(uuid("8119219C-28DF-42B9-B5B3-9B2904535DDC")) FolderToolsCommand final
     : public CommandBase<FolderToolsCommand>
@@ -522,7 +464,8 @@ public:
         bool hasItems = items && SUCCEEDED(items->GetCount(&count)) && count > 0;
         // Hidden by the user (the whole menu, or both its sub-entries), or on items that are not folders of the file
         // system (This PC, Control Panel...).
-        bool allHidden = HiddenBySettings(HideSizeValue) && HiddenBySettings(HideCleanValue);
+        bool allHidden = HiddenBySettings(HideSizeValue) && HiddenBySettings(HideCleanValue)
+            && (HiddenBySettings(HideColorValue) || !hasItems);
         *state = HiddenBySettings() || allHidden || (hasItems && FolderPaths(items).empty()) ? ECS_HIDDEN : ECS_ENABLED;
         return S_OK;
     }
@@ -540,7 +483,20 @@ public:
         ComPtr<IExplorerCommand> clean;
         RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&size, Action::Size, m_site.Get()));
         RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&clean, Action::Clean, m_site.Get()));
-        return MakeAndInitialize<CommandList>(commands, std::vector<ComPtr<IExplorerCommand>>{size, clean});
+        std::vector<ComPtr<IExplorerCommand>> list{size, clean};
+        // The colors right in this sub-menu: File Explorer does not show a sub-menu inside a sub-menu (remarks of
+        // IExplorerCommand::EnumSubCommands), and a second entry of the package, or a second package, gets gathered
+        // with this one in an icon-less "FolderTools ›" flyout made by Windows.
+        for (int color = 0; color < FolderColor::Count; ++color)
+        {
+            ComPtr<IExplorerCommand> command;
+            RETURN_IF_FAILED_HR(MakeAndInitialize<ColorCommand>(&command, color));
+            list.push_back(command);
+        }
+        ComPtr<IExplorerCommand> reset;
+        RETURN_IF_FAILED_HR(MakeAndInitialize<ColorCommand>(&reset, FolderColor::Default));
+        list.push_back(reset);
+        return MakeAndInitialize<CommandList>(commands, std::move(list));
     }
 
     IFACEMETHODIMP Invoke(IShellItemArray*, IBindCtx*) override
