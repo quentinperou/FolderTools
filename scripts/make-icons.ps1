@@ -22,7 +22,7 @@ function New-RoundedRectPath([System.Drawing.RectangleF]$r, [float]$radius) {
 }
 
 # Rounded square in the yellow of File Explorer folders, with a white line drawing:
-#   Folder: the app (a filled folder with its tab); Size: three bars (folder sizes); Clean: a recycle bin.
+#   Folder: the app (a filled folder with its tab); Size: three bars (folder sizes); Clean: the folder with a cross.
 # -Hinted (small sizes): lines of a whole number of pixels, snapped to the pixel grid, so that they stay sharp.
 function New-IconBitmap([int]$size, [float]$padding = 0.04, [switch]$Hinted, [string]$Glyph = 'Folder') {
     $bmp = New-Object System.Drawing.Bitmap $size, $size, ([System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
@@ -52,34 +52,41 @@ function New-IconBitmap([int]$size, [float]$padding = 0.04, [switch]$Hinted, [st
         if ($Hinted) { [float]([Math]::Round($c - $snap) + $snap) } else { [float]$c }
     }
     function P([float]$x, [float]$y) { New-Object System.Drawing.PointF (C $x), (C $y) }
+    if ($Glyph -in 'Folder', 'Clean') {
+        # Filled folder with its tab on the top left. Small sizes: edges on whole pixels, so that they stay sharp.
+        function F([float]$v) { $c = $m + $v * $s; if ($Hinted) { [float][Math]::Round($c) } else { [float]$c } }
+        $r = [float]([Math]::Max(1, 0.06 * $s)); $d = 2 * $r
+        $folder = New-Object System.Drawing.Drawing2D.GraphicsPath
+        $folder.AddArc((F 0.18), (F 0.25), $d, $d, 180, 90)
+        $folder.AddLine((F 0.18) + $r, (F 0.25), (F 0.42), (F 0.25))
+        $folder.AddLine((F 0.42), (F 0.25), (F 0.50), (F 0.33))
+        $folder.AddArc((F 0.82) - $d, (F 0.33), $d, $d, 270, 90)
+        $folder.AddArc((F 0.82) - $d, (F 0.75) - $d, $d, $d, 0, 90)
+        $folder.AddArc((F 0.18), (F 0.75) - $d, $d, $d, 90, 90)
+        $folder.CloseFigure()
+        $g.FillPath([System.Drawing.Brushes]::White, $folder)
+        $folder.Dispose()
+    }
     switch ($Glyph) {
-        'Folder' {
-            # Filled folder with its tab on the top left. Small sizes: edges on whole pixels, so that they stay sharp.
-            function F([float]$v) { $c = $m + $v * $s; if ($Hinted) { [float][Math]::Round($c) } else { [float]$c } }
-            $r = [float]([Math]::Max(1, 0.06 * $s)); $d = 2 * $r
-            $folder = New-Object System.Drawing.Drawing2D.GraphicsPath
-            $folder.AddArc((F 0.18), (F 0.25), $d, $d, 180, 90)
-            $folder.AddLine((F 0.18) + $r, (F 0.25), (F 0.42), (F 0.25))
-            $folder.AddLine((F 0.42), (F 0.25), (F 0.50), (F 0.33))
-            $folder.AddArc((F 0.82) - $d, (F 0.33), $d, $d, 270, 90)
-            $folder.AddArc((F 0.82) - $d, (F 0.75) - $d, $d, $d, 0, 90)
-            $folder.AddArc((F 0.18), (F 0.75) - $d, $d, $d, 90, 90)
-            $folder.CloseFigure()
-            $g.FillPath([System.Drawing.Brushes]::White, $folder)
-            $folder.Dispose()
-        }
         'Size' {
             $g.DrawLine($pen, (P 0.30 0.76), (P 0.30 0.52))
             $g.DrawLine($pen, (P 0.50 0.76), (P 0.50 0.24))
             $g.DrawLine($pen, (P 0.70 0.76), (P 0.70 0.40))
         }
         'Clean' {
-            $g.DrawLine($pen, (P 0.22 0.30), (P 0.78 0.30))
-            $g.DrawLines($pen, [System.Drawing.PointF[]]@((P 0.40 0.30), (P 0.40 0.20), (P 0.60 0.20), (P 0.60 0.30)))
-            $g.DrawLines($pen, [System.Drawing.PointF[]]@((P 0.30 0.30), (P 0.34 0.80), (P 0.66 0.80), (P 0.70 0.30)))
+            # A cross cut out of the folder, in the background gradient.
+            # Up to 20 px: a bigger cross with a thinner line, otherwise it fills in and reads as a blob.
+            $small = $size -le 20
+            $cut = New-Object System.Drawing.Pen ($brush), $(if ($small) { [float]1.6 } else { $w })
+            $cut.StartCap = [System.Drawing.Drawing2D.LineCap]::Round
+            $cut.EndCap = [System.Drawing.Drawing2D.LineCap]::Round
+            $a = if ($small) { 0.36 } else { 0.41 }; $b = 1 - $a; $t = if ($small) { 0.41 } else { 0.45 }; $u = $t + ($b - $a)
+            function Q([float]$x, [float]$y) { New-Object System.Drawing.PointF ($m + $x * $s), ($m + $y * $s) }
+            $g.DrawLine($cut, (Q $a $t), (Q $b $u))
+            $g.DrawLine($cut, (Q $b $t), (Q $a $u))
+            $cut.Dispose()
         }
     }
-
     $pen.Dispose(); $brush.Dispose(); $bg.Dispose(); $g.Dispose()
     return $bmp
 }

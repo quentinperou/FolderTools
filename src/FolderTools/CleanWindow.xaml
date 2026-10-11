@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:FolderTools"
         Icon="Assets/FolderTools.ico"
-        Width="760" Height="600" MinWidth="520" MinHeight="380"
+        Width="1000" Height="680" MinWidth="520" MinHeight="380"
         WindowStartupLocation="CenterScreen">
 
   <DockPanel Margin="24,20,24,20">
