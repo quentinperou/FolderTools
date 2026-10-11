@@ -50,6 +50,9 @@ WizardStyle=modern
 Compression=lzma2/max
 SolidCompression=yes
 CloseApplications=yes
+; Colored folders point at {app}\Colors\*.ico, replaced in place by an update: File Explorer is told to reload its icons
+; at the end (SHCNE_ASSOCCHANGED), so that they show the new ones without anything to do (see also RefreshIconCache).
+ChangesAssociations=yes
 RestartApplications=no
 ; Only ask for the language when Windows uses one the installer does not have.
 ShowLanguageDialog=auto
@@ -169,6 +172,12 @@ end;
   also ends the dllhost surrogate that has the menu DLL loaded, so that the DLL can be deleted. }
 procedure UnregisterContextMenu(AllUsers: Boolean);
 begin
+  { Remove-AppxPackage waits for the package's processes: the dllhost surrogate that File Explorer started for the
+    menu (its command line holds our CLSID) can keep it waiting for good. It is ended first; File Explorer starts a
+    new one at the next right-click. }
+  RunPowerShell('Get-CimInstance Win32_Process -Filter ''Name=''''dllhost.exe'''''' | ' +
+    'Where-Object { $_.CommandLine -match ''8119219C-28DF-42B9-B5B3-9B2904535DDC|07A048EB-4FAE-4897-A619-4E4DA25C1376'' } | ' +
+    'ForEach-Object { Stop-Process -Id $_.ProcessId -Force }');
   if AllUsers then
   begin
     if RunPowerShell('''{#PackageName}'', ''{#ColorPackageName}'' | ForEach-Object { Get-AppxPackage -AllUsers -Name $_ } | Remove-AppxPackage -AllUsers') then
@@ -234,6 +243,15 @@ begin
   end;
 end;
 
+{ The icon cache keeps the images of a path even when the file changes: refreshed after each install. }
+procedure RefreshIconCache;
+var
+  ResultCode: Integer;
+begin
+  if Exec(ExpandConstant('{sys}\ie4uinit.exe'), '-show', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
+    Log('Icon cache refreshed (ie4uinit -show)');
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssInstall then
@@ -250,6 +268,7 @@ begin
     EnsureDesktopRuntime;
     if IsWindows11 then
       RegisterContextMenu;
+    RefreshIconCache;
   end;
 end;
 

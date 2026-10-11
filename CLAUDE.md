@@ -321,6 +321,13 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   from `dllhost` (the app would inherit the package identity: blank taskbar tile). See CropPdf's CLAUDE.md.
 - `exdisp.h` does not compile with `WIN32_LEAN_AND_MEAN`; `rc.exe` needs a trailing newline at the end of `resource.h`.
 - File Explorer may keep the DLL loaded during an update: the installer then replaces it at the next restart.
+- `Remove-AppxPackage` waits for the package's processes, and the `dllhost` surrogate of the menu (command line
+  `/Processid:{8119219C-…}`) once kept it waiting for good (installer stuck on an empty progress bar, October 12,
+  2026). `UnregisterContextMenu` now ends the surrogates whose command line holds our CLSIDs first.
+- A colored folder's `desktop.ini` is hidden **and system**: File Explorer only shows it when “Hide protected
+  operating system files” is unchecked (showing hidden items is not enough), like Windows' own `desktop.ini`.
+- After the icons in `<app>\Colors` change (same path), File Explorer may keep showing the old ones from its icon
+  cache: `ie4uinit.exe -show`, or apply the color again.
 - PowerShell scratch scripts: never name a helper function `R`, `Rp`, `Ri`, `Rm`… (`r` is `Invoke-History`, `rp` is
   `Remove-ItemProperty`, `ri`/`rm` are `Remove-Item`): aliases win over functions, and the call then runs the
   built-in command with the arguments. Use the Edit tool, or `.Replace()` on a string.
