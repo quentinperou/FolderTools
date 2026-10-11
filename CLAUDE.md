@@ -64,7 +64,11 @@ sparse files (real sizes, no disk space; `FSCTL_SET_SPARSE` + `SetLength`), moun
 started with `FOLDERTOOLS_LANG=en`, `FOLDERTOOLS_THEME=Light`, “Photos” expanded by selecting its row through UI
 Automation (rows are `DataItem`s) then posting `WM_KEYDOWN VK_RIGHT`, captured with `PrintWindow`.
 
-Next steps: release v1.0.0; test the new-menu toggle and the settings cleanup at uninstall for real; then v1.1
+**v1.0.0 is released** (October 11, 2026): tag `v1.0.0` on `da46744`, built and published by the CI
+(`FolderTools-Setup-1.0.0.exe`, 5.9 MB, SHA-256 `fefe757d…871287`), release notes in English written by hand
+(features, installation, privacy, checksum), like CropPdf's.
+
+Next steps: test the new-menu toggle and the settings cleanup at uninstall for real; then v1.1
 (folder colors).
 
 ## Commands
