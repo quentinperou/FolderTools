@@ -171,7 +171,10 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   updates from GitHub Releases (Stable/Beta channels, SHA-256 check, silent install, `/RELAUNCH=1`).
 - **One process per right-click**: the DLL starts `FolderTools.exe size|clean "<folder>"` (up to 8 selected
   folders). `LaunchRequest` parses it; a drive root arrives as `C:"` (`\"` is an escaped quote on the command line)
-  and is repaired. Without arguments: the home window, which is also the only place that checks for updates.
+  and is repaired. Without arguments: the home window.
+- **Updates**: every start checks (since 1.0.2; before, only the home window did), and `UpdateBar` (a `UserControl`,
+  like CropPdf's bar: *What's new* / *Update* / close) sits at the top of the home, size and cleaning windows.
+  Closing it hides that version in every window for the run; one install at a time, whichever window started it.
 - **Scanner**: `FileSystemEnumerable` (name, size, date, attributes in one pass), `AttributesToSkip = 0` (hidden
   and system files count), errors kept (`IgnoreInaccessible = false`) and counted per folder. The first 3 levels
   are scanned with `Parallel.ForEach`. A node's `Children` array is assigned once, before its subfolders are
@@ -233,7 +236,7 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
 - Icon-only buttons get an `AutomationProperties.Name`.
 - A single version in `Directory.Build.props` (app + installer). The **package** version (`AppxManifest.xml`) only
   changes when the manifest changes.
-- The README's **Privacy policy** lists every network access of the app (today: update check from the home window
+- The README's **Privacy policy** lists every network access of the app (today: update check at every start
   and Settings, update download, links on click): keep it in step with the code.
 
 ## Known pitfalls

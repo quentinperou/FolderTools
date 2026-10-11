@@ -60,8 +60,8 @@
 - **English and French**: the app, the context menu and the installer follow the Windows display language; the
   app language can also be chosen in **Settings**.
 - The entry of the new Windows 11 menu can be **turned off** in Settings; it then stays under “Show more options”.
-- **Updates in one click**: the app checks the GitHub Releases (from the home window) and offers the new version,
-  which installs itself and restarts the app. In **Settings**: check now, turn off the check at startup, or
+- **Updates in one click**: at startup the app checks the GitHub Releases; a bar at the top of every window offers
+  the new version (**What's new** / **Update**), which installs itself and restarts the app. In **Settings**: check now, turn off the check at startup, or
   choose the **Beta** channel to get new versions earlier.
 
 ## Installation
@@ -77,7 +77,7 @@ The installer:
 - adds the “FolderTools ›” entry to the right-click menu of folders, drives and folder backgrounds;
 - offers to install the Microsoft **.NET 10 Desktop Runtime** if it is missing.
 
-To update: the app offers new versions itself (a bar in the home window, or **Settings → Updates**); installing
+To update: the app offers new versions itself (a bar at the top of its windows, or **Settings → Updates**); installing
 one asks for the administrator prompt again.
 
 To uninstall: **Settings → Apps → Installed apps → FolderTools**. It removes:
@@ -205,12 +205,12 @@ and declares `FolderToolsMenu.dll`, which shows “FolderTools ›” and its tw
 This program will not transfer any information to other networked systems unless specifically requested by the
 user, with one exception: the **update check**. The names, sizes and contents of your folders never leave your computer.
 
-- **Update check:** when the home window opens, and when you click *Check for updates*, the app sends one HTTPS
+- **Update check:** when the app starts (from the Start menu or the right-click menu), and when you click
+  *Check for updates*, the app sends one HTTPS
   request to the GitHub API (`api.github.com`) to read the list of releases of this repository. The request
   contains no personal data and nothing about your folders; like any web request, it lets GitHub see your IP
   address and the app version (User-Agent). GitHub's [privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement)
   applies. The check at startup can be turned off in **Settings → Updates → Check for updates at startup**.
-  The right-click tools never check.
 - **Update download:** a new installer is downloaded from GitHub only when you click **Update**.
 - **Links** (*What's new*, *Source code on GitHub*…) open in your browser only when you click them.
 

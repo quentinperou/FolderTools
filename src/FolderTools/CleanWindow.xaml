@@ -7,6 +7,8 @@
         WindowStartupLocation="CenterScreen">
 
   <DockPanel Margin="24,20,24,20">
+    <local:UpdateBar DockPanel.Dock="Top" Margin="0,0,0,12" />
+
     <!-- Title and folder. -->
     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
       <Button DockPanel.Dock="Right" Click="Settings_Click" Padding="8" VerticalAlignment="Top"

@@ -14,6 +14,8 @@
   </Window.Resources>
 
   <DockPanel Margin="16,12,16,12">
+    <local:UpdateBar DockPanel.Dock="Top" Margin="0,0,0,10" />
+
     <!-- Toolbar: up one level, folder, analyze again, export. -->
     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
       <Button x:Name="UpButton" DockPanel.Dock="Left" Click="Up_Click" Padding="8" Margin="0,0,8,0"

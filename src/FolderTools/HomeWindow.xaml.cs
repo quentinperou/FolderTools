@@ -13,9 +13,6 @@ public partial class HomeWindow : Window, IRebuildable
         InitializeComponent();
         PathBox.Text = folder ?? "";
         UpdateButtons();
-        ShowUpdateBar();
-        Updater.Checked += Updater_Checked;
-        Closed += (_, _) => Updater.Checked -= Updater_Checked;
     }
 
     public Window? Rebuild() => new HomeWindow(PathBox.Text);
@@ -73,21 +70,4 @@ public partial class HomeWindow : Window, IRebuildable
 
     private static string? DroppedFolder(DragEventArgs e) =>
         e.Data.GetData(DataFormats.FileDrop) is string[] { Length: 1 } paths && Directory.Exists(paths[0]) ? paths[0] : null;
-
-    // ---------------------------------------------------------------- Updates
-
-    private void Updater_Checked(object? sender, EventArgs e) => ShowUpdateBar();
-
-    private void ShowUpdateBar()
-    {
-        if (Updater.Available is { } release)
-        {
-            UpdateBarText.Text = Strings.Format("UpdateBarText", release.Version);
-            UpdateBar.Visibility = Visibility.Visible;
-        }
-        else
-            UpdateBar.Visibility = Visibility.Collapsed;
-    }
-
-    private void UpdateBar_Click(object sender, RoutedEventArgs e) => App.OpenSettings(this);
 }

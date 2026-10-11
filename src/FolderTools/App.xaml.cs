@@ -60,9 +60,8 @@ public partial class App : Application
             window.WindowState = WindowState.Normal;
         window.Activate();
 
-        // Only from the home window: a right-click tool should not reach the network every time it opens.
-        if (request.Action == LaunchAction.Home)
-            _ = Updater.CheckAtStartupAsync();
+        // Every window shows the new-version bar, so every start checks (unless turned off in Settings).
+        _ = Updater.CheckAtStartupAsync();
     }
 
     /// <summary>

@@ -64,8 +64,8 @@
   Windows ; la langue de l'application peut aussi être choisie dans les **Paramètres**.
 - L'entrée du nouveau menu de Windows 11 peut être **désactivée** dans les paramètres ; elle reste alors dans
   « Afficher plus d'options ».
-- **Mises à jour en un clic** : l'application consulte les Releases GitHub (depuis la fenêtre d'accueil) et propose la
-  nouvelle version, qui s'installe et redémarre l'application. Dans les **Paramètres** : vérifier maintenant,
+- **Mises à jour en un clic** : au démarrage, l'application consulte les Releases GitHub ; un bandeau en haut de chaque
+  fenêtre propose la nouvelle version (**Nouveautés** / **Mettre à jour**), qui s'installe et redémarre l'application. Dans les **Paramètres** : vérifier maintenant,
   désactiver la vérification au démarrage, ou choisir le canal **Bêta** pour recevoir les nouveautés en avance.
 
 ## Installation
@@ -81,7 +81,7 @@ L'installeur :
 - ajoute l'entrée « FolderTools › » au menu clic droit des dossiers, des lecteurs et du fond des dossiers ;
 - propose d'installer le **.NET 10 Desktop Runtime** de Microsoft s'il est absent.
 
-Mettre à jour : l'application propose elle-même les nouvelles versions (barre dans la fenêtre d'accueil, ou
+Mettre à jour : l'application propose elle-même les nouvelles versions (bandeau en haut de ses fenêtres, ou
 **Paramètres → Mises à jour**) ; l'installation redemande l'accord administrateur.
 
 Désinstaller : **Paramètres → Applications → Applications installées → FolderTools**. La désinstallation retire :
@@ -213,13 +213,13 @@ Ce programme ne transfère aucune information vers d'autres systèmes en réseau
 l'utilisateur, avec une exception : la **vérification des mises à jour**. Les noms, tailles et contenus de vos
 dossiers ne quittent jamais votre ordinateur.
 
-- **Vérification des mises à jour :** à l'ouverture de la fenêtre d'accueil, et quand vous cliquez sur *Rechercher des
-  mises à jour*, l'application envoie une requête HTTPS à l'API de GitHub (`api.github.com`) pour lire la liste des
+- **Vérification des mises à jour :** au lancement de l'application (depuis le menu Démarrer ou le menu clic droit), et
+  quand vous cliquez sur *Rechercher des mises à jour*, l'application envoie une requête HTTPS à l'API de GitHub (`api.github.com`) pour lire la liste des
   versions de ce dépôt. La requête ne contient aucune donnée personnelle ni rien sur vos dossiers ; comme toute
   requête web, elle permet à GitHub de voir votre adresse IP et la version de l'application (User-Agent). La
   [déclaration de confidentialité](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement)
   de GitHub s'applique. La vérification au démarrage se désactive dans **Paramètres → Mises à jour → Rechercher les
-  mises à jour au démarrage**. Les outils du clic droit ne vérifient jamais.
+  mises à jour au démarrage**.
 - **Téléchargement d'une mise à jour :** un nouvel installeur n'est téléchargé depuis GitHub que lorsque vous cliquez
   sur **Mettre à jour**.
 - **Liens** (*Nouveautés*, *Code source sur GitHub*…) : ils ne s'ouvrent dans votre navigateur que lorsque vous cliquez dessus.

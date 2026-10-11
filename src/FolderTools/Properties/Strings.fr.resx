@@ -329,9 +329,7 @@ Ils n'iront pas à la corbeille.</value>
   <data name="ThemeSystem" xml:space="preserve">
     <value>Thème du système (automatique)</value>
   </data>
-  <data name="UpdateBarButton" xml:space="preserve">
-    <value>Voir</value>
-  </data>
+  
   <data name="UpdateBarText" xml:space="preserve">
     <value>FolderTools {0} est disponible.</value>
   </data>

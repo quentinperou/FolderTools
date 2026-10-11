@@ -329,9 +329,7 @@ They will not go to the recycle bin.</value>
   <data name="ThemeSystem" xml:space="preserve">
     <value>System theme (automatic)</value>
   </data>
-  <data name="UpdateBarButton" xml:space="preserve">
-    <value>See</value>
-  </data>
+  
   <data name="UpdateBarText" xml:space="preserve">
     <value>FolderTools {0} is available.</value>
   </data>
