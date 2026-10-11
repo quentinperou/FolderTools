@@ -75,6 +75,9 @@ opens at 1000 × 680. 91 unit tests pass. **Released** (tag `v1.0.1` on `6de049f
 `FolderTools-Setup-1.0.1.exe`, SHA-256 `bfe20e40…3984ab`, hand-written notes: Fixed / New / Changed / Installation).
 Users of 1.0.0 are offered it by the app.
 
+**v1.0.2** (October 11, 2026): the new-version bar (`UpdateBar`) in every window, with *What's new* and *Update*
+(installs from the bar, like CropPdf), asked by the author; every start checks for updates (privacy policy updated).
+
 Next steps: test the new-menu toggle and the settings cleanup at uninstall for real; then v1.1
 (folder colors).
 
