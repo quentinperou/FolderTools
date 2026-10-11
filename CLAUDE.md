@@ -105,8 +105,12 @@ Not created: `%APPDATA%`, startup entries, scheduled tasks, file associations. K
 settings (in admin mode `{localappdata}`/HKCU are the UAC account's: documented, not forced), the .NET runtime,
 the user's CSV exports. An update runs the installer, not the uninstaller: settings stay. The user-data cleanup lives
 in `installer\UserDataCleanup.iss` (included in `[Code]`, with `Log()` lines prefixed `Cleanup:`), shared with the
-test installer. Verified: `Test-UninstallCleanup.ps1` passes (6 checks); the real uninstall from Windows Settings
-followed by `uninstall-inventory.ps1` is still to be done by the author (needs UAC).
+test installer. Verified: `Test-UninstallCleanup.ps1` passes (6 checks). Real uninstall from Windows Settings
+(October 11, 2026, installer built with `-UninstallLog`): log “package removed for all accounts”, install folder,
+shortcut, HKLM keys, uninstall entry and package all gone, nothing pending at restart (Inno logged “Failed to delete
+directory (145). Will retry later.” and the retry succeeded). The settings folder and the HKCU key did not exist at
+that time (“not present” in the log), so their deletion was only exercised by the test installer; the two items the
+inventory still showed were leftovers of Claude Code's own sandboxed experiments, invisible to the uninstaller.
 
 ## Working on the project
 
