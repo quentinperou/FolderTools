@@ -73,6 +73,8 @@ english.MenuClean=Delete empty folders
 french.MenuClean=Supprimer les dossiers vides
 english.MenuPhotos=Sort photos by date
 french.MenuPhotos=Trier les photos par date
+english.MenuFlatten=Flatten folder
+french.MenuFlatten=Aplatir le dossier
 english.MenuNotRegistered=The "FolderTools" entry could not be added to the new Windows 11 context menu.%nIt is still available under "Show more options".
 french.MenuNotRegistered=L'entrée « FolderTools » n'a pas pu être ajoutée au nouveau menu clic droit de Windows 11.%nElle reste disponible via « Afficher plus d'options ».
 english.RuntimeMissing=FolderTools needs the Microsoft ".NET 10 Desktop Runtime", which is not installed on this PC.%nInstall it now?
@@ -97,9 +99,10 @@ Name: "{autoprograms}\FolderTools"; Filename: "{app}\{#AppExe}"
 ; in both the new menu and "Show more options", so the classic ones would be listed twice there: on Windows 11 they
 ; are only written for drives, which the package cannot target (and those of older versions are removed, see
 ; RemoveClassicEntries). MUIVerb points at the localized string table of the DLL (101 FolderTools, 102 Folder sizes,
-; 103 Delete empty folders, 104 Folder color, 105 Sort photos by date, 110-117 the colors, 118 Default color), so the
-; labels follow each user's display language; the default values are a fallback in the installer's language.
-; Sub-entries are listed in the order of their key names, hence "01Size", "02Clean", "03Photos", "04Red"...
+; 103 Delete empty folders, 104 Folder color, 105 Sort photos by date, 106 Flatten folder, 110-117 the colors,
+; 118 Default color), so the labels follow each user's display language; the default values are a fallback in the
+; installer's language. Sub-entries are listed in the order of their key names, hence "01Size", "02Clean",
+; "03Photos", "04Flatten", "05Red"...
 #define MenuEntry(Type, Condition) \
   'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-101"; Flags: uninsdeletekey' + Condition + NewLine + \
   'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\' + AppExe + '"",0"' + Condition + NewLine + \
@@ -115,7 +118,11 @@ Name: "{autoprograms}\FolderTools"; Filename: "{app}\{#AppExe}"
   'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\03Photos"; ValueType: string; ValueName: ""; ValueData: "{cm:MenuPhotos}"' + Condition + NewLine + \
   'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\03Photos"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-105"' + Condition + NewLine + \
   'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\03Photos"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\' + MenuDll + '"",-204"' + Condition + NewLine + \
-  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\03Photos\command"; ValueType: string; ValueName: ""; ValueData: """{app}\' + AppExe + '"" photos ""%V"""' + Condition + NewLine
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\03Photos\command"; ValueType: string; ValueName: ""; ValueData: """{app}\' + AppExe + '"" photos ""%V"""' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\04Flatten"; ValueType: string; ValueName: ""; ValueData: "{cm:MenuFlatten}"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\04Flatten"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-106"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\04Flatten"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\' + MenuDll + '"",-205"' + Condition + NewLine + \
+  'Root: HKLM; Subkey: "Software\Classes\' + Type + '\shell\FolderTools\shell\04Flatten\command"; ValueType: string; ValueName: ""; ValueData: """{app}\' + AppExe + '"" flatten ""%V"""' + Condition + NewLine
 #define Windows10Only "; Check: not IsWindows11"
 {#MenuEntry("Directory", Windows10Only)}
 {#MenuEntry("Directory\Background", Windows10Only)}
@@ -128,17 +135,17 @@ Name: "{autoprograms}\FolderTools"; Filename: "{app}\{#AppExe}"
   'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '"; ValueType: string; ValueName: "MUIVerb"; ValueData: "@{app}\' + MenuDll + ',-' + Label + '"' + Windows10Only + NewLine + \
   'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '"; ValueType: string; ValueName: "Icon"; ValueData: "' + (Icon == "" ? '{sys}\imageres.dll,-3' : '{app}\Colors\' + Icon + '.ico') + '"' + Windows10Only + NewLine + \
   'Root: HKLM; Subkey: "' + ColorKey + '\shell\' + Key + '\command"; ValueType: string; ValueName: ""; ValueData: """{sys}\rundll32.exe"" ""{app}\' + MenuDll + '"",SetColor ' + Arg + ' ""%1"""' + Windows10Only + NewLine
-{#ColorItem("04Red", "red", "110", "Red")}
-{#ColorItem("05Orange", "orange", "111", "Orange")}
-{#ColorItem("06Yellow", "yellow", "112", "Yellow")}
-{#ColorItem("07Green", "green", "113", "Green")}
-{#ColorItem("08Blue", "blue", "114", "Blue")}
-{#ColorItem("09Purple", "purple", "115", "Purple")}
-{#ColorItem("10Pink", "pink", "116", "Pink")}
-{#ColorItem("11Gray", "gray", "117", "Gray")}
-{#ColorItem("12Default", "default", "118", "")}
+{#ColorItem("05Red", "red", "110", "Red")}
+{#ColorItem("06Orange", "orange", "111", "Orange")}
+{#ColorItem("07Yellow", "yellow", "112", "Yellow")}
+{#ColorItem("08Green", "green", "113", "Green")}
+{#ColorItem("09Blue", "blue", "114", "Blue")}
+{#ColorItem("10Purple", "purple", "115", "Purple")}
+{#ColorItem("11Pink", "pink", "116", "Pink")}
+{#ColorItem("12Gray", "gray", "117", "Gray")}
+{#ColorItem("13Default", "default", "118", "")}
 ; A separator between the tools and the colors.
-Root: HKLM; Subkey: "{#ColorKey}\shell\04Red"; ValueType: dword; ValueName: "CommandFlags"; ValueData: "$20"{#Windows10Only}
+Root: HKLM; Subkey: "{#ColorKey}\shell\05Red"; ValueType: dword; ValueName: "CommandFlags"; ValueData: "$20"{#Windows10Only}
 ; The preprocessed script, to check the lines generated above: build\FolderTools.preprocessed.iss
 #expr SaveToFile(AddBackslash(SourcePath) + "..\build\FolderTools.preprocessed.iss")
 
@@ -201,7 +208,8 @@ end;
 
 { Versions up to 1.0.2 wrote classic entries for folders on Windows 11 too: with the package's, they were listed twice
   under "Show more options". Removed before every install, on Windows 10 too, where they are written again fresh: the
-  keys of 1.1-1.2 ("03Red"...) would otherwise stay next to the renumbered ones of 1.3 ("03Photos", "04Red"...). }
+  keys are renumbered when a tool is added ("03Red" in 1.1, "04Red" in 1.3, "05Red" in 1.4), and the old ones would
+  otherwise stay next to the new ones. }
 procedure RemoveClassicEntries;
 begin
   if RegDeleteKeyIncludingSubkeys(HKLM, 'Software\Classes\Directory\shell\FolderTools') then

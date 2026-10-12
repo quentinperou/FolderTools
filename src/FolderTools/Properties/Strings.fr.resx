@@ -537,4 +537,139 @@ Ils n'iront pas à la corbeille.</value>
   <data name="PhotosLeftInPlace" xml:space="preserve">
     <value>Laissées en place</value>
   </data>
+  <data name="ActionFlatten" xml:space="preserve">
+    <value>Aplatir le dossier</value>
+  </data>
+  <data name="ActionFlattenDescription" xml:space="preserve">
+    <value>Remonte les fichiers des sous-dossiers dans le dossier et supprime les sous-dossiers vidés. Annulable.</value>
+  </data>
+  <data name="FlattenWindowTitle" xml:space="preserve">
+    <value>Aplatir le dossier – {0}</value>
+  </data>
+  <data name="SettingsFlatten" xml:space="preserve">
+    <value>Aplatir</value>
+  </data>
+  <data name="FlattenDepth" xml:space="preserve">
+    <value>Profondeur</value>
+  </data>
+  <data name="FlattenDepthAllLevels" xml:space="preserve">
+    <value>Tous les niveaux : chaque fichier remonte</value>
+  </data>
+  <data name="FlattenDepthOneLevel" xml:space="preserve">
+    <value>Un seul niveau : les sous-dossiers remontent d'un cran</value>
+  </data>
+  <data name="FlattenNaming" xml:space="preserve">
+    <value>Noms déjà pris</value>
+  </data>
+  <data name="FlattenNamingSuffix" xml:space="preserve">
+    <value>Ajouter « (2) »</value>
+  </data>
+  <data name="FlattenNamingPrefix" xml:space="preserve">
+    <value>Ajouter les dossiers d'origine</value>
+  </data>
+  <data name="SettingsFlattenNamingDescription" xml:space="preserve">
+    <value>Quand un fichier qui remonte porte le nom d'un fichier déjà là : « IMG_001 (2).jpg », ou « Vacances - IMG_001.jpg ». Les autres fichiers gardent leur nom.</value>
+  </data>
+  <data name="FlattenNote" xml:space="preserve">
+    <value>Rien n'est écrasé. Les fichiers déjà dans le dossier ne bougent pas. Les liens, jonctions et dossiers ignorés (.git…) restent tels quels.</value>
+  </data>
+  <data name="FlattenIdenticalTitle" xml:space="preserve">
+    <value>Fichiers identiques (même nom, même contenu)</value>
+  </data>
+  <data name="FlattenIdenticalNote" xml:space="preserve">
+    <value>Coché : la copie en trop va à la corbeille. Décoché : les deux sont gardés, le second renommé.</value>
+  </data>
+  <data name="FlattenIdenticalDetail" xml:space="preserve">
+    <value>dans {0} et {1}</value>
+  </data>
+  <data name="FlattenColumnName" xml:space="preserve">
+    <value>Nouveau nom</value>
+  </data>
+  <data name="FlattenColumnFrom" xml:space="preserve">
+    <value>Vient de</value>
+  </data>
+  <data name="FlattenUndo" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="FlattenReading" xml:space="preserve">
+    <value>Lecture des sous-dossiers…</value>
+  </data>
+  <data name="FlattenNoSubfolders" xml:space="preserve">
+    <value>Aucun sous-dossier à aplatir ici.</value>
+  </data>
+  <data name="FlattenNothingToMove" xml:space="preserve">
+    <value>Rien à remonter : les sous-dossiers ne contiennent aucun fichier.</value>
+  </data>
+  <data name="FlattenPlanSummary" xml:space="preserve">
+    <value>{0} à remonter dans « {1} ».</value>
+  </data>
+  <data name="FlattenFilesAndFolders" xml:space="preserve">
+    <value>{0} et {1}</value>
+  </data>
+  <data name="FlattenDetailRenamed_One" xml:space="preserve">
+    <value>{0} renommé (nom déjà pris)</value>
+  </data>
+  <data name="FlattenDetailRenamed_Other" xml:space="preserve">
+    <value>{0} renommés (nom déjà pris)</value>
+  </data>
+  <data name="FlattenDetailRecycled_One" xml:space="preserve">
+    <value>{0} fichier identique à la corbeille</value>
+  </data>
+  <data name="FlattenDetailRecycled_Other" xml:space="preserve">
+    <value>{0} fichiers identiques à la corbeille</value>
+  </data>
+  <data name="FlattenDetailEmptied_One" xml:space="preserve">
+    <value>{0} sous-dossier vidé sera supprimé</value>
+  </data>
+  <data name="FlattenDetailEmptied_Other" xml:space="preserve">
+    <value>{0} sous-dossiers vidés seront supprimés</value>
+  </data>
+  <data name="FlattenDetailInaccessible_One" xml:space="preserve">
+    <value>{0} dossier n'a pas pu être lu (il reste)</value>
+  </data>
+  <data name="FlattenDetailInaccessible_Other" xml:space="preserve">
+    <value>{0} dossiers n'ont pas pu être lus (ils restent)</value>
+  </data>
+  <data name="FlattenButton" xml:space="preserve">
+    <value>Aplatir ({0})</value>
+  </data>
+  <data name="FlattenWorking" xml:space="preserve">
+    <value>Aplatissement en cours…</value>
+  </data>
+  <data name="FlattenDone" xml:space="preserve">
+    <value>Aplatissement terminé : {0} en plus dans le dossier, {1}.</value>
+  </data>
+  <data name="FlattenDoneRemoved_One" xml:space="preserve">
+    <value>{0} sous-dossier supprimé</value>
+  </data>
+  <data name="FlattenDoneRemoved_Other" xml:space="preserve">
+    <value>{0} sous-dossiers supprimés</value>
+  </data>
+  <data name="FlattenDetailRecycledDone_One" xml:space="preserve">
+    <value>{0} fichier identique mis à la corbeille</value>
+  </data>
+  <data name="FlattenDetailRecycledDone_Other" xml:space="preserve">
+    <value>{0} fichiers identiques mis à la corbeille</value>
+  </data>
+  <data name="FlattenUndoing" xml:space="preserve">
+    <value>Remise en place des fichiers…</value>
+  </data>
+  <data name="FlattenUndone_One" xml:space="preserve">
+    <value>Aplatissement annulé : {0} élément remis en place.</value>
+  </data>
+  <data name="FlattenUndone_Other" xml:space="preserve">
+    <value>Aplatissement annulé : {0} éléments remis en place.</value>
+  </data>
+  <data name="FlattenUndoRecycled_One" xml:space="preserve">
+    <value>Le fichier identique est toujours dans la corbeille.</value>
+  </data>
+  <data name="FlattenUndoRecycled_Other" xml:space="preserve">
+    <value>Les {0} fichiers identiques sont toujours dans la corbeille.</value>
+  </data>
+  <data name="FlattenTagRenamed" xml:space="preserve">
+    <value>renommé</value>
+  </data>
+  <data name="FlattenTagRecycle" xml:space="preserve">
+    <value>à la corbeille</value>
+  </data>
 </root>

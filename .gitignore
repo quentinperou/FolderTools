@@ -12,8 +12,9 @@ dist/
 *.user
 *.suo
 
-# Personal notes and local Claude Code settings
+# Personal notes, local dev tools and local Claude Code settings
 CLAUDE.local.md
+.local/
 .claude/settings.local.json
 
 # Signing material (never commit private keys)

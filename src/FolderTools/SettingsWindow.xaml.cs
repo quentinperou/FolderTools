@@ -13,6 +13,7 @@ public enum SettingsPage
     General,
     EmptyFolders,
     Photos,
+    Flatten,
     Updates,
     About,
 }
@@ -50,6 +51,7 @@ public partial class SettingsWindow : Window
         SizeEntryBox.IsChecked = AppSettings.ShowSizeEntry;
         CleanEntryBox.IsChecked = AppSettings.ShowCleanEntry;
         PhotosEntryBox.IsChecked = AppSettings.ShowPhotosEntry;
+        FlattenEntryBox.IsChecked = AppSettings.ShowFlattenEntry;
         ColorEntryBox.IsChecked = AppSettings.ShowColorEntry;
         MenuEntries.IsEnabled = NewMenuBox.IsChecked == true;
 
@@ -60,6 +62,9 @@ public partial class SettingsWindow : Window
         IgnoredFoldersBox.Text = string.Join(Environment.NewLine, _settings.IgnoredFolders);
         Closing += (_, _) => SaveIgnoredFiles();
         PhotoOptions.Fill(PhotoLayoutBox, PhotoUndatedBox, _settings);
+        FlattenNamingBox.Items.Add(Strings.Get("FlattenNamingSuffix"));
+        FlattenNamingBox.Items.Add(Strings.Get("FlattenNamingPrefix"));
+        FlattenNamingBox.SelectedIndex = _settings.FlattenNaming == FlattenNaming.Prefix ? 1 : 0;
 
         VersionText.Text = Strings.Format("AboutVersion", Updater.CurrentVersion);
         _initialized = true;
@@ -102,7 +107,7 @@ public partial class SettingsWindow : Window
 
     private void PageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ScrollViewer[] pages = [GeneralPage, EmptyFoldersPage, PhotosPage, UpdatesPage, AboutPage];
+        ScrollViewer[] pages = [GeneralPage, EmptyFoldersPage, PhotosPage, FlattenPage, UpdatesPage, AboutPage];
         for (int i = 0; i < pages.Length; i++)
             pages[i].Visibility = i == PageList.SelectedIndex ? Visibility.Visible : Visibility.Hidden;
         if (PageList.SelectedItem is ListBoxItem item)
@@ -130,6 +135,8 @@ public partial class SettingsWindow : Window
             AppSettings.ShowCleanEntry = CleanEntryBox.IsChecked == true;
         else if (sender == PhotosEntryBox)
             AppSettings.ShowPhotosEntry = PhotosEntryBox.IsChecked == true;
+        else if (sender == FlattenEntryBox)
+            AppSettings.ShowFlattenEntry = FlattenEntryBox.IsChecked == true;
         else if (sender == ColorEntryBox)
             AppSettings.ShowColorEntry = ColorEntryBox.IsChecked == true;
     }
@@ -139,6 +146,14 @@ public partial class SettingsWindow : Window
         if (!_initialized)
             return;
         (_settings.PhotoLayout, _settings.PhotoUndated) = PhotoOptions.Read(PhotoLayoutBox, PhotoUndatedBox);
+        _settings.Save();
+    }
+
+    private void FlattenNamingBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_initialized)
+            return;
+        _settings.FlattenNaming = FlattenNamingBox.SelectedIndex == 1 ? FlattenNaming.Prefix : FlattenNaming.Suffix;
         _settings.Save();
     }
 

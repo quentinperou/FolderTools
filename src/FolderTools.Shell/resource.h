@@ -8,6 +8,7 @@
 #define IDS_MENU_CLEAN 103
 #define IDS_MENU_COLOR 104
 #define IDS_MENU_PHOTOS 105
+#define IDS_MENU_FLATTEN 106
 
 // Folder colors, in the order of the menu (FolderColor::Colors).
 #define IDS_COLOR_RED     110
@@ -24,3 +25,4 @@
 #define IDI_MENU_CLEAN 202
 #define IDI_MENU_COLOR 203
 #define IDI_MENU_PHOTOS 204
+#define IDI_MENU_FLATTEN 205

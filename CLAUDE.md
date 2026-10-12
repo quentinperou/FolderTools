@@ -15,7 +15,7 @@ Guidance for Claude Code and contributors working on this repository. `README.md
 
 UI in English and French, light/dark/system theme. The name “FolderTools” is never translated. Author:
 [QuentinPerou](https://github.com/quentinperou). Repository: https://github.com/quentinperou/FolderTools (to be
-created). Sister projects with the same stack and conventions: CropPdf (`F:\DEV\crop-pdf`) and PageCompose. Credits
+created). Sister projects with the same stack and conventions: CropPdf (usually the sibling folder `..\crop-pdf`) and PageCompose. Credits
 wording chosen by the author (bottom of the READMEs): “Developed by QuentinPerou, with Claude Code (Anthropic)”.
 
 ## Project status (October 11, 2026)
@@ -92,9 +92,14 @@ Users of 1.0.0 are offered it by the app.
 through UI Automation; installed and validated by the author (“ça marche”). Windows 10 (renumbered classic keys) not
 tried.
 
-**v1.3.0** (October 12, 2026, stable, at the author's request): the photo sort of the beta, plus two fixes of the
+**v1.3.0 released** (October 12, 2026, stable, at the author's request; tag `v1.3.0` on `3ae38db`, “latest”,
+`FolderTools-Setup-1.3.0.exe`, SHA-256 `a32044cb…20b71c`, hand-written notes): the photo sort of the beta, plus two fixes of the
 Largest files tab found while making the README screenshots (a file of the analyzed folder showed “.” as its
 folder; the Modified columns were too narrow for English dates).
+
+**v1.4.0** (October 12, 2026, stable, at the author's request): **flatten folder**. 125 unit tests pass; preview,
+flatten and undo checked on a test tree through UI Automation; the installed menu entry (new menu and “Show more
+options”) validated by the author (“ça marche”). Not tried for real: one level, the prefix naming, Windows 10.
 
 **v1.1.0 (released October 12, 2026: tag `v1.1.0` on `053a1c6`, “latest”, `FolderTools-Setup-1.1.0.exe`, SHA-256 `d5b5b0fb…ad7e9a`, hand-written notes)**: **folder colors** (8 colors + Default
 color, right in “FolderTools ›” after a separator), decided with the author on October 11, 2026: the palette of the
@@ -118,6 +123,7 @@ dotnet build src\FolderTools              # build the app only
 dotnet run --project src\FolderTools -- size "D:\Photos"
 dotnet run --project src\FolderTools -- clean "%TEMP%"
 dotnet run --project src\FolderTools -- photos "D:\Import"
+dotnet run --project src\FolderTools -- flatten "D:\Projects"
 ```
 
 - `FOLDERTOOLS_THEME=Light|Dark` and `FOLDERTOOLS_LANG=en|fr` force the theme / UI language at startup;
@@ -173,7 +179,8 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   (`PW_RENDERFULLCONTENT`, DPI-aware process) captures a window even when it is covered.
 - Docs (both READMEs, this file) are expected to be kept up to date at the end of each work session, including
   the “Project status” section above.
-- Personal or machine-specific notes go in `CLAUDE.local.md` (git-ignored), not in this file.
+- Personal or machine-specific notes go in `CLAUDE.local.md` (git-ignored), not in this file; personal dev tools
+  in `.local/` (git-ignored).
 - Never test deletion on real folders: use a test tree in the temp folder (`TempTree` in the tests does that).
 - **Claude Code's sandbox**: registry and file writes made from its shell (and by the processes it starts) are not
   seen by processes started outside it (File Explorer, the menu's `dllhost`, the installed app started by
@@ -187,9 +194,9 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
 
 | Folder | Role |
 |--------|------|
-| `src/FolderTools.Core` | Pure, tested logic, no UI text: `FolderScanner` + `FolderNode` (size tree), `EmptyFolderCleaner` (find, re-check, delete), `PhotoSorter` + `DateTakenReader` (photo sort, undo), `CsvExport`, `SizeFormat`, `LaunchRequest` (command line), `SensitiveLocations`, `SemanticVersion`, `UpdateFeed` (GitHub Releases). |
-| `src/FolderTools` | WPF .NET 10. `App` (startup by command line, theme, language, `OpenSettings` + `IRebuildable`), `HomeWindow`, `SizeWindow` + `SizeRow` (flat list showing the tree), `CleanWindow` + `CleanItem`, `PhotoSortWindow` + `PhotoNode` + `PhotoOptions`, `SettingsWindow` + `AppSettings`, `WindowsShell` (recycle bin, Explorer, elevation, size/count formatting), `Updater`, `Localization.cs` (`Strings`, `{local:Tr}`), `Properties/Strings*.resx`. |
-| `src/FolderTools.Shell` | C++ DLL (WRL): `FolderToolsCommand` (“FolderTools ›”, `ECF_HASSUBCOMMANDS`) and three `SubCommand`s (`InfoOf(Action)`: title, icon, verb, switch) that have File Explorer start `FolderTools.exe size|clean|photos "<folder>"`, then the colors. Labels in `FolderToolsMenu.rc`, sub-entry icons `SizeMenu.ico` / `CleanMenu.ico` / `ColorMenu.ico` / `PhotosMenu.ico` (resources 201–204). |
+| `src/FolderTools.Core` | Pure, tested logic, no UI text: `FolderScanner` + `FolderNode` (size tree), `EmptyFolderCleaner` (find, re-check, delete), `PhotoSorter` + `DateTakenReader` (photo sort, undo), `FolderFlattener` (flatten, undo), `CsvExport`, `SizeFormat`, `LaunchRequest` (command line), `SensitiveLocations`, `SemanticVersion`, `UpdateFeed` (GitHub Releases). |
+| `src/FolderTools` | WPF .NET 10. `App` (startup by command line, theme, language, `OpenSettings` + `IRebuildable`), `HomeWindow`, `SizeWindow` + `SizeRow` (flat list showing the tree), `CleanWindow` + `CleanItem`, `PhotoSortWindow` + `PhotoNode` + `PhotoOptions`, `FlattenWindow` + `FlattenRow` + `IdenticalRow`, `SettingsWindow` + `AppSettings`, `WindowsShell` (recycle bin, Explorer, elevation, size/count formatting), `Updater`, `Localization.cs` (`Strings`, `{local:Tr}`), `Properties/Strings*.resx`. |
+| `src/FolderTools.Shell` | C++ DLL (WRL): `FolderToolsCommand` (“FolderTools ›”, `ECF_HASSUBCOMMANDS`) and four `SubCommand`s (`InfoOf(Action)`: title, icon, verb, switch) that have File Explorer start `FolderTools.exe size|clean|photos|flatten "<folder>"`, then the colors. Labels in `FolderToolsMenu.rc`, sub-entry icons `SizeMenu.ico` / `CleanMenu.ico` / `ColorMenu.ico` / `PhotosMenu.ico` / `FlattenMenu.ico` (resources 201–205). |
 | `package/` | `AppxManifest.xml` of the “sparse” package + logos. Packed by `makeappx` in `build.ps1`. |
 | `installer/FolderTools.iss` | Inno Setup installer (English/French): copies to Program Files, registers the package, adds the classic cascading menu on `Directory`, `Directory\Background` and `Drive`. |
 | `scripts/` | `build.ps1`, `make-icons.ps1` (app icon, menu icons, package logos; generated files are committed). |
@@ -248,6 +255,19 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   left empty, innermost first. The window caches the dates read (`CachingReader`, keyed by path + date + length), so
   changing an option previews again at once; the choice made in the window is saved like in Settings → Photos. The
   undo is only possible while the window is open (it survives a language change: `Rebuild` passes the result).
+- **Flatten** (mock-up validated by the author on October 12, 2026): `FolderFlattener.Plan` lists the direct subfolders
+  (not ignored folders nor links) and, all levels, every file below them (ignored files stay and go with their folder;
+  ignored folders, links and folders that cannot be read are not entered, and keep their parent), or, one level, the
+  files and the folders right inside them (moved whole). Only the subfolders left with nothing are in
+  `EmptiedFolders`. The first file of a name keeps it (a file already in the folder first); a later one of the same
+  name is compared to it (size, then SHA-256) and, identical, offered for the recycle bin (`IdenticalTo`, checked by
+  default in the window). `Resolve` gives the names: every name of the folder is taken (the subfolders being emptied
+  too, as they are still there while the items move); a taken name gets “ (n)” or, `Prefix`, the folders it came from
+  joined with “ - ” (then “ (n)” if that is taken too): only clashing files are renamed, as the author asked.
+  `Execute` moves (`overwrite: false`, a name taken since the preview gets “ (n)”), recycles the identical copies,
+  then deletes the emptied subfolders with `EmptyFolderCleaner.Delete` (checked again, for good: only ignored files
+  and empty folders go). `Undo` creates those folders again and moves everything back; recycled copies stay in the
+  recycle bin. The depth is chosen in the window (and kept), the naming in Settings → Flatten.
 - **Deleting from the size tree**: `SHFileOperation` with File Explorer's own progress/error dialogs and
   `FOF_WANTNUKEWARNING` (asks before a permanent deletion on a drive without recycle bin), then `FolderNode.Detach`
   updates the totals of every parent without rescanning.
@@ -271,8 +291,9 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   generated by `make-icons.ps1`, same names and order as `FolderColor::Colors` and the installer) are copied to
   `<app>\Colors` by `build.ps1`. `ColorCommand::GetState` returns `ECS_CHECKED` when every selected folder has the
   color, hidden on folder backgrounds and drives; the first color has `ECF_SEPARATORBEFORE` (classic:
-  `CommandFlags=0x20` on `04Red`; the classic keys are `01Size`, `02Clean`, `03Photos`, `04Red`…`12Default` since
-  1.3, and `RemoveClassicEntries` runs before every install, Windows 10 included, so the old `03Red`… do not stay).
+  `CommandFlags=0x20` on `05Red`; the classic keys are `01Size`, `02Clean`, `03Photos`, `04Flatten`,
+  `05Red`…`13Default` since 1.4, and `RemoveClassicEntries` runs before every install, Windows 10 included, so the
+  keys of older versions do not stay).
 - **One entry, the colors flat in it**: a single package (`FolderTools.ContextMenu`), a single verb
   (`FolderToolsCommand`, CLSID `8119219C-…`), whose sub-entries are Size, Clean, then the colors. The four layouts
   tried, and why they failed (do not try them again):
@@ -291,7 +312,7 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   (`Check: not IsWindows11`) and `RemoveClassicEntries` deletes those of older versions (the author saw FolderTools
   twice in “Show more options”). The classic `Drive` entry is written everywhere. CropPdf probably lists its entry
   twice the same way (classic `.pdf` verb + package): to check.
-- **Per-entry switches**: `HideSizeEntry`, `HideCleanEntry`, `HidePhotosEntry`, `HideColorEntry` (DWORDs next to
+- **Per-entry switches**: `HideSizeEntry`, `HideCleanEntry`, `HidePhotosEntry`, `HideFlattenEntry`, `HideColorEntry` (DWORDs next to
   `HideInNewContextMenu`) read by the sub-entries' `GetState`; with all of them hidden (or the tools on a folder background),
   “FolderTools ›” is hidden. On Windows 11 they apply to both menus (same package entry); the classic drive entry is
   not affected.
@@ -315,7 +336,7 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   `"ConfirmX"`, and `Strings.Plural(... "X" ...` → `X_One` + `X_Other`). Keys mentioned in comments count too.
 - Context menu labels: string tables in `FolderToolsMenu.rc` (English neutral, en-US, French neutral; **never
   `LANG_NEUTRAL`** for strings). 101 FolderTools, 102 Folder sizes, 103 Delete empty folders, 104 Folder color,
-  105 Sort photos by date, 110–118 the colors. They follow the Windows
+  105 Sort photos by date, 106 Flatten folder, 110–118 the colors. They follow the Windows
   display language, not the app setting. The classic entries use `MUIVerb = @<app>\FolderToolsMenu.dll,-10x`.
 - Installer: `[Languages]` english/french + `[CustomMessages]`, `ShowLanguageDialog=auto`.
 
@@ -387,7 +408,6 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
 
 ## To do
 
-- Then (author's picks for later versions): **new dated folder** (folder background, `2026-10-12` or a chosen
-  pattern), **flatten a folder** (move the files of the subfolders up, renaming duplicates), **duplicates** (identical
-  files by hash, preview before deleting).
+- Then: **duplicates** (identical files by hash, preview before deleting). The “new dated folder” idea was dropped by
+  the author (“ça sert à rien”).
 - Signing through SignPath Foundation (see CropPdf); Windows 10 style colored folders; ARM64; more languages.

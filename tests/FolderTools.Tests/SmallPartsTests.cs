@@ -43,6 +43,7 @@ public class LaunchRequestTests
     [InlineData("--clean", LaunchAction.Clean)]
     [InlineData("SIZE", LaunchAction.Size)]
     [InlineData("photos", LaunchAction.Photos)]
+    [InlineData("flatten", LaunchAction.Flatten)]
     public void Verbs(string verb, LaunchAction action)
     {
         Assert.Equal(new LaunchRequest(action, @"D:\Photos"), LaunchRequest.Parse([verb, @"D:\Photos"]));

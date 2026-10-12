@@ -163,6 +163,12 @@
           <TextBlock Text="{local:Tr SettingsPhotos}" VerticalAlignment="Center" />
         </StackPanel>
       </ListBoxItem>
+      <ListBoxItem AutomationProperties.Name="{local:Tr SettingsFlatten}">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE74A;" />
+          <TextBlock Text="{local:Tr SettingsFlatten}" VerticalAlignment="Center" />
+        </StackPanel>
+      </ListBoxItem>
       <ListBoxItem AutomationProperties.Name="{local:Tr UpdatesTitle}">
         <StackPanel Orientation="Horizontal">
           <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE895;" />
@@ -242,6 +248,13 @@
                           VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
                           AutomationProperties.Name="{local:Tr ActionPhotos}" />
                 <TextBlock Text="{local:Tr ActionPhotos}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Rectangle Style="{StaticResource CardDivider}" />
+              <DockPanel Style="{StaticResource CardSubRow}">
+                <CheckBox x:Name="FlattenEntryBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                          VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
+                          AutomationProperties.Name="{local:Tr ActionFlatten}" />
+                <TextBlock Text="{local:Tr ActionFlatten}" VerticalAlignment="Center" />
               </DockPanel>
               <Rectangle Style="{StaticResource CardDivider}" />
               <DockPanel Style="{StaticResource CardSubRow}">
@@ -329,6 +342,24 @@
             <StackPanel VerticalAlignment="Center">
               <TextBlock Text="{local:Tr PhotosUndated}" />
               <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsPhotosUndatedDescription}" />
+            </StackPanel>
+          </DockPanel>
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Flatten: what a name already taken becomes. -->
+    <ScrollViewer x:Name="FlattenPage" Grid.Row="1" Grid.Column="1" Style="{StaticResource Page}" Margin="16,0,0,0">
+      <StackPanel>
+        <Border Style="{StaticResource Card}">
+          <DockPanel>
+            <TextBlock DockPanel.Dock="Left" Style="{StaticResource CardIcon}" Text="&#xE8AC;" />
+            <ComboBox x:Name="FlattenNamingBox" DockPanel.Dock="Right" MinWidth="260" VerticalAlignment="Center"
+                      Margin="16,0,0,0" SelectionChanged="FlattenNamingBox_SelectionChanged"
+                      AutomationProperties.Name="{local:Tr FlattenNaming}" />
+            <StackPanel VerticalAlignment="Center">
+              <TextBlock Text="{local:Tr FlattenNaming}" />
+              <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsFlattenNamingDescription}" />
             </StackPanel>
           </DockPanel>
         </Border>

@@ -537,4 +537,139 @@ They will not go to the recycle bin.</value>
   <data name="PhotosLeftInPlace" xml:space="preserve">
     <value>Left where they are</value>
   </data>
+  <data name="ActionFlatten" xml:space="preserve">
+    <value>Flatten folder</value>
+  </data>
+  <data name="ActionFlattenDescription" xml:space="preserve">
+    <value>Brings the files of the subfolders up into the folder and deletes the emptied subfolders. Can be undone.</value>
+  </data>
+  <data name="FlattenWindowTitle" xml:space="preserve">
+    <value>Flatten folder – {0}</value>
+  </data>
+  <data name="SettingsFlatten" xml:space="preserve">
+    <value>Flatten</value>
+  </data>
+  <data name="FlattenDepth" xml:space="preserve">
+    <value>Depth</value>
+  </data>
+  <data name="FlattenDepthAllLevels" xml:space="preserve">
+    <value>All levels: every file comes up</value>
+  </data>
+  <data name="FlattenDepthOneLevel" xml:space="preserve">
+    <value>One level: subfolders come up one level</value>
+  </data>
+  <data name="FlattenNaming" xml:space="preserve">
+    <value>Names already taken</value>
+  </data>
+  <data name="FlattenNamingSuffix" xml:space="preserve">
+    <value>Add “ (2)”</value>
+  </data>
+  <data name="FlattenNamingPrefix" xml:space="preserve">
+    <value>Add the folders it came from</value>
+  </data>
+  <data name="SettingsFlattenNamingDescription" xml:space="preserve">
+    <value>When a file coming up has the name of one already there: “IMG_001 (2).jpg”, or “Holidays - IMG_001.jpg”. The other files keep their name.</value>
+  </data>
+  <data name="FlattenNote" xml:space="preserve">
+    <value>Nothing is overwritten. The files already in the folder stay. Links, junctions and ignored folders (.git…) are left as they are.</value>
+  </data>
+  <data name="FlattenIdenticalTitle" xml:space="preserve">
+    <value>Identical files (same name, same content)</value>
+  </data>
+  <data name="FlattenIdenticalNote" xml:space="preserve">
+    <value>Checked: the extra copy goes to the recycle bin. Unchecked: both are kept, the second one renamed.</value>
+  </data>
+  <data name="FlattenIdenticalDetail" xml:space="preserve">
+    <value>in {0} and {1}</value>
+  </data>
+  <data name="FlattenColumnName" xml:space="preserve">
+    <value>New name</value>
+  </data>
+  <data name="FlattenColumnFrom" xml:space="preserve">
+    <value>Comes from</value>
+  </data>
+  <data name="FlattenUndo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="FlattenReading" xml:space="preserve">
+    <value>Looking at the subfolders…</value>
+  </data>
+  <data name="FlattenNoSubfolders" xml:space="preserve">
+    <value>No subfolder to flatten here.</value>
+  </data>
+  <data name="FlattenNothingToMove" xml:space="preserve">
+    <value>Nothing to bring up: the subfolders hold no files.</value>
+  </data>
+  <data name="FlattenPlanSummary" xml:space="preserve">
+    <value>{0} to bring up into “{1}”.</value>
+  </data>
+  <data name="FlattenFilesAndFolders" xml:space="preserve">
+    <value>{0} and {1}</value>
+  </data>
+  <data name="FlattenDetailRenamed_One" xml:space="preserve">
+    <value>{0} renamed (name taken)</value>
+  </data>
+  <data name="FlattenDetailRenamed_Other" xml:space="preserve">
+    <value>{0} renamed (name taken)</value>
+  </data>
+  <data name="FlattenDetailRecycled_One" xml:space="preserve">
+    <value>{0} identical file to the recycle bin</value>
+  </data>
+  <data name="FlattenDetailRecycled_Other" xml:space="preserve">
+    <value>{0} identical files to the recycle bin</value>
+  </data>
+  <data name="FlattenDetailEmptied_One" xml:space="preserve">
+    <value>{0} emptied subfolder will be deleted</value>
+  </data>
+  <data name="FlattenDetailEmptied_Other" xml:space="preserve">
+    <value>{0} emptied subfolders will be deleted</value>
+  </data>
+  <data name="FlattenDetailInaccessible_One" xml:space="preserve">
+    <value>{0} folder could not be read (it stays)</value>
+  </data>
+  <data name="FlattenDetailInaccessible_Other" xml:space="preserve">
+    <value>{0} folders could not be read (they stay)</value>
+  </data>
+  <data name="FlattenButton" xml:space="preserve">
+    <value>Flatten ({0})</value>
+  </data>
+  <data name="FlattenWorking" xml:space="preserve">
+    <value>Flattening…</value>
+  </data>
+  <data name="FlattenDone" xml:space="preserve">
+    <value>Done: {0} brought up, {1}.</value>
+  </data>
+  <data name="FlattenDoneRemoved_One" xml:space="preserve">
+    <value>{0} subfolder deleted</value>
+  </data>
+  <data name="FlattenDoneRemoved_Other" xml:space="preserve">
+    <value>{0} subfolders deleted</value>
+  </data>
+  <data name="FlattenDetailRecycledDone_One" xml:space="preserve">
+    <value>{0} identical file sent to the recycle bin</value>
+  </data>
+  <data name="FlattenDetailRecycledDone_Other" xml:space="preserve">
+    <value>{0} identical files sent to the recycle bin</value>
+  </data>
+  <data name="FlattenUndoing" xml:space="preserve">
+    <value>Putting the files back…</value>
+  </data>
+  <data name="FlattenUndone_One" xml:space="preserve">
+    <value>Flatten undone: {0} item put back.</value>
+  </data>
+  <data name="FlattenUndone_Other" xml:space="preserve">
+    <value>Flatten undone: {0} items put back.</value>
+  </data>
+  <data name="FlattenUndoRecycled_One" xml:space="preserve">
+    <value>The identical file is still in the recycle bin.</value>
+  </data>
+  <data name="FlattenUndoRecycled_Other" xml:space="preserve">
+    <value>The {0} identical files are still in the recycle bin.</value>
+  </data>
+  <data name="FlattenTagRenamed" xml:space="preserve">
+    <value>renamed</value>
+  </data>
+  <data name="FlattenTagRecycle" xml:space="preserve">
+    <value>to the recycle bin</value>
+  </data>
 </root>

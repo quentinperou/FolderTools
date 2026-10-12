@@ -51,6 +51,7 @@ namespace
     constexpr wchar_t HideSizeValue[] = L"HideSizeEntry";
     constexpr wchar_t HideCleanValue[] = L"HideCleanEntry";
     constexpr wchar_t HidePhotosValue[] = L"HidePhotosEntry";
+    constexpr wchar_t HideFlattenValue[] = L"HideFlattenEntry";
     constexpr wchar_t HideColorValue[] = L"HideColorEntry";
 
     enum class Action
@@ -58,6 +59,7 @@ namespace
         Size,
         Clean,
         Photos,
+        Flatten,
     };
 
     // What each tool entry shows and starts: title, icon (resource id of this DLL), app verb, settings value.
@@ -75,6 +77,7 @@ namespace
             {IDS_MENU_SIZE, L",-201", L"size ", HideSizeValue},
             {IDS_MENU_CLEAN, L",-202", L"clean ", HideCleanValue},
             {IDS_MENU_PHOTOS, L",-204", L"photos ", HidePhotosValue},
+            {IDS_MENU_FLATTEN, L",-205", L"flatten ", HideFlattenValue},
         };
         return infos[static_cast<int>(action)];
     }
@@ -275,7 +278,7 @@ namespace
         ComPtr<IUnknown> m_site;
     };
 
-    // "Folder sizes", "Delete empty folders" or "Sort photos by date".
+    // "Folder sizes", "Delete empty folders", "Sort photos by date" or "Flatten folder".
     class SubCommand final : public CommandBase<SubCommand>
     {
     public:
@@ -486,7 +489,8 @@ public:
         // Hidden by the user (the whole menu, or all its sub-entries), or on items that are not folders of the file
         // system (This PC, Control Panel...).
         bool allHidden = HiddenBySettings(HideSizeValue) && HiddenBySettings(HideCleanValue)
-            && HiddenBySettings(HidePhotosValue) && (HiddenBySettings(HideColorValue) || !hasItems);
+            && HiddenBySettings(HidePhotosValue) && HiddenBySettings(HideFlattenValue)
+            && (HiddenBySettings(HideColorValue) || !hasItems);
         *state = HiddenBySettings() || allHidden || (hasItems && FolderPaths(items).empty()) ? ECS_HIDDEN : ECS_ENABLED;
         return S_OK;
     }
@@ -503,10 +507,12 @@ public:
         ComPtr<IExplorerCommand> size;
         ComPtr<IExplorerCommand> clean;
         ComPtr<IExplorerCommand> photos;
+        ComPtr<IExplorerCommand> flatten;
         RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&size, Action::Size, m_site.Get()));
         RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&clean, Action::Clean, m_site.Get()));
         RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&photos, Action::Photos, m_site.Get()));
-        std::vector<ComPtr<IExplorerCommand>> list{size, clean, photos};
+        RETURN_IF_FAILED_HR(MakeAndInitialize<SubCommand>(&flatten, Action::Flatten, m_site.Get()));
+        std::vector<ComPtr<IExplorerCommand>> list{size, clean, photos, flatten};
         // The colors right in this sub-menu: File Explorer does not show a sub-menu inside a sub-menu (remarks of
         // IExplorerCommand::EnumSubCommands), and a second entry of the package, or a second package, gets gathered
         // with this one in an icon-less "FolderTools ›" flyout made by Windows.

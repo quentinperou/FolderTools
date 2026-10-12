@@ -55,6 +55,14 @@ public sealed class AppSettings
     [JsonConverter(typeof(JsonStringEnumConverter<UndatedPolicy>))]
     public UndatedPolicy PhotoUndated { get; set; } = UndatedPolicy.FileDate;
 
+    /// <summary>How deep “Flatten folder” goes (the last choice made in its window).</summary>
+    [JsonConverter(typeof(JsonStringEnumConverter<FlattenDepth>))]
+    public FlattenDepth FlattenDepth { get; set; } = FlattenDepth.AllLevels;
+
+    /// <summary>What a name already taken becomes when flattening a folder.</summary>
+    [JsonConverter(typeof(JsonStringEnumConverter<FlattenNaming>))]
+    public FlattenNaming FlattenNaming { get; set; } = FlattenNaming.Suffix;
+
     /// <summary>Ask GitHub for a newer version when the app starts.</summary>
     public bool CheckForUpdatesAtStartup { get; set; } = true;
 
@@ -128,6 +136,12 @@ public sealed class AppSettings
     {
         get => IsShown("HidePhotosEntry");
         set => SetShown("HidePhotosEntry", value);
+    }
+
+    public static bool ShowFlattenEntry
+    {
+        get => IsShown("HideFlattenEntry");
+        set => SetShown("HideFlattenEntry", value);
     }
 
     public static bool ShowColorEntry

@@ -21,7 +21,7 @@
 ## Fonctionnalités
 
 - **Clic droit sur un dossier, un lecteur ou le fond d'un dossier ouvert → « FolderTools › »**, dans le nouveau menu
-  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec trois outils et, sur les dossiers, les
+  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec quatre outils et, sur les dossiers, les
   couleurs de dossier :
 
 ### Taille des dossiers
@@ -87,6 +87,21 @@
   <img src=".github/screenshots/photo-sort.png" width="800" alt="Trier les photos par date : l'aperçu des dossiers datés, un RAW avec son JPEG, l'heure de chaque photo">
 </p>
 
+### Aplatir le dossier
+
+- Remonte les fichiers des **sous-dossiers** dans le dossier lui-même, puis supprime les sous-dossiers vidés.
+- **Profondeur**, au choix dans la fenêtre : **tous les niveaux** (chaque fichier remonte, même très imbriqué), ou
+  **un seul niveau** (les fichiers des sous-dossiers directs remontent, et leurs propres sous-dossiers remontent d'un
+  cran, entiers).
+- **Noms déjà pris** : rien n'est écrasé. Le fichier qui remonte reçoit « (2) », ou le nom des dossiers d'où il vient
+  (`Vacances - IMG_001.jpg`), selon le réglage ; les autres fichiers gardent leur nom.
+- **Fichiers identiques** (même nom, même contenu) listés en premier : cochés, la copie en trop va à la corbeille ;
+  décochés, les deux sont gardés.
+- **Aperçu d'abord** : chaque fichier avec son nouveau nom et sa provenance, puis **Aplatir**.
+- Les dossiers ignorés (`.git`…), liens et jonctions restent tels quels ; les fichiers ignorés (`Thumbs.db`…) partent
+  avec leur dossier.
+- **Annuler** : remet chaque fichier à sa place et recrée les sous-dossiers supprimés (tant que la fenêtre est ouverte).
+
 ### Couleur du dossier
 
 - **Clic droit sur un dossier → FolderTools ›**, sous les outils : rouge, orange, jaune, vert, bleu, violet, rose
@@ -113,7 +128,8 @@
 - **Français et anglais** : l'application, le menu clic droit et l'installeur suivent la langue d'affichage de
   Windows ; la langue de l'application peut aussi être choisie dans les **Paramètres**.
 - Les entrées du menu clic droit peuvent être **désactivées** dans les paramètres, toutes ensemble ou une par une
-  (Taille des dossiers, Supprimer les dossiers vides, Trier les photos par date, Couleur du dossier).
+  (Taille des dossiers, Supprimer les dossiers vides, Trier les photos par date, Aplatir le dossier, Couleur du
+  dossier).
 - **Mises à jour en un clic** : au démarrage, l'application consulte les Releases GitHub ; un bandeau en haut de chaque
   fenêtre propose la nouvelle version (**Nouveautés** / **Mettre à jour**), qui s'installe et redémarre l'application. Dans les **Paramètres** : vérifier maintenant,
   désactiver la vérification au démarrage, ou choisir le canal **Bêta** pour recevoir les nouveautés en avance.
@@ -201,6 +217,7 @@ dotnet run --project src\FolderTools                             # fenêtre d'ac
 dotnet run --project src\FolderTools -- size "D:\Photos"         # taille des dossiers
 dotnet run --project src\FolderTools -- clean "%TEMP%"           # dossiers vides
 dotnet run --project src\FolderTools -- photos "D:\Import"       # trier les photos par date
+dotnet run --project src\FolderTools -- flatten "D:\Projets"     # aplatir le dossier
 ```
 
 Définissez la variable d'environnement `FOLDERTOOLS_THEME` à `Light` ou `Dark`, ou `FOLDERTOOLS_LANG` à `en` ou `fr`,
@@ -213,8 +230,8 @@ installation remplace la précédente).
 
 ```
 src/
-  FolderTools.Core/     Logique sans interface : analyse des dossiers, recherche et suppression des dossiers vides, tri des photos, export CSV, tailles, ligne de commande, mises à jour
-  FolderTools/          Application WPF : accueil, arborescence des tailles, fenêtre de nettoyage, fenêtre de tri des photos, paramètres, mises à jour, textes
+  FolderTools.Core/     Logique sans interface : analyse des dossiers, recherche et suppression des dossiers vides, tri des photos, aplatissement, export CSV, tailles, ligne de commande, mises à jour
+  FolderTools/          Application WPF : accueil, arborescence des tailles, fenêtre de nettoyage, fenêtres de tri des photos et d'aplatissement, paramètres, mises à jour, textes
   FolderTools.Shell/    DLL C++ du menu clic droit de Windows 11 (IExplorerCommand), avec ses libellés traduits et ses icônes
 package/                Manifeste et logos du package « sparse » (l'identité de l'application pour le menu de Windows 11)
 installer/              Script Inno Setup de l'installeur
@@ -239,7 +256,7 @@ tools/                  Outil de dev : InvokeMenu (lance les commandes du menu i
 Le nouveau menu clic droit n'accepte que les applications qui ont une **identité de package**. L'application reste une
 application de bureau classique, mais l'installeur enregistre un petit package « sparse » (`package/AppxManifest.xml`)
 qui pointe vers le dossier d'installation et déclare `FolderToolsMenu.dll`. Cette DLL affiche « FolderTools › » et ses
-entrées, puis demande à l'Explorateur de lancer `FolderTools.exe size|clean|photos "<dossier>"`. Ce package **n'est pas
+entrées, puis demande à l'Explorateur de lancer `FolderTools.exe size|clean|photos|flatten "<dossier>"`. Ce package **n'est pas
 signé** : Windows 11 l'accepte avec `Add-AppxPackage -AllowUnsigned` depuis une session administrateur, d'où la
 demande UAC pendant l'installation.
 
@@ -254,9 +271,6 @@ demande UAC pendant l'installation.
 
 ## Feuille de route
 
-- [ ] **Nouveau dossier daté** : sur le fond d'un dossier, créer `2026-10-12` (ou un modèle choisi) en un clic.
-- [ ] **Aplatir un dossier** : remonter tous les fichiers des sous-dossiers dans le dossier lui-même, en renommant
-      les doublons de noms.
 - [ ] **Doublons** : trouver les fichiers identiques (comparés par empreinte), avec aperçu avant suppression.
 - [ ] Icônes de dossiers colorés au style de Windows 10, choisies automatiquement sous Windows 10.
 - [ ] **Signature gratuite** de l'installeur et du package via [SignPath Foundation](https://signpath.org) : plus

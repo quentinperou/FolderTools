@@ -7,11 +7,12 @@ public enum LaunchAction
     Size,
     Clean,
     Photos,
+    Flatten,
 }
 
 /// <summary>
 /// What the command line asks for: <c>FolderTools.exe size "D:\Photos"</c>, <c>clean "%TEMP%"</c>,
-/// <c>photos "D:\Import"</c>, or nothing.
+/// <c>photos "D:\Import"</c>, <c>flatten "D:\Projects"</c>, or nothing.
 /// The context menu (classic entries and the Windows 11 handler) and the "run as administrator" relaunch use it.
 /// </summary>
 public sealed record LaunchRequest(LaunchAction Action, string? Path)
@@ -26,6 +27,7 @@ public sealed record LaunchRequest(LaunchAction Action, string? Path)
             "size" => LaunchAction.Size,
             "clean" => LaunchAction.Clean,
             "photos" => LaunchAction.Photos,
+            "flatten" => LaunchAction.Flatten,
             _ => LaunchAction.Home,
         };
         // Without a known verb, the first argument is a folder to open in the home window.
@@ -40,6 +42,7 @@ public sealed record LaunchRequest(LaunchAction Action, string? Path)
         LaunchAction.Size => $"size {QuotePath(Path!)}",
         LaunchAction.Clean => $"clean {QuotePath(Path!)}",
         LaunchAction.Photos => $"photos {QuotePath(Path!)}",
+        LaunchAction.Flatten => $"flatten {QuotePath(Path!)}",
         _ => Path is null ? "" : QuotePath(Path),
     };
 
