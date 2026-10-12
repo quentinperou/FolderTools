@@ -90,7 +90,11 @@ Users of 1.0.0 are offered it by the app.
 `v1.3.0-beta.1` on `647d73a`, `FolderTools-Setup-1.3.0-beta.1.exe`, SHA-256 `12fcd91b…297dbf`, hand-written notes):
 **sort photos by date**. 113 unit tests pass; sort, undo and the “leave in place” option checked on a test folder
 through UI Automation; installed and validated by the author (“ça marche”). Windows 10 (renumbered classic keys) not
-tried. Next: the stable 1.3.0 once the beta has been used on real photos.
+tried.
+
+**v1.3.0** (October 12, 2026, stable, at the author's request): the photo sort of the beta, plus two fixes of the
+Largest files tab found while making the README screenshots (a file of the analyzed folder showed “.” as its
+folder; the Modified columns were too narrow for English dates).
 
 **v1.1.0 (released October 12, 2026: tag `v1.1.0` on `053a1c6`, “latest”, `FolderTools-Setup-1.1.0.exe`, SHA-256 `d5b5b0fb…ad7e9a`, hand-written notes)**: **folder colors** (8 colors + Default
 color, right in “FolderTools ›” after a separator), decided with the author on October 11, 2026: the palette of the
@@ -383,8 +387,6 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
 
 ## To do
 
-- **Sort photos by date** (decided with the author on October 12, 2026, see “Technical choices”): in beta
-  (1.3.0-beta.1); release the stable 1.3.0 (`<Version>1.3.0</Version>`, tag `v1.3.0`) when the author says so.
 - Then (author's picks for later versions): **new dated folder** (folder background, `2026-10-12` or a chosen
   pattern), **flatten a folder** (move the files of the subfolders up, renaming duplicates), **duplicates** (identical
   files by hash, preview before deleting).
