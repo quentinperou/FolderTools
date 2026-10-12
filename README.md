@@ -96,6 +96,10 @@
   folder.
 - **Undo**: puts every file back and creates the deleted subfolders again (while the window is open).
 
+<p align="center">
+  <img src=".github/screenshots/flatten-folder.png" width="800" alt="Flatten folder: every file with its new name and where it comes from, an identical file offered for the recycle bin, a renamed one">
+</p>
+
 ### Folder color
 
 - **Right-click a folder → FolderTools ›**, below the tools: red, orange, yellow, green, blue, purple, pink or gray,

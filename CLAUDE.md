@@ -59,10 +59,11 @@ The repository is public (https://github.com/quentinperou/FolderTools), CI passe
 
 **README screenshots** (`.github/screenshots/`, English images shared by both READMEs, one per feature, as decided
 by the author on October 12, 2026): `folder-sizes.png` (top of the READMEs), `largest-files.png`, `empty-folders.png`,
-`photo-sort.png`, all 1100 × 640, light theme, on **fictitious** data (no personal folder names): `S:\Archives`
+`photo-sort.png`, all 1100 × 640, and `flatten-folder.png` (1100 × 780, on `S:\Projects`), light theme, on **fictitious** data (no personal folder names): `S:\Archives`
 (Photos/2023-2025/Edits, Videos, Music, Projects, Old backups, Documents, Temp, two .iso files and a few big videos,
 ~100 GB, plus nine empty folders) made of sparse files (real sizes, no disk space; `FSCTL_SET_SPARSE` + `SetLength`),
-and `S:\Camera import` (tiny JPEGs holding only an EXIF date, CR3/MP4 placeholders), mounted with `subst S:
+`S:\Camera import` (tiny JPEGs holding only an EXIF date, CR3/MP4 placeholders) and `S:\Projects` (made by
+`.local\scripts\make-flatten-demo.py`), mounted with `subst S:
 <folder>`. Started with `FOLDERTOOLS_LANG=en`, `FOLDERTOOLS_THEME=Light`, driven through UI Automation (rows
 selected with `SelectionItemPattern`, not `SetFocus`, which draws a focus rectangle; the size tree's “Photos” expanded
 by posting `WM_KEYDOWN VK_RIGHT`), moved to a screen without the mouse pointer (hover color), captured with
@@ -97,7 +98,8 @@ tried.
 Largest files tab found while making the README screenshots (a file of the analyzed folder showed “.” as its
 folder; the Modified columns were too narrow for English dates).
 
-**v1.4.0** (October 12, 2026, stable, at the author's request): **flatten folder**. 125 unit tests pass; preview,
+**v1.4.0 released** (October 12, 2026, stable, at the author's request; tag `v1.4.0` on `0e2c365`, “latest”,
+`FolderTools-Setup-1.4.0.exe`, SHA-256 `265ac472…f7277c`, hand-written notes): **flatten folder**. 125 unit tests pass; preview,
 flatten and undo checked on a test tree through UI Automation; the installed menu entry (new menu and “Show more
 options”) validated by the author (“ça marche”). Not tried for real: one level, the prefix naming, Windows 10.
 

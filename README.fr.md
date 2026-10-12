@@ -102,6 +102,10 @@
   avec leur dossier.
 - **Annuler** : remet chaque fichier à sa place et recrée les sous-dossiers supprimés (tant que la fenêtre est ouverte).
 
+<p align="center">
+  <img src=".github/screenshots/flatten-folder.png" width="800" alt="Aplatir le dossier : chaque fichier avec son nouveau nom et sa provenance, un fichier identique proposé pour la corbeille, un fichier renommé">
+</p>
+
 ### Couleur du dossier
 
 - **Clic droit sur un dossier → FolderTools ›**, sous les outils : rouge, orange, jaune, vert, bleu, violet, rose

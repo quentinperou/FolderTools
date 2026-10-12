@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- English: default UI language. Every key must also exist in Strings.fr.resx (checked by the tests). -->
 <root>
   <resheader name="resmimetype">
@@ -562,7 +562,7 @@ They will not go to the recycle bin.</value>
     <value>Names already taken</value>
   </data>
   <data name="FlattenNamingSuffix" xml:space="preserve">
-    <value>Add “ (2)”</value>
+    <value>Add “(2)”</value>
   </data>
   <data name="FlattenNamingPrefix" xml:space="preserve">
     <value>Add the folders it came from</value>
