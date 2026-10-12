@@ -63,6 +63,10 @@ public sealed class AppSettings
     [JsonConverter(typeof(JsonStringEnumConverter<FlattenNaming>))]
     public FlattenNaming FlattenNaming { get; set; } = FlattenNaming.Suffix;
 
+    /// <summary>Which copy of a group of duplicates is kept by default.</summary>
+    [JsonConverter(typeof(JsonStringEnumConverter<DuplicateKeep>))]
+    public DuplicateKeep DuplicateKeep { get; set; } = DuplicateKeep.Oldest;
+
     /// <summary>Ask GitHub for a newer version when the app starts.</summary>
     public bool CheckForUpdatesAtStartup { get; set; } = true;
 
@@ -142,6 +146,12 @@ public sealed class AppSettings
     {
         get => IsShown("HideFlattenEntry");
         set => SetShown("HideFlattenEntry", value);
+    }
+
+    public static bool ShowDuplicatesEntry
+    {
+        get => IsShown("HideDuplicatesEntry");
+        set => SetShown("HideDuplicatesEntry", value);
     }
 
     public static bool ShowColorEntry

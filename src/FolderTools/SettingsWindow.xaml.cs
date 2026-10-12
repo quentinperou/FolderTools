@@ -14,12 +14,15 @@ public enum SettingsPage
     EmptyFolders,
     Photos,
     Flatten,
+    Duplicates,
     Updates,
     About,
 }
 
 public partial class SettingsWindow : Window
 {
+    private static readonly DuplicateKeep[] DuplicateKeeps = [DuplicateKeep.Oldest, DuplicateKeep.Newest, DuplicateKeep.ShortestPath];
+
     private readonly AppSettings _settings = AppSettings.Load();
     private readonly bool _initialized;
     private bool _updating; // an update check or download is running
@@ -52,6 +55,7 @@ public partial class SettingsWindow : Window
         CleanEntryBox.IsChecked = AppSettings.ShowCleanEntry;
         PhotosEntryBox.IsChecked = AppSettings.ShowPhotosEntry;
         FlattenEntryBox.IsChecked = AppSettings.ShowFlattenEntry;
+        DuplicatesEntryBox.IsChecked = AppSettings.ShowDuplicatesEntry;
         ColorEntryBox.IsChecked = AppSettings.ShowColorEntry;
         MenuEntries.IsEnabled = NewMenuBox.IsChecked == true;
 
@@ -65,6 +69,9 @@ public partial class SettingsWindow : Window
         FlattenNamingBox.Items.Add(Strings.Get("FlattenNamingSuffix"));
         FlattenNamingBox.Items.Add(Strings.Get("FlattenNamingPrefix"));
         FlattenNamingBox.SelectedIndex = _settings.FlattenNaming == FlattenNaming.Prefix ? 1 : 0;
+        foreach (var keep in DuplicateKeeps)
+            DuplicateKeepBox.Items.Add(Strings.Get("DuplicatesKeep" + keep));
+        DuplicateKeepBox.SelectedIndex = Math.Max(0, Array.IndexOf(DuplicateKeeps, _settings.DuplicateKeep));
 
         VersionText.Text = Strings.Format("AboutVersion", Updater.CurrentVersion);
         _initialized = true;
@@ -107,7 +114,7 @@ public partial class SettingsWindow : Window
 
     private void PageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ScrollViewer[] pages = [GeneralPage, EmptyFoldersPage, PhotosPage, FlattenPage, UpdatesPage, AboutPage];
+        ScrollViewer[] pages = [GeneralPage, EmptyFoldersPage, PhotosPage, FlattenPage, DuplicatesPage, UpdatesPage, AboutPage];
         for (int i = 0; i < pages.Length; i++)
             pages[i].Visibility = i == PageList.SelectedIndex ? Visibility.Visible : Visibility.Hidden;
         if (PageList.SelectedItem is ListBoxItem item)
@@ -137,6 +144,8 @@ public partial class SettingsWindow : Window
             AppSettings.ShowPhotosEntry = PhotosEntryBox.IsChecked == true;
         else if (sender == FlattenEntryBox)
             AppSettings.ShowFlattenEntry = FlattenEntryBox.IsChecked == true;
+        else if (sender == DuplicatesEntryBox)
+            AppSettings.ShowDuplicatesEntry = DuplicatesEntryBox.IsChecked == true;
         else if (sender == ColorEntryBox)
             AppSettings.ShowColorEntry = ColorEntryBox.IsChecked == true;
     }
@@ -154,6 +163,14 @@ public partial class SettingsWindow : Window
         if (!_initialized)
             return;
         _settings.FlattenNaming = FlattenNamingBox.SelectedIndex == 1 ? FlattenNaming.Prefix : FlattenNaming.Suffix;
+        _settings.Save();
+    }
+
+    private void DuplicateKeepBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_initialized)
+            return;
+        _settings.DuplicateKeep = DuplicateKeeps[Math.Max(0, DuplicateKeepBox.SelectedIndex)];
         _settings.Save();
     }
 

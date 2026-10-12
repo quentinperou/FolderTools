@@ -23,7 +23,8 @@ function New-RoundedRectPath([System.Drawing.RectangleF]$r, [float]$radius) {
 
 # Rounded square in the yellow of File Explorer folders, with a white line drawing:
 #   Folder: the app (a filled folder with its tab); Size: three bars (folder sizes); Clean: the folder with a cross;
-#   Color: three dots (the folder color sub-menu); Photos: a picture with mountains and a sun (sort photos by date); Flatten: the folder with an up arrow.
+#   Color: three dots (the folder color sub-menu); Photos: a picture with mountains and a sun (sort photos by date); Flatten: the folder with an up arrow; Duplicates: two
+#   overlapping pages.
 # -Hinted (small sizes): lines of a whole number of pixels, snapped to the pixel grid, so that they stay sharp.
 function New-IconBitmap([int]$size, [float]$padding = 0.04, [switch]$Hinted, [string]$Glyph = 'Folder') {
     $bmp = New-Object System.Drawing.Bitmap $size, $size, ([System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
@@ -100,6 +101,20 @@ function New-IconBitmap([int]$size, [float]$padding = 0.04, [switch]$Hinted, [st
             $g.FillPolygon($brush, $small)
             $sun = [float]($s * 0.14)
             $g.FillEllipse($brush, [float]($m + 0.64 * $s - $sun / 2), [float]($m + 0.38 * $s - $sun / 2), $sun, $sun)
+        }
+        'Duplicates' {
+            # Two pages: the back one drawn as an outline, the front one filled, cut out from the back one by a
+            # margin of background gradient. Edges on whole pixels.
+            function F([float]$v) { $c = $m + $v * $s; if ($Hinted) { [float][Math]::Round($c) } else { [float]$c } }
+            $r = [float]([Math]::Max(1, 0.05 * $s))
+            $back = New-RoundedRectPath (New-Object System.Drawing.RectangleF (F 0.22), (F 0.18), ((F 0.62) - (F 0.22)), ((F 0.66) - (F 0.18))) $r
+            $g.FillPath([System.Drawing.Brushes]::White, $back)
+            $gap = [float]([Math]::Max(1, [Math]::Round(0.06 * $s)))
+            $front = New-Object System.Drawing.RectangleF (F 0.38), (F 0.34), ((F 0.80) - (F 0.38)), ((F 0.84) - (F 0.34))
+            $halo = New-Object System.Drawing.RectangleF ($front.X - $gap), ($front.Y - $gap), ($front.Width + 2 * $gap), ($front.Height + 2 * $gap)
+            $g.FillPath($brush, (New-RoundedRectPath $halo ($r + $gap)))
+            $g.FillPath([System.Drawing.Brushes]::White, (New-RoundedRectPath $front $r))
+            $back.Dispose()
         }
         'Flatten' {
             # An up arrow cut out of the folder, in the background gradient: the files come up.
@@ -246,6 +261,7 @@ Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\Clean
 Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\ColorMenu.ico') 'Color'
 Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\PhotosMenu.ico') 'Photos'
 Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\FlattenMenu.ico') 'Flatten'
+Save-Ico @(16, 20, 24, 32, 40, 48) (Join-Path $root 'src\FolderTools.Shell\DuplicatesMenu.ico') 'Duplicates'
 # The colored folders, installed in <app>\Colors and referenced by the desktop.ini of the colored folders.
 $colorDir = Join-Path $root 'src\FolderTools.Shell\Colors'
 [System.IO.Directory]::CreateDirectory($colorDir) | Out-Null

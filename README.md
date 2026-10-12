@@ -21,7 +21,7 @@
 ## Features
 
 - **Right-click a folder, a drive or the background of an open folder → “FolderTools ›”**, in the new Windows 11
-  context menu (and under “Show more options” / on Windows 10), with four tools and, on folders, the folder colors:
+  context menu (and under “Show more options” / on Windows 10), with five tools and, on folders, the folder colors:
 
 ### Folder sizes
 
@@ -100,6 +100,23 @@
   <img src=".github/screenshots/flatten-folder.png" width="800" alt="Flatten folder: every file with its new name and where it comes from, an identical file offered for the recycle bin, a renamed one">
 </p>
 
+### Delete duplicates
+
+- Finds the files with the **same content** (byte for byte, whatever their name) in the folder and all its
+  subfolders. Only files of the same size are read: first their beginning, then the whole file.
+- The groups are listed **heaviest first**, with the space each one frees. In each group every copy is checked but the
+  one kept by default: **the oldest** (or the newest, or the shortest path, in Settings); change it file by file.
+  A group always keeps at least one copy.
+- **Move to the recycle bin** sends the checked copies there (to be restored from it if needed).
+- Left out: empty files, hidden and system files, ignored folders (`.git`…), links and junctions, hard links (the same
+  file under two names takes no extra space), and cloud files that are not on this PC (comparing them would download
+  them).
+- Right-click a line: open, show in File Explorer, copy the path.
+
+<p align="center">
+  <img src=".github/screenshots/delete-duplicates.png" width="800" alt="Delete duplicates: groups of identical files, the heaviest first, the oldest copy kept, the others checked for the recycle bin">
+</p>
+
 ### Folder color
 
 - **Right-click a folder → FolderTools ›**, below the tools: red, orange, yellow, green, blue, purple, pink or gray,
@@ -124,7 +141,7 @@
 - **English and French**: the app, the context menu and the installer follow the Windows display language; the
   app language can also be chosen in **Settings**.
 - The context menu entries can be **turned off** in Settings, all together or one by one (Folder sizes, Delete empty
-  folders, Sort photos by date, Flatten folder, Folder color).
+  folders, Sort photos by date, Flatten folder, Delete duplicates, Folder color).
 - **Updates in one click**: at startup the app checks the GitHub Releases; a bar at the top of every window offers
   the new version (**What's new** / **Update**), which installs itself and restarts the app. In **Settings**: check now, turn off the check at startup, or
   choose the **Beta** channel to get new versions earlier.
@@ -212,6 +229,7 @@ dotnet run --project src\FolderTools -- size "D:\Photos"         # folder sizes
 dotnet run --project src\FolderTools -- clean "%TEMP%"           # empty folders
 dotnet run --project src\FolderTools -- photos "D:\Import"       # sort photos by date
 dotnet run --project src\FolderTools -- flatten "D:\Projects"    # flatten folder
+dotnet run --project src\FolderTools -- duplicates "D:\Photos"   # delete duplicates
 ```
 
 Set the `FOLDERTOOLS_THEME` environment variable to `Light` or `Dark`, or `FOLDERTOOLS_LANG` to `en` or `fr`,
@@ -224,8 +242,8 @@ replaces the previous install).
 
 ```
 src/
-  FolderTools.Core/     Logic without UI: folder scan, empty folder search and deletion, photo sort, flatten, CSV export, sizes, command line, update feed
-  FolderTools/          WPF app: home, size tree, cleaning window, photo sort and flatten windows, settings, updates, UI strings
+  FolderTools.Core/     Logic without UI: folder scan, empty folder search and deletion, photo sort, flatten, duplicates, CSV export, sizes, command line, update feed
+  FolderTools/          WPF app: home, size tree, cleaning window, photo sort, flatten and duplicates windows, settings, updates, UI strings
   FolderTools.Shell/    C++ DLL for the Windows 11 context menu (IExplorerCommand), with its localized labels and icons
 package/                Manifest and logos of the “sparse” package (the app identity for the Windows 11 menu)
 installer/              Inno Setup script of the installer
@@ -250,7 +268,7 @@ tools/                  Dev tool: InvokeMenu (runs the installed menu commands l
 The new context menu only accepts apps that have a **package identity**. The app remains a classic desktop app,
 but the installer registers a small “sparse” package (`package/AppxManifest.xml`) that points at the install folder
 and declares `FolderToolsMenu.dll`, which shows “FolderTools ›” and its entries and asks File Explorer to start
-`FolderTools.exe size|clean|photos|flatten "<folder>"`. This package is **not signed**: Windows 11 accepts it with
+`FolderTools.exe size|clean|photos|flatten|duplicates "<folder>"`. This package is **not signed**: Windows 11 accepts it with
 `Add-AppxPackage -AllowUnsigned` from an administrator session, hence the UAC prompt during installation.
 
 ### Releasing a version
@@ -264,7 +282,6 @@ and declares `FolderToolsMenu.dll`, which shows “FolderTools ›” and its en
 
 ## Roadmap
 
-- [ ] **Duplicates**: find identical files (compared by hash), with a preview before deleting.
 - [ ] Colored folder icons in the style of Windows 10, picked automatically on Windows 10.
 - [ ] **Free signing** of the installer and package through [SignPath Foundation](https://signpath.org): no more
       SmartScreen warning, and no administrator rights needed for the menu.

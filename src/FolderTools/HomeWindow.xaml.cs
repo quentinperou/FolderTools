@@ -26,7 +26,7 @@ public partial class HomeWindow : Window, IRebuildable
         }
     }
 
-    private void UpdateButtons() => SizeButton.IsEnabled = CleanButton.IsEnabled = PhotosButton.IsEnabled = FlattenButton.IsEnabled = Folder is not null;
+    private void UpdateButtons() => SizeButton.IsEnabled = CleanButton.IsEnabled = PhotosButton.IsEnabled = FlattenButton.IsEnabled = DuplicatesButton.IsEnabled = Folder is not null;
 
     private void PathBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => UpdateButtons();
 
@@ -64,6 +64,12 @@ public partial class HomeWindow : Window, IRebuildable
     {
         if (Folder is { } folder)
             new FlattenWindow(folder).Show();
+    }
+
+    private void Duplicates_Click(object sender, RoutedEventArgs e)
+    {
+        if (Folder is { } folder)
+            new DuplicatesWindow(folder).Show();
     }
 
     private void Settings_Click(object sender, RoutedEventArgs e) => App.OpenSettings(this);

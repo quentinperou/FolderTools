@@ -21,7 +21,7 @@
 ## Fonctionnalités
 
 - **Clic droit sur un dossier, un lecteur ou le fond d'un dossier ouvert → « FolderTools › »**, dans le nouveau menu
-  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec quatre outils et, sur les dossiers, les
+  de Windows 11 (et dans « Afficher plus d'options » / sous Windows 10), avec cinq outils et, sur les dossiers, les
   couleurs de dossier :
 
 ### Taille des dossiers
@@ -106,6 +106,23 @@
   <img src=".github/screenshots/flatten-folder.png" width="800" alt="Aplatir le dossier : chaque fichier avec son nouveau nom et sa provenance, un fichier identique proposé pour la corbeille, un fichier renommé">
 </p>
 
+### Supprimer les doublons
+
+- Trouve les fichiers au **contenu identique** (à l'octet près, quel que soit leur nom) dans le dossier et tous ses
+  sous-dossiers. Seuls les fichiers de même taille sont lus : d'abord leur début, puis le fichier entier.
+- Les groupes sont listés **les plus lourds d'abord**, avec la place que chacun libère. Dans chaque groupe, toutes les
+  copies sont cochées sauf celle gardée par défaut : **la plus ancienne** (ou la plus récente, ou le chemin le plus
+  court, dans les paramètres) ; modifiable fichier par fichier. Un groupe garde toujours au moins une copie.
+- **Mettre à la corbeille** y envoie les copies cochées (récupérables depuis la corbeille si besoin).
+- Ignorés : fichiers vides, fichiers cachés et système, dossiers ignorés (`.git`…), liens et jonctions, liens
+  physiques (un même fichier sous deux noms ne prend pas de place en plus), et fichiers du cloud absents de ce PC (les
+  comparer les téléchargerait).
+- Clic droit sur une ligne : ouvrir, afficher dans l'Explorateur, copier le chemin.
+
+<p align="center">
+  <img src=".github/screenshots/delete-duplicates.png" width="800" alt="Supprimer les doublons : groupes de fichiers identiques, les plus lourds d'abord, la copie la plus ancienne gardée, les autres cochées pour la corbeille">
+</p>
+
 ### Couleur du dossier
 
 - **Clic droit sur un dossier → FolderTools ›**, sous les outils : rouge, orange, jaune, vert, bleu, violet, rose
@@ -132,8 +149,8 @@
 - **Français et anglais** : l'application, le menu clic droit et l'installeur suivent la langue d'affichage de
   Windows ; la langue de l'application peut aussi être choisie dans les **Paramètres**.
 - Les entrées du menu clic droit peuvent être **désactivées** dans les paramètres, toutes ensemble ou une par une
-  (Taille des dossiers, Supprimer les dossiers vides, Trier les photos par date, Aplatir le dossier, Couleur du
-  dossier).
+  (Taille des dossiers, Supprimer les dossiers vides, Trier les photos par date, Aplatir le dossier, Supprimer les
+  doublons, Couleur du dossier).
 - **Mises à jour en un clic** : au démarrage, l'application consulte les Releases GitHub ; un bandeau en haut de chaque
   fenêtre propose la nouvelle version (**Nouveautés** / **Mettre à jour**), qui s'installe et redémarre l'application. Dans les **Paramètres** : vérifier maintenant,
   désactiver la vérification au démarrage, ou choisir le canal **Bêta** pour recevoir les nouveautés en avance.
@@ -222,6 +239,7 @@ dotnet run --project src\FolderTools -- size "D:\Photos"         # taille des do
 dotnet run --project src\FolderTools -- clean "%TEMP%"           # dossiers vides
 dotnet run --project src\FolderTools -- photos "D:\Import"       # trier les photos par date
 dotnet run --project src\FolderTools -- flatten "D:\Projets"     # aplatir le dossier
+dotnet run --project src\FolderTools -- duplicates "D:\Photos"   # supprimer les doublons
 ```
 
 Définissez la variable d'environnement `FOLDERTOOLS_THEME` à `Light` ou `Dark`, ou `FOLDERTOOLS_LANG` à `en` ou `fr`,
@@ -234,8 +252,8 @@ installation remplace la précédente).
 
 ```
 src/
-  FolderTools.Core/     Logique sans interface : analyse des dossiers, recherche et suppression des dossiers vides, tri des photos, aplatissement, export CSV, tailles, ligne de commande, mises à jour
-  FolderTools/          Application WPF : accueil, arborescence des tailles, fenêtre de nettoyage, fenêtres de tri des photos et d'aplatissement, paramètres, mises à jour, textes
+  FolderTools.Core/     Logique sans interface : analyse des dossiers, recherche et suppression des dossiers vides, tri des photos, aplatissement, doublons, export CSV, tailles, ligne de commande, mises à jour
+  FolderTools/          Application WPF : accueil, arborescence des tailles, fenêtre de nettoyage, fenêtres de tri des photos, d'aplatissement et des doublons, paramètres, mises à jour, textes
   FolderTools.Shell/    DLL C++ du menu clic droit de Windows 11 (IExplorerCommand), avec ses libellés traduits et ses icônes
 package/                Manifeste et logos du package « sparse » (l'identité de l'application pour le menu de Windows 11)
 installer/              Script Inno Setup de l'installeur
@@ -260,7 +278,7 @@ tools/                  Outil de dev : InvokeMenu (lance les commandes du menu i
 Le nouveau menu clic droit n'accepte que les applications qui ont une **identité de package**. L'application reste une
 application de bureau classique, mais l'installeur enregistre un petit package « sparse » (`package/AppxManifest.xml`)
 qui pointe vers le dossier d'installation et déclare `FolderToolsMenu.dll`. Cette DLL affiche « FolderTools › » et ses
-entrées, puis demande à l'Explorateur de lancer `FolderTools.exe size|clean|photos|flatten "<dossier>"`. Ce package **n'est pas
+entrées, puis demande à l'Explorateur de lancer `FolderTools.exe size|clean|photos|flatten|duplicates "<dossier>"`. Ce package **n'est pas
 signé** : Windows 11 l'accepte avec `Add-AppxPackage -AllowUnsigned` depuis une session administrateur, d'où la
 demande UAC pendant l'installation.
 
@@ -275,7 +293,6 @@ demande UAC pendant l'installation.
 
 ## Feuille de route
 
-- [ ] **Doublons** : trouver les fichiers identiques (comparés par empreinte), avec aperçu avant suppression.
 - [ ] Icônes de dossiers colorés au style de Windows 10, choisies automatiquement sous Windows 10.
 - [ ] **Signature gratuite** de l'installeur et du package via [SignPath Foundation](https://signpath.org) : plus
       d'avertissement SmartScreen, et plus besoin de droits administrateur pour le menu.

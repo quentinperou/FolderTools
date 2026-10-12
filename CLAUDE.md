@@ -59,7 +59,8 @@ The repository is public (https://github.com/quentinperou/FolderTools), CI passe
 
 **README screenshots** (`.github/screenshots/`, English images shared by both READMEs, one per feature, as decided
 by the author on October 12, 2026): `folder-sizes.png` (top of the READMEs), `largest-files.png`, `empty-folders.png`,
-`photo-sort.png`, all 1100 × 640, and `flatten-folder.png` (1100 × 780, on `S:\Projects`), light theme, on **fictitious** data (no personal folder names): `S:\Archives`
+`photo-sort.png`, all 1100 × 640, `flatten-folder.png` (1100 × 780, on `S:\Projects`) and `delete-duplicates.png`
+(1100 × 780, on `S:\Photos`, made by `.local\scripts\make-duplicates-demo.py`), light theme, on **fictitious** data (no personal folder names): `S:\Archives`
 (Photos/2023-2025/Edits, Videos, Music, Projects, Old backups, Documents, Temp, two .iso files and a few big videos,
 ~100 GB, plus nine empty folders) made of sparse files (real sizes, no disk space; `FSCTL_SET_SPARSE` + `SetLength`),
 `S:\Camera import` (tiny JPEGs holding only an EXIF date, CR3/MP4 placeholders) and `S:\Projects` (made by
@@ -103,6 +104,12 @@ folder; the Modified columns were too narrow for English dates).
 flatten and undo checked on a test tree through UI Automation; the installed menu entry (new menu and “Show more
 options”) validated by the author (“ça marche”). Not tried for real: one level, the prefix naming, Windows 10.
 
+**v1.5.0** (October 12, 2026, stable, at the author's request): **delete duplicates**, and the installer ends the
+menu's COM Surrogate before its check for files in use (no more “close COM Surrogate” page after a right-click; the
+author saw it, then validated the fix). 133 unit tests pass; search, the “never every copy” rule and the recycle bin
+checked on a test folder through UI Automation; installed and validated by the author (“ça marche”). Not tried for
+real: hard links and cloud files left out, on real data.
+
 **v1.1.0 (released October 12, 2026: tag `v1.1.0` on `053a1c6`, “latest”, `FolderTools-Setup-1.1.0.exe`, SHA-256 `d5b5b0fb…ad7e9a`, hand-written notes)**: **folder colors** (8 colors + Default
 color, right in “FolderTools ›” after a separator), decided with the author on October 11, 2026: the palette of the
 mock-up (red, orange, yellow, green, blue, purple, pink, gray), icons kept in the install folder (not copied into each
@@ -126,6 +133,7 @@ dotnet run --project src\FolderTools -- size "D:\Photos"
 dotnet run --project src\FolderTools -- clean "%TEMP%"
 dotnet run --project src\FolderTools -- photos "D:\Import"
 dotnet run --project src\FolderTools -- flatten "D:\Projects"
+dotnet run --project src\FolderTools -- duplicates "D:\Photos"
 ```
 
 - `FOLDERTOOLS_THEME=Light|Dark` and `FOLDERTOOLS_LANG=en|fr` force the theme / UI language at startup;
@@ -196,9 +204,9 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
 
 | Folder | Role |
 |--------|------|
-| `src/FolderTools.Core` | Pure, tested logic, no UI text: `FolderScanner` + `FolderNode` (size tree), `EmptyFolderCleaner` (find, re-check, delete), `PhotoSorter` + `DateTakenReader` (photo sort, undo), `FolderFlattener` (flatten, undo), `CsvExport`, `SizeFormat`, `LaunchRequest` (command line), `SensitiveLocations`, `SemanticVersion`, `UpdateFeed` (GitHub Releases). |
-| `src/FolderTools` | WPF .NET 10. `App` (startup by command line, theme, language, `OpenSettings` + `IRebuildable`), `HomeWindow`, `SizeWindow` + `SizeRow` (flat list showing the tree), `CleanWindow` + `CleanItem`, `PhotoSortWindow` + `PhotoNode` + `PhotoOptions`, `FlattenWindow` + `FlattenRow` + `IdenticalRow`, `SettingsWindow` + `AppSettings`, `WindowsShell` (recycle bin, Explorer, elevation, size/count formatting), `Updater`, `Localization.cs` (`Strings`, `{local:Tr}`), `Properties/Strings*.resx`. |
-| `src/FolderTools.Shell` | C++ DLL (WRL): `FolderToolsCommand` (“FolderTools ›”, `ECF_HASSUBCOMMANDS`) and four `SubCommand`s (`InfoOf(Action)`: title, icon, verb, switch) that have File Explorer start `FolderTools.exe size|clean|photos|flatten "<folder>"`, then the colors. Labels in `FolderToolsMenu.rc`, sub-entry icons `SizeMenu.ico` / `CleanMenu.ico` / `ColorMenu.ico` / `PhotosMenu.ico` / `FlattenMenu.ico` (resources 201–205). |
+| `src/FolderTools.Core` | Pure, tested logic, no UI text: `FolderScanner` + `FolderNode` (size tree), `EmptyFolderCleaner` (find, re-check, delete), `PhotoSorter` + `DateTakenReader` (photo sort, undo), `FolderFlattener` (flatten, undo), `DuplicateFinder` (find, keep rule, recycle), `CsvExport`, `SizeFormat`, `LaunchRequest` (command line), `SensitiveLocations`, `SemanticVersion`, `UpdateFeed` (GitHub Releases). |
+| `src/FolderTools` | WPF .NET 10. `App` (startup by command line, theme, language, `OpenSettings` + `IRebuildable`), `HomeWindow`, `SizeWindow` + `SizeRow` (flat list showing the tree), `CleanWindow` + `CleanItem`, `PhotoSortWindow` + `PhotoNode` + `PhotoOptions`, `FlattenWindow` + `FlattenRow` + `IdenticalRow`, `DuplicatesWindow` + `DuplicateRow` + `DuplicateGroupView`, `SettingsWindow` + `AppSettings`, `WindowsShell` (recycle bin, Explorer, elevation, size/count formatting), `Updater`, `Localization.cs` (`Strings`, `{local:Tr}`), `Properties/Strings*.resx`. |
+| `src/FolderTools.Shell` | C++ DLL (WRL): `FolderToolsCommand` (“FolderTools ›”, `ECF_HASSUBCOMMANDS`) and five `SubCommand`s (`InfoOf(Action)`: title, icon, verb, switch) that have File Explorer start `FolderTools.exe size|clean|photos|flatten|duplicates "<folder>"`, then the colors. Labels in `FolderToolsMenu.rc`, sub-entry icons `SizeMenu.ico` / `CleanMenu.ico` / `ColorMenu.ico` / `PhotosMenu.ico` / `FlattenMenu.ico` / `DuplicatesMenu.ico` (resources 201–206). |
 | `package/` | `AppxManifest.xml` of the “sparse” package + logos. Packed by `makeappx` in `build.ps1`. |
 | `installer/FolderTools.iss` | Inno Setup installer (English/French): copies to Program Files, registers the package, adds the classic cascading menu on `Directory`, `Directory\Background` and `Drive`. |
 | `scripts/` | `build.ps1`, `make-icons.ps1` (app icon, menu icons, package logos; generated files are committed). |
@@ -270,6 +278,19 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   then deletes the emptied subfolders with `EmptyFolderCleaner.Delete` (checked again, for good: only ignored files
   and empty folders go). `Undo` creates those folders again and moves everything back; recycled copies stay in the
   recycle bin. The depth is chosen in the window (and kept), the naming in Settings → Flatten.
+- **Delete duplicates** (mock-up validated by the author on October 12, 2026; named “Delete duplicates” / “Supprimer
+  les doublons” by the author): `DuplicateFinder.Find` lists the files below the folder (`AttributesToSkip` hidden and
+  system, so `$RECYCLE.BIN` and `System Volume Information` too; empty files, ignored files and folders, links, and
+  cloud files not on the disk — `RecallOnDataAccess`/`RecallOnOpen`/`Offline`, hashing them would download them — left
+  out), groups them by size, drops the extra names of hard links (`GetFileInformationByHandle`: same volume and file
+  index, only when `NumberOfLinks` > 1), then compares the SHA-256 of the first 64 KB and, for files longer than that
+  which still match, of the whole file. A file that cannot be read is never reported. Groups come heaviest first.
+  `Keeper` picks the copy left unchecked: `Oldest` (default) / `Newest` by `LastWriteUtc`, or `ShortestPath`; ties go
+  to the shortest path, then the path. `Recycle` skips a group whose kept copies are all gone or changed size (the
+  last copy is never removed), then recycles in batches of 64 and checks what is really gone. The window groups the
+  rows with a `ListCollectionView` (`PropertyGroupDescription` on `DuplicateRow.Group`, an `Expander` per group, the
+  first 20 open, `IsVirtualizingWhenGrouping`); `DuplicateRow.IsChecked` refuses to check the last unchecked copy of a
+  group. No undo: everything goes through the recycle bin.
 - **Deleting from the size tree**: `SHFileOperation` with File Explorer's own progress/error dialogs and
   `FOF_WANTNUKEWARNING` (asks before a permanent deletion on a drive without recycle bin), then `FolderNode.Detach`
   updates the totals of every parent without rescanning.
@@ -293,8 +314,8 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   generated by `make-icons.ps1`, same names and order as `FolderColor::Colors` and the installer) are copied to
   `<app>\Colors` by `build.ps1`. `ColorCommand::GetState` returns `ECS_CHECKED` when every selected folder has the
   color, hidden on folder backgrounds and drives; the first color has `ECF_SEPARATORBEFORE` (classic:
-  `CommandFlags=0x20` on `05Red`; the classic keys are `01Size`, `02Clean`, `03Photos`, `04Flatten`,
-  `05Red`…`13Default` since 1.4, and `RemoveClassicEntries` runs before every install, Windows 10 included, so the
+  `CommandFlags=0x20` on `06Red`; the classic keys are `01Size`, `02Clean`, `03Photos`, `04Flatten`,
+  `05Duplicates`, `06Red`…`14Default` since 1.5, and `RemoveClassicEntries` runs before every install, Windows 10 included, so the
   keys of older versions do not stay).
 - **One entry, the colors flat in it**: a single package (`FolderTools.ContextMenu`), a single verb
   (`FolderToolsCommand`, CLSID `8119219C-…`), whose sub-entries are Size, Clean, then the colors. The four layouts
@@ -314,7 +335,7 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   (`Check: not IsWindows11`) and `RemoveClassicEntries` deletes those of older versions (the author saw FolderTools
   twice in “Show more options”). The classic `Drive` entry is written everywhere. CropPdf probably lists its entry
   twice the same way (classic `.pdf` verb + package): to check.
-- **Per-entry switches**: `HideSizeEntry`, `HideCleanEntry`, `HidePhotosEntry`, `HideFlattenEntry`, `HideColorEntry` (DWORDs next to
+- **Per-entry switches**: `HideSizeEntry`, `HideCleanEntry`, `HidePhotosEntry`, `HideFlattenEntry`, `HideDuplicatesEntry`, `HideColorEntry` (DWORDs next to
   `HideInNewContextMenu`) read by the sub-entries' `GetState`; with all of them hidden (or the tools on a folder background),
   “FolderTools ›” is hidden. On Windows 11 they apply to both menus (same package entry); the classic drive entry is
   not affected.
@@ -338,7 +359,7 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
   `"ConfirmX"`, and `Strings.Plural(... "X" ...` → `X_One` + `X_Other`). Keys mentioned in comments count too.
 - Context menu labels: string tables in `FolderToolsMenu.rc` (English neutral, en-US, French neutral; **never
   `LANG_NEUTRAL`** for strings). 101 FolderTools, 102 Folder sizes, 103 Delete empty folders, 104 Folder color,
-  105 Sort photos by date, 106 Flatten folder, 110–118 the colors. They follow the Windows
+  105 Sort photos by date, 106 Flatten folder, 107 Delete duplicates, 110–118 the colors. They follow the Windows
   display language, not the app setting. The classic entries use `MUIVerb = @<app>\FolderToolsMenu.dll,-10x`.
 - Installer: `[Languages]` english/french + `[CustomMessages]`, `ShowLanguageDialog=auto`.
 
@@ -389,7 +410,9 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
 - File Explorer may keep the DLL loaded during an update: the installer then replaces it at the next restart.
 - `Remove-AppxPackage` waits for the package's processes, and the `dllhost` surrogate of the menu (command line
   `/Processid:{8119219C-…}`) once kept it waiting for good (installer stuck on an empty progress bar, October 12,
-  2026). `UnregisterContextMenu` now ends the surrogates whose command line holds our CLSIDs first.
+  2026). `UnregisterContextMenu` now ends the surrogates whose command line holds our CLSIDs first
+  (`StopMenuSurrogates`). Since 1.5 `PrepareToInstall` ends them too, before Setup's check for files in use: after a
+  right-click, an update showed a “COM Surrogate” to close on the “Preparing to install” page.
 - A colored folder's `desktop.ini` is hidden **and system**: File Explorer only shows it when “Hide protected
   operating system files” is unchecked (showing hidden items is not enough), like Windows' own `desktop.ini`.
 - After the icons in `<app>\Colors` change (same path), File Explorer may keep showing the old ones from its icon
@@ -410,6 +433,5 @@ inventory still showed were leftovers of Claude Code's own sandboxed experiments
 
 ## To do
 
-- Then: **duplicates** (identical files by hash, preview before deleting). The “new dated folder” idea was dropped by
-  the author (“ça sert à rien”).
+- Next feature: none decided (the author's list is done; the “new dated folder” idea was dropped: “ça sert à rien”).
 - Signing through SignPath Foundation (see CropPdf); Windows 10 style colored folders; ARM64; more languages.

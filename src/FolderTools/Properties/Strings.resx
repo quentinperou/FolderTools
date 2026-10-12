@@ -672,4 +672,106 @@ They will not go to the recycle bin.</value>
   <data name="FlattenTagRecycle" xml:space="preserve">
     <value>to the recycle bin</value>
   </data>
+  <data name="ActionDuplicates" xml:space="preserve">
+    <value>Delete duplicates</value>
+  </data>
+  <data name="ActionDuplicatesDescription" xml:space="preserve">
+    <value>Finds the files with the same content in the folder and its subfolders, and sends the extra copies to the recycle bin.</value>
+  </data>
+  <data name="DuplicatesWindowTitle" xml:space="preserve">
+    <value>Delete duplicates – {0}</value>
+  </data>
+  <data name="SettingsDuplicates" xml:space="preserve">
+    <value>Duplicates</value>
+  </data>
+  <data name="DuplicatesKeep" xml:space="preserve">
+    <value>Copy kept by default</value>
+  </data>
+  <data name="DuplicatesKeepOldest" xml:space="preserve">
+    <value>The oldest</value>
+  </data>
+  <data name="DuplicatesKeepNewest" xml:space="preserve">
+    <value>The newest</value>
+  </data>
+  <data name="DuplicatesKeepShortestPath" xml:space="preserve">
+    <value>The shortest path</value>
+  </data>
+  <data name="SettingsDuplicatesKeepDescription" xml:space="preserve">
+    <value>In each group of duplicates, the copy left unchecked (by modification date; the shortest path breaks ties). You can still change it file by file.</value>
+  </data>
+  <data name="DuplicatesKeepNow" xml:space="preserve">
+    <value>Copy kept: {0}</value>
+  </data>
+  <data name="DuplicatesSearching" xml:space="preserve">
+    <value>Looking for duplicates…</value>
+  </data>
+  <data name="DuplicatesListing_One" xml:space="preserve">
+    <value>{0} file listed</value>
+  </data>
+  <data name="DuplicatesListing_Other" xml:space="preserve">
+    <value>{0} files listed</value>
+  </data>
+  <data name="DuplicatesComparing" xml:space="preserve">
+    <value>Comparing the files of the same size: {0} of {1}</value>
+  </data>
+  <data name="DuplicatesNone" xml:space="preserve">
+    <value>No duplicates: every file here is unique.</value>
+  </data>
+  <data name="DuplicatesFound" xml:space="preserve">
+    <value>{0} of duplicates: {1}, {2} to free.</value>
+  </data>
+  <data name="DuplicatesGroups_One" xml:space="preserve">
+    <value>{0} group</value>
+  </data>
+  <data name="DuplicatesGroups_Other" xml:space="preserve">
+    <value>{0} groups</value>
+  </data>
+  <data name="DuplicatesCopies_One" xml:space="preserve">
+    <value>{0} extra copy</value>
+  </data>
+  <data name="DuplicatesCopies_Other" xml:space="preserve">
+    <value>{0} extra copies</value>
+  </data>
+  <data name="DuplicatesCompared_One" xml:space="preserve">
+    <value>{0} file compared by its content</value>
+  </data>
+  <data name="DuplicatesCompared_Other" xml:space="preserve">
+    <value>{0} files compared by their content</value>
+  </data>
+  <data name="DuplicatesInaccessible_One" xml:space="preserve">
+    <value>{0} folder could not be read</value>
+  </data>
+  <data name="DuplicatesInaccessible_Other" xml:space="preserve">
+    <value>{0} folders could not be read</value>
+  </data>
+  <data name="DuplicatesRecycle" xml:space="preserve">
+    <value>Move to the recycle bin ({0} · {1})</value>
+  </data>
+  <data name="DuplicatesRecycling" xml:space="preserve">
+    <value>Moving to the recycle bin…</value>
+  </data>
+  <data name="DuplicatesDone_One" xml:space="preserve">
+    <value>{0} copy moved to the recycle bin, {1} freed.</value>
+  </data>
+  <data name="DuplicatesDone_Other" xml:space="preserve">
+    <value>{0} copies moved to the recycle bin, {1} freed.</value>
+  </data>
+  <data name="DuplicatesFailures_One" xml:space="preserve">
+    <value>{0} file could not go to the recycle bin (still listed).</value>
+  </data>
+  <data name="DuplicatesFailures_Other" xml:space="preserve">
+    <value>{0} files could not go to the recycle bin (still listed).</value>
+  </data>
+  <data name="DuplicatesGroupDetail" xml:space="preserve">
+    <value>{0} copies of {1} · {2} to free</value>
+  </data>
+  <data name="DuplicatesKept" xml:space="preserve">
+    <value>kept</value>
+  </data>
+  <data name="DuplicatesNote" xml:space="preserve">
+    <value>Checked copies go to the recycle bin; each group always keeps one. Left out: empty, hidden and system files, ignored folders (.git…), links, and cloud files not on this PC. Double-click: show in File Explorer.</value>
+  </data>
+  <data name="DuplicatesCheckToolTip" xml:space="preserve">
+    <value>Checked: goes to the recycle bin</value>
+  </data>
 </root>

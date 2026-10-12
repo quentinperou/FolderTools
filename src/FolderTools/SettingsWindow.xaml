@@ -169,6 +169,12 @@
           <TextBlock Text="{local:Tr SettingsFlatten}" VerticalAlignment="Center" />
         </StackPanel>
       </ListBoxItem>
+      <ListBoxItem AutomationProperties.Name="{local:Tr SettingsDuplicates}">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8C8;" />
+          <TextBlock Text="{local:Tr SettingsDuplicates}" VerticalAlignment="Center" />
+        </StackPanel>
+      </ListBoxItem>
       <ListBoxItem AutomationProperties.Name="{local:Tr UpdatesTitle}">
         <StackPanel Orientation="Horizontal">
           <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE895;" />
@@ -255,6 +261,13 @@
                           VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
                           AutomationProperties.Name="{local:Tr ActionFlatten}" />
                 <TextBlock Text="{local:Tr ActionFlatten}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Rectangle Style="{StaticResource CardDivider}" />
+              <DockPanel Style="{StaticResource CardSubRow}">
+                <CheckBox x:Name="DuplicatesEntryBox" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                          VerticalAlignment="Center" Margin="16,0,0,0" Checked="MenuEntry_Changed" Unchecked="MenuEntry_Changed"
+                          AutomationProperties.Name="{local:Tr ActionDuplicates}" />
+                <TextBlock Text="{local:Tr ActionDuplicates}" VerticalAlignment="Center" />
               </DockPanel>
               <Rectangle Style="{StaticResource CardDivider}" />
               <DockPanel Style="{StaticResource CardSubRow}">
@@ -360,6 +373,24 @@
             <StackPanel VerticalAlignment="Center">
               <TextBlock Text="{local:Tr FlattenNaming}" />
               <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsFlattenNamingDescription}" />
+            </StackPanel>
+          </DockPanel>
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Duplicates: the copy kept by default. -->
+    <ScrollViewer x:Name="DuplicatesPage" Grid.Row="1" Grid.Column="1" Style="{StaticResource Page}" Margin="16,0,0,0">
+      <StackPanel>
+        <Border Style="{StaticResource Card}">
+          <DockPanel>
+            <TextBlock DockPanel.Dock="Left" Style="{StaticResource CardIcon}" Text="&#xE8C8;" />
+            <ComboBox x:Name="DuplicateKeepBox" DockPanel.Dock="Right" MinWidth="260" VerticalAlignment="Center"
+                      Margin="16,0,0,0" SelectionChanged="DuplicateKeepBox_SelectionChanged"
+                      AutomationProperties.Name="{local:Tr DuplicatesKeep}" />
+            <StackPanel VerticalAlignment="Center">
+              <TextBlock Text="{local:Tr DuplicatesKeep}" />
+              <TextBlock Style="{StaticResource CardDescription}" Text="{local:Tr SettingsDuplicatesKeepDescription}" />
             </StackPanel>
           </DockPanel>
         </Border>

@@ -672,4 +672,106 @@ Ils n'iront pas à la corbeille.</value>
   <data name="FlattenTagRecycle" xml:space="preserve">
     <value>à la corbeille</value>
   </data>
+  <data name="ActionDuplicates" xml:space="preserve">
+    <value>Supprimer les doublons</value>
+  </data>
+  <data name="ActionDuplicatesDescription" xml:space="preserve">
+    <value>Trouve les fichiers au contenu identique dans le dossier et ses sous-dossiers, et met les copies en trop à la corbeille.</value>
+  </data>
+  <data name="DuplicatesWindowTitle" xml:space="preserve">
+    <value>Supprimer les doublons – {0}</value>
+  </data>
+  <data name="SettingsDuplicates" xml:space="preserve">
+    <value>Doublons</value>
+  </data>
+  <data name="DuplicatesKeep" xml:space="preserve">
+    <value>Copie gardée par défaut</value>
+  </data>
+  <data name="DuplicatesKeepOldest" xml:space="preserve">
+    <value>La plus ancienne</value>
+  </data>
+  <data name="DuplicatesKeepNewest" xml:space="preserve">
+    <value>La plus récente</value>
+  </data>
+  <data name="DuplicatesKeepShortestPath" xml:space="preserve">
+    <value>Le chemin le plus court</value>
+  </data>
+  <data name="SettingsDuplicatesKeepDescription" xml:space="preserve">
+    <value>Dans chaque groupe de doublons, la copie laissée décochée (selon la date de modification ; le chemin le plus court départage). Modifiable fichier par fichier.</value>
+  </data>
+  <data name="DuplicatesKeepNow" xml:space="preserve">
+    <value>Copie gardée : {0}</value>
+  </data>
+  <data name="DuplicatesSearching" xml:space="preserve">
+    <value>Recherche des doublons…</value>
+  </data>
+  <data name="DuplicatesListing_One" xml:space="preserve">
+    <value>{0} fichier listé</value>
+  </data>
+  <data name="DuplicatesListing_Other" xml:space="preserve">
+    <value>{0} fichiers listés</value>
+  </data>
+  <data name="DuplicatesComparing" xml:space="preserve">
+    <value>Comparaison des fichiers de même taille : {0} sur {1}</value>
+  </data>
+  <data name="DuplicatesNone" xml:space="preserve">
+    <value>Aucun doublon : chaque fichier ici est unique.</value>
+  </data>
+  <data name="DuplicatesFound" xml:space="preserve">
+    <value>{0} de doublons : {1}, {2} récupérables.</value>
+  </data>
+  <data name="DuplicatesGroups_One" xml:space="preserve">
+    <value>{0} groupe</value>
+  </data>
+  <data name="DuplicatesGroups_Other" xml:space="preserve">
+    <value>{0} groupes</value>
+  </data>
+  <data name="DuplicatesCopies_One" xml:space="preserve">
+    <value>{0} copie en trop</value>
+  </data>
+  <data name="DuplicatesCopies_Other" xml:space="preserve">
+    <value>{0} copies en trop</value>
+  </data>
+  <data name="DuplicatesCompared_One" xml:space="preserve">
+    <value>{0} fichier comparé par son contenu</value>
+  </data>
+  <data name="DuplicatesCompared_Other" xml:space="preserve">
+    <value>{0} fichiers comparés par leur contenu</value>
+  </data>
+  <data name="DuplicatesInaccessible_One" xml:space="preserve">
+    <value>{0} dossier n'a pas pu être lu</value>
+  </data>
+  <data name="DuplicatesInaccessible_Other" xml:space="preserve">
+    <value>{0} dossiers n'ont pas pu être lus</value>
+  </data>
+  <data name="DuplicatesRecycle" xml:space="preserve">
+    <value>Mettre à la corbeille ({0} · {1})</value>
+  </data>
+  <data name="DuplicatesRecycling" xml:space="preserve">
+    <value>Mise à la corbeille…</value>
+  </data>
+  <data name="DuplicatesDone_One" xml:space="preserve">
+    <value>{0} copie mise à la corbeille, {1} libérés.</value>
+  </data>
+  <data name="DuplicatesDone_Other" xml:space="preserve">
+    <value>{0} copies mises à la corbeille, {1} libérés.</value>
+  </data>
+  <data name="DuplicatesFailures_One" xml:space="preserve">
+    <value>{0} fichier n'a pas pu aller à la corbeille (toujours listé).</value>
+  </data>
+  <data name="DuplicatesFailures_Other" xml:space="preserve">
+    <value>{0} fichiers n'ont pas pu aller à la corbeille (toujours listés).</value>
+  </data>
+  <data name="DuplicatesGroupDetail" xml:space="preserve">
+    <value>{0} copies de {1} · {2} récupérables</value>
+  </data>
+  <data name="DuplicatesKept" xml:space="preserve">
+    <value>gardée</value>
+  </data>
+  <data name="DuplicatesNote" xml:space="preserve">
+    <value>Les copies cochées vont à la corbeille ; chaque groupe en garde toujours une. Ignorés : fichiers vides, cachés et système, dossiers ignorés (.git…), liens, et fichiers du cloud absents de ce PC. Double-clic : afficher dans l'Explorateur.</value>
+  </data>
+  <data name="DuplicatesCheckToolTip" xml:space="preserve">
+    <value>Coché : va à la corbeille</value>
+  </data>
 </root>

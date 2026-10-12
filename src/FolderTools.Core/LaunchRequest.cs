@@ -8,6 +8,7 @@ public enum LaunchAction
     Clean,
     Photos,
     Flatten,
+    Duplicates,
 }
 
 /// <summary>
@@ -28,6 +29,7 @@ public sealed record LaunchRequest(LaunchAction Action, string? Path)
             "clean" => LaunchAction.Clean,
             "photos" => LaunchAction.Photos,
             "flatten" => LaunchAction.Flatten,
+            "duplicates" => LaunchAction.Duplicates,
             _ => LaunchAction.Home,
         };
         // Without a known verb, the first argument is a folder to open in the home window.
@@ -43,6 +45,7 @@ public sealed record LaunchRequest(LaunchAction Action, string? Path)
         LaunchAction.Clean => $"clean {QuotePath(Path!)}",
         LaunchAction.Photos => $"photos {QuotePath(Path!)}",
         LaunchAction.Flatten => $"flatten {QuotePath(Path!)}",
+        LaunchAction.Duplicates => $"duplicates {QuotePath(Path!)}",
         _ => Path is null ? "" : QuotePath(Path),
     };
 

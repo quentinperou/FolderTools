@@ -44,7 +44,7 @@ public partial class App : Application
             args.Handled = true;
         };
 
-        // The context menu starts "FolderTools.exe size|clean|photos|flatten <folder>"; the Start menu, no argument.
+        // The context menu starts "FolderTools.exe size|clean|photos|flatten|duplicates <folder>"; the Start menu, no argument.
         var request = LaunchRequest.Parse(e.Args);
         Window window = request.Action switch
         {
@@ -52,6 +52,7 @@ public partial class App : Application
             LaunchAction.Clean => new CleanWindow(request.Path!),
             LaunchAction.Photos => new PhotoSortWindow(request.Path!),
             LaunchAction.Flatten => new FlattenWindow(request.Path!),
+            LaunchAction.Duplicates => new DuplicatesWindow(request.Path!),
             _ => new HomeWindow(request.Path),
         };
         MainWindow = window;
